@@ -58,6 +58,8 @@ import Layout from '../../layouts/Layout.astro';
 		status: 'ok' | 'revoked' | 'expired' | 'unavailable';
 		target: { type: string; id: string };
 		appLink: string | null;
+		/** 小程序里的落点；小程序没有对应页面（只在 App 里有）时为空。 */
+		miniappPath: string | null;
 		preview: { title: string; subtitle: string | null; author: string | null } | null;
 		/** 服务端海报版式；为空时（招募、功能入口）只展示短链二维码。 */
 		posterVariants?: string[];
@@ -148,8 +150,15 @@ import Layout from '../../layouts/Layout.astro';
 		return (share.posterVariants?.length ?? 1) > 0;
 	}
 
+	/**
+	 * 微信里网页跳不进个人主体小程序，只能长按识别小程序码：
+	 * 小程序能打开的内容，海报换成印小程序码的版本，没有海报的直接展示小程序码。
+	 */
+	function usesMiniappCode(env: ShareEnv, share: ShareResolution): boolean {
+		return env === 'wechat' && Boolean(share.miniappPath);
+	}
+
 	function actionsFor(env: ShareEnv, share: ShareResolution): { hint: string; actions: ShareAction[] } {
-		const image = hasPoster(share) ? '海报' : '二维码';
 		const title = share.preview?.title ?? '';
 		const copyLink = {
 			label: '复制链接',
@@ -168,7 +177,9 @@ import Layout from '../../layouts/Layout.astro';
 		switch (env) {
 			case 'wechat':
 				return {
-					hint: `长按上方${image}识别二维码，就能在小程序里查看。想用 App 打开，可以复制链接到浏览器。`,
+					hint: usesMiniappCode(env, share)
+						? `${hasPoster(share) ? '长按上方海报，识别图中的小程序码' : '长按识别上方小程序码'}，就能在小程序里查看。想用 App 打开，可以复制链接到浏览器。`
+						: '这项内容需要在 Astria天穹 App 中查看。点右上角「…」选择在浏览器打开，或复制链接到浏览器。',
 					actions: [{ ...copyLink, primary: true }],
 				};
 			case 'qq':
@@ -187,7 +198,7 @@ import Layout from '../../layouts/Layout.astro';
 				};
 			case 'desktop':
 				return {
-					hint: `用手机微信或相机扫描${image}上的二维码查看。`,
+					hint: `用手机微信或相机扫描${hasPoster(share) ? '海报上的' : '上方'}二维码查看。`,
 					actions: [download, copyLink],
 				};
 		}
@@ -264,9 +275,17 @@ import Layout from '../../layouts/Layout.astro';
 		if (nodes.poster) {
 			const code = encodeURIComponent(share.code);
 			const withPoster = hasPoster(share);
-			// 没有海报的目标只放短链二维码：微信内长按识别进小程序，电脑上用手机扫。
-			nodes.poster.src = `${apiBase}/share/links/${code}/${withPoster ? 'poster' : 'qr'}.png`;
-			nodes.poster.alt = withPoster ? `${preview.title} 的分享海报` : `${preview.title} 的二维码`;
+			const miniappCode = usesMiniappCode(env, share);
+			// 没有海报的目标只放码：微信里放小程序码长按识别，其他环境放短链二维码。
+			const image = withPoster
+				? `poster.png${miniappCode ? '?scan=wechat' : ''}`
+				: miniappCode
+					? 'wxacode.png'
+					: 'qr.png';
+			nodes.poster.src = `${apiBase}/share/links/${code}/${image}`;
+			nodes.poster.alt = withPoster
+				? `${preview.title} 的分享海报`
+				: `${preview.title} 的${miniappCode ? '小程序码' : '二维码'}`;
 			nodes.poster.closest('figure')?.classList.toggle('qr-only', !withPoster);
 		}
 		const { hint, actions } = actionsFor(env, share);
