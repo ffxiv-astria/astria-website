@@ -8,7 +8,7 @@ import Layout from '../../layouts/Layout.astro';
 
 <Layout
 	title="Astria天穹 · 分享"
-	description="在 Astria天穹 查看好友分享的配装与配装清单。"
+	description="在 Astria天穹 查看好友分享的配装、配装清单、宏方案与招募。"
 	noindex
 	ogImage="https://astria.cxmeow.top/brand/astria-app-icon.png"
 >
@@ -59,6 +59,8 @@ import Layout from '../../layouts/Layout.astro';
 		target: { type: string; id: string };
 		appLink: string | null;
 		preview: { title: string; subtitle: string | null; author: string | null } | null;
+		/** 服务端海报版式；为空时（招募、功能入口）只展示短链二维码。 */
+		posterVariants?: string[];
 	}
 
 	interface ShareAction {
@@ -73,9 +75,13 @@ import Layout from '../../layouts/Layout.astro';
 		'',
 	);
 
-	const KIND_LABELS: Record<string, string> = {
-		gearset: '配装',
-		gearset_list: '配装清单',
+	/** 承接页顶部的一行说明，按目标类型区分。 */
+	const KIND_EYEBROWS: Record<string, string> = {
+		gearset: '好友分享的配装',
+		gearset_list: '好友分享的配装清单',
+		macro: '好友分享的宏方案',
+		party_listing: '好友分享的跨服招募',
+		feature: '好友邀请你一起来玩',
 	};
 
 	const GONE_MESSAGES: Record<string, string> = {
@@ -138,7 +144,12 @@ import Layout from '../../layouts/Layout.astro';
 		return { env: platform === 'other' ? 'desktop' : 'browser', platform };
 	}
 
+	function hasPoster(share: ShareResolution): boolean {
+		return (share.posterVariants?.length ?? 1) > 0;
+	}
+
 	function actionsFor(env: ShareEnv, share: ShareResolution): { hint: string; actions: ShareAction[] } {
+		const image = hasPoster(share) ? '海报' : '二维码';
 		const title = share.preview?.title ?? '';
 		const copyLink = { label: '复制链接', copy: { text: share.url, done: '链接已复制' } };
 		const copyCommand = {
@@ -153,7 +164,7 @@ import Layout from '../../layouts/Layout.astro';
 		switch (env) {
 			case 'wechat':
 				return {
-					hint: '长按上方海报识别二维码，就能在小程序里查看。想用 App 打开，可以复制链接到浏览器。',
+					hint: `长按上方${image}识别二维码，就能在小程序里查看。想用 App 打开，可以复制链接到浏览器。`,
 					actions: [{ ...copyLink, primary: true }],
 				};
 			case 'qq':
@@ -172,7 +183,7 @@ import Layout from '../../layouts/Layout.astro';
 				};
 			case 'desktop':
 				return {
-					hint: '用手机微信或相机扫描海报上的二维码查看。',
+					hint: `用手机微信或相机扫描${image}上的二维码查看。`,
 					actions: [download, copyLink],
 				};
 		}
@@ -224,8 +235,7 @@ import Layout from '../../layouts/Layout.astro';
 	function render(share: ShareResolution, env: ShareEnv) {
 		const preview = share.preview;
 		if (!preview) return;
-		const kind = KIND_LABELS[share.target.type] ?? '分享';
-		if (nodes.kind) nodes.kind.textContent = `好友分享的${kind}`;
+		if (nodes.kind) nodes.kind.textContent = KIND_EYEBROWS[share.target.type] ?? '好友的分享';
 		if (nodes.title) nodes.title.textContent = preview.title;
 		if (nodes.meta) {
 			nodes.meta.textContent = [preview.subtitle, preview.author ? `by ${preview.author}` : null]
@@ -233,8 +243,12 @@ import Layout from '../../layouts/Layout.astro';
 				.join(' · ');
 		}
 		if (nodes.poster) {
-			nodes.poster.src = `${apiBase}/share/links/${encodeURIComponent(share.code)}/poster.png`;
-			nodes.poster.alt = `${preview.title} 的分享海报`;
+			const code = encodeURIComponent(share.code);
+			const withPoster = hasPoster(share);
+			// 没有海报的目标只放短链二维码：微信内长按识别进小程序，电脑上用手机扫。
+			nodes.poster.src = `${apiBase}/share/links/${code}/${withPoster ? 'poster' : 'qr'}.png`;
+			nodes.poster.alt = withPoster ? `${preview.title} 的分享海报` : `${preview.title} 的二维码`;
+			nodes.poster.closest('figure')?.classList.toggle('qr-only', !withPoster);
 		}
 		const { hint, actions } = actionsFor(env, share);
 		if (nodes.hint) nodes.hint.textContent = hint;
@@ -367,6 +381,14 @@ import Layout from '../../layouts/Layout.astro';
 		border-radius: 8px;
 		background: var(--bg-2);
 		aspect-ratio: 3 / 4;
+	}
+
+	.poster.qr-only {
+		width: min(240px, 70%);
+		margin-inline: auto;
+		padding: 12px;
+		background: #ffffff;
+		aspect-ratio: 1;
 	}
 
 	.poster img {
