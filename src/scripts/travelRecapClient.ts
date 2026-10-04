@@ -1,4 +1,5 @@
 import { toPng } from 'html-to-image';
+import QRCode from 'qrcode';
 
 const SCHEMA_VERSION = 1;
 const allowedTones = new Set(['teal', 'gold', 'rose', 'green', 'violet']);
@@ -19,6 +20,9 @@ if (!root || !demoScript?.textContent) {
 
 const demoPayload = JSON.parse(demoScript.textContent);
 const isEmbed = root.dataset.embed === 'true';
+const apiBase = (import.meta.env.PUBLIC_API_BASE_URL || 'https://ff14search.cxmeow.top/api').replace(/\/$/, '');
+/** 分享卡二维码的短链：落到 App 的旅行簿入口（feature/daoyuTravel），不含任何个人数据。 */
+let shareQrDataUrl: Promise<string | null> | null = null;
 const state: { index: number; payload: RuntimePayload | null; started: boolean; pendingStartIndex: number } = {
 	index: 0,
 	payload: null,
@@ -69,6 +73,8 @@ const nodes = {
 	closeShare: document.querySelector<HTMLButtonElement>('[data-close-share]'),
 	shareStatus: document.querySelector<HTMLElement>('[data-share-status]'),
 	shareCanvas: document.querySelector<HTMLElement>('[data-share-card-canvas]'),
+	shareQr: document.querySelector<HTMLElement>('[data-share-qr]'),
+	shareQrImage: document.querySelector<HTMLImageElement>('[data-share-qr-image]'),
 };
 
 function emitBridge(type: string, payload: RuntimePayload = {}) {
@@ -454,6 +460,39 @@ function renderTabs(payload: RuntimePayload) {
 	nodes.tabs?.replaceChildren(...buttons);
 }
 
+/**
+ * 签发旅行簿入口的短链并画成二维码。只签一次；网络失败时返回 null，
+ * 分享图照常生成，只是不带二维码。
+ */
+function loadShareQr(): Promise<string | null> {
+	shareQrDataUrl ??= (async () => {
+		try {
+			const response = await fetch(`${apiBase}/share/links`, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+				body: JSON.stringify({ targetType: 'feature', targetId: 'daoyuTravel' }),
+			});
+			if (!response.ok) return null;
+			const link = (await response.json()) as { url?: string };
+			if (!link.url) return null;
+			return await QRCode.toDataURL(link.url, { margin: 1, width: 228, errorCorrectionLevel: 'M' });
+		} catch {
+			return null;
+		}
+	})();
+	return shareQrDataUrl;
+}
+
+async function showShareQr() {
+	const dataUrl = await loadShareQr();
+	if (!dataUrl || !nodes.shareQrImage) return;
+	if (nodes.shareQrImage.src !== dataUrl) {
+		nodes.shareQrImage.src = dataUrl;
+		await nodes.shareQrImage.decode().catch(() => undefined);
+	}
+	setHidden(nodes.shareQr, false);
+}
+
 function renderShare(payload: RuntimePayload) {
 	setText(nodes.shareBrand, payload.brand);
 	setText(nodes.shareYear, payload.year);
@@ -471,6 +510,7 @@ function renderShare(payload: RuntimePayload) {
 			return item;
 		}),
 	);
+	void showShareQr();
 }
 
 function updateProgress(payload: RuntimePayload) {
@@ -598,6 +638,7 @@ async function generateShareImage() {
 	nodes.generateShare.disabled = true;
 	setHidden(nodes.sharePanel, false);
 	try {
+		await showShareQr();
 		const dataUrl = await toPng(nodes.shareCanvas, {
 			cacheBust: true,
 			pixelRatio: 2,

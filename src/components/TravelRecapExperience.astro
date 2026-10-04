@@ -112,6 +112,10 @@ const firstSlideFootnote = firstSlide.footnote && !internalCopyPattern.test(firs
 			<div class="share-mini" data-share-highlights>
 				{demoRecapPayload.shareCard.highlights.map((highlight) => <span>{highlight}</span>)}
 			</div>
+			<div class="share-qr" data-share-qr hidden>
+				<img data-share-qr-image alt="" width="76" height="76" />
+				<span>扫码生成<br />你的旅行簿</span>
+			</div>
 		</article>
 	</section>
 
@@ -1366,6 +1370,41 @@ const firstSlideFootnote = firstSlide.footnote && !internalCopyPattern.test(firs
 		display: flex;
 		flex-wrap: wrap;
 		gap: 8px;
+	}
+
+	/* 分享卡右下角的短链二维码：落到 App 的旅行簿入口，加载失败时整块隐藏。 */
+	.share-card:has(.share-qr:not([hidden])) .share-mini {
+		right: 128px;
+	}
+
+	.share-qr {
+		position: absolute;
+		z-index: 1;
+		right: 28px;
+		bottom: 28px;
+		display: grid;
+		justify-items: center;
+		gap: 6px;
+		width: 88px;
+	}
+
+	.share-qr[hidden] {
+		display: none;
+	}
+
+	.share-qr img {
+		width: 76px;
+		height: 76px;
+		padding: 4px;
+		border-radius: 6px;
+		background: #ffffff;
+	}
+
+	.share-qr span {
+		color: var(--muted);
+		font-size: 11px;
+		line-height: 1.35;
+		text-align: center;
 	}
 
 	.share-mini span {
