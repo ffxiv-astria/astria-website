@@ -3,6 +3,7 @@ import SiteHeader from '../../../components/SiteHeader.astro';
 import Layout from '../../../layouts/Layout.astro';
 
 const effectiveDate = '2026年7月22日';
+const updatedDate = '2026年10月5日';
 
 const sections = [
 	{ id: 'scope', label: '适用范围与运营者' },
@@ -45,7 +46,7 @@ const sections = [
 				</div>
 				<div>
 					<span>最近更新</span>
-					<strong>{effectiveDate}</strong>
+					<strong>{updatedDate}</strong>
 				</div>
 				<div>
 					<span>适用平台</span>
@@ -188,6 +189,20 @@ const sections = [
 
 						<article>
 							<div class="data-heading">
+								<span>分享链接与统计</span>
+								<strong>生成分享海报与短链、向创作者展示打开次数</strong>
+							</div>
+							<p>
+								你分享配装、清单、宏、招募等内容时，我们会生成一条短链，记录它指向的内容、生成时间；登录状态下还会与你的账号关联，以便复用同一条链接并向你展示它被打开的次数。私有清单的短链会保存一份访问凭证，你重置分享令牌后旧链接随即失效。
+							</p>
+							<p>
+								他人打开短链时，我们只记录打开的端（网页、iOS、Android、小程序）、网页打开时的环境类别（微信、QQ、手机浏览器或电脑浏览器）和时间；你发出分享时，记录所选的渠道标识（例如 iOS 系统分享面板中选择的 App、存储图像，或保存图片、复制链接、复制口令）。这些统计记录不包含
+								IP 地址、User-Agent、打开者账号、接收方或分享内容；常规的服务器访问日志仍按下方“设备、网络与日志”处理。分享与任何奖励或积分无关。
+							</p>
+						</article>
+
+						<article>
+							<div class="data-heading">
 								<span>反馈与客服</span>
 								<strong>处理问题、申诉与安全事件</strong>
 							</div>
@@ -270,6 +285,13 @@ const sections = [
 							</p>
 						</article>
 						<article>
+							<strong>剪贴板（iPhone / iPad）</strong>
+							<p>
+								App 回到前台时，如果剪贴板在 App 处于后台期间有变化，App 只通过系统接口判断其中是否像一个链接，不读取内容，也不会触发系统的粘贴提示；你点按系统“粘贴”按钮后，App
+								才会读取剪贴板，用来识别并打开 Astria 的分享链接，不会上传或保存剪贴板内容。你可以在提示中选择“不再提示”关闭这项检测。
+							</p>
+						</article>
+						<article class="permission-wide">
 							<strong>当前未使用</strong>
 							<p>
 								当前版本不请求精确或模糊位置、通讯录、麦克风、相机、健康数据、广告追踪或设备广告标识符权限。
@@ -389,7 +411,8 @@ const sections = [
 						<li>用户 ID、昵称、头像、邮箱及平台身份关联状态；</li>
 						<li>登录记录、会话、安装设备、通知端点和通知投递状态；</li>
 						<li>用户发布内容、图片、互动、举报、审核记录和反馈工单；</li>
-						<li>查询与安全日志、账号状态、功能权限及管理员操作审计记录。</li>
+						<li>查询与安全日志、账号状态、功能权限及管理员操作审计记录；</li>
+						<li>分享短链的生成记录，以及打开与分享渠道的汇总统计。管理员可以撤销违规的分享链接，撤销时会记录操作人和原因。</li>
 					</ul>
 					<p>
 						管理员无法通过后台查看明文密码、完整刷新令牌或保存在设备端的叨鱼、水晶通讯录官方凭据。我们通过权限控制和审计记录限制、追踪后台操作。
@@ -411,6 +434,10 @@ const sections = [
 						<div>
 							<strong>短期流程数据</strong>
 							<p>邮箱验证码、Apple 首次登录流程和二维码中转票据只在完成验证所需的短时间内有效；二维码中转内容约 5 分钟后失效。</p>
+						</div>
+						<div>
+							<strong>分享链接与统计</strong>
+							<p>随短链保留。链接指向的内容被删除、设为私密或你重置分享令牌后，链接不再可用；账号注销后，你生成的短链与账号解除关联，所指向的内容按注销规则删除。</p>
 						</div>
 						<div>
 							<strong>日志与安全记录</strong>
@@ -838,6 +865,10 @@ const sections = [
 
 	.permission-grid strong {
 		font-size: 16px;
+	}
+
+	.permission-grid .permission-wide {
+		grid-column: 1 / -1;
 	}
 
 	.plain-statement {
