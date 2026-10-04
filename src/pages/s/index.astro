@@ -67,7 +67,7 @@ import Layout from '../../layouts/Layout.astro';
 		label: string;
 		primary?: boolean;
 		href?: string;
-		copy?: { text: string; done: string };
+		copy?: { text: string; done: string; channel: 'copy_link' | 'copy_text' };
 	}
 
 	const apiBase = (import.meta.env.PUBLIC_API_BASE_URL || 'https://ff14search.cxmeow.top/api').replace(
@@ -151,12 +151,16 @@ import Layout from '../../layouts/Layout.astro';
 	function actionsFor(env: ShareEnv, share: ShareResolution): { hint: string; actions: ShareAction[] } {
 		const image = hasPoster(share) ? '海报' : '二维码';
 		const title = share.preview?.title ?? '';
-		const copyLink = { label: '复制链接', copy: { text: share.url, done: '链接已复制' } };
+		const copyLink = {
+			label: '复制链接',
+			copy: { text: share.url, done: '链接已复制', channel: 'copy_link' as const },
+		};
 		const copyCommand = {
 			label: '复制口令',
 			copy: {
 				text: `【Astria天穹】${title} 打开链接查看：${share.url}`,
 				done: '口令已复制，可以粘贴给好友',
+				channel: 'copy_text' as const,
 			},
 		};
 		const download = { label: '下载 Astria天穹', href: '/#download' };
@@ -208,6 +212,19 @@ import Layout from '../../layouts/Layout.astro';
 		}
 	}
 
+	let currentCode: string | null = null;
+
+	/** 记一次分享被转发出去（复制链接、复制口令）；统计失败不打扰用户。 */
+	function reportExport(channel: 'copy_link' | 'copy_text') {
+		if (!currentCode) return;
+		void fetch(`${apiBase}/share/links/${encodeURIComponent(currentCode)}/exports`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ surface: 'web', channel }),
+			keepalive: true,
+		}).catch(() => undefined);
+	}
+
 	function renderActions(actions: ShareAction[]) {
 		if (!nodes.actions) return;
 		nodes.actions.replaceChildren(
@@ -225,6 +242,7 @@ import Layout from '../../layouts/Layout.astro';
 						if (nodes.copyStatus) {
 							nodes.copyStatus.textContent = copied ? copy.done : `复制失败，请手动复制：${copy.text}`;
 						}
+						if (copied) reportExport(copy.channel);
 					});
 				}
 				return element;
@@ -235,6 +253,7 @@ import Layout from '../../layouts/Layout.astro';
 	function render(share: ShareResolution, env: ShareEnv) {
 		const preview = share.preview;
 		if (!preview) return;
+		currentCode = share.code;
 		if (nodes.kind) nodes.kind.textContent = KIND_EYEBROWS[share.target.type] ?? '好友的分享';
 		if (nodes.title) nodes.title.textContent = preview.title;
 		if (nodes.meta) {
