@@ -2,11 +2,17 @@
 interface Props {
 	title?: string;
 	description?: string;
+	/** 不让搜索引擎收录（分享承接页承载 UGC 与带凭证的链接）。 */
+	noindex?: boolean;
+	/** 链接卡片用的 Open Graph 图片，完整 URL。 */
+	ogImage?: string;
 }
 
 const {
 	title = 'Astria天穹',
 	description = 'Astria天穹公共服务。',
+	noindex = false,
+	ogImage,
 } = Astro.props;
 ---
 
@@ -19,6 +25,16 @@ const {
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="description" content={description} />
 		<meta name="generator" content={Astro.generator} />
+		{noindex && <meta name="robots" content="noindex, nofollow" />}
+		{ogImage && (
+			<>
+				<meta property="og:type" content="website" />
+				<meta property="og:site_name" content="Astria天穹" />
+				<meta property="og:title" content={title} />
+				<meta property="og:description" content={description} />
+				<meta property="og:image" content={ogImage} />
+			</>
+		)}
 		<title>{title}</title>
 	</head>
 	<body>

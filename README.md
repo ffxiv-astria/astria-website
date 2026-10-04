@@ -46,6 +46,8 @@ Node.js 要求：
 | `/recap/travel` | 超域旅行年度回顾页面 |
 | `/recap/travel/embed` | App 内 WKWebView 轻量版本 |
 | `/travel-annual-recap` | 历史兼容入口，跳转到 `/recap/travel` |
+| `/s/<code>` | 分享短链承接页（静态壳，nginx 把 `/s/*` 回落到 `/s/index.html`；本地预览用 `/s/?c=<code>`） |
+| `/.well-known/apple-app-site-association` | iOS Universal Links 声明，只认领 `/s/*`；需以 `application/json` 返回 |
 
 年度回顾是 App 专属入口功能，首页和官网导航不主动指向它。
 

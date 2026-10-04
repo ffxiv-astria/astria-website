@@ -1,0 +1,18 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "25WQA93SV4.top.cxmeow.astria",
+          "25WQA93SV4.top.cxmeow.astria.testing"
+        ],
+        "components": [
+          {
+            "/": "/s/*",
+            "comment": "分享短链，见 astria-backend/docs/share/share-and-return-design.md"
+          }
+        ]
+      }
+    ]
+  }
+}

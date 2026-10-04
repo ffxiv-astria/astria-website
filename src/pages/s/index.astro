@@ -1,0 +1,421 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+// 分享短链承接页：nginx 把 /s/<code> 统一回落到这个静态页（见
+// astria-backend/docs/share/share-and-return-design.md §6.3）。已安装 App 时，
+// Universal Links 会直接打开 App，用户看不到这一页。
+---
+
+<Layout
+	title="Astria天穹 · 分享"
+	description="在 Astria天穹 查看好友分享的配装与配装清单。"
+	noindex
+	ogImage="https://astria.cxmeow.top/brand/astria-app-icon.png"
+>
+	<main class="share-shell">
+		<section class="share-panel" aria-live="polite">
+			<a class="brand" href="/">
+				<img src="/brand/astria-app-icon.png" alt="" />
+				<span>Astria天穹</span>
+			</a>
+
+			<div id="loading" class="state">
+				<div class="spinner" aria-hidden="true"></div>
+				<p>正在打开分享内容…</p>
+			</div>
+
+			<div id="ready" class="state hidden">
+				<p class="eyebrow" id="kind"></p>
+				<h1 id="title"></h1>
+				<p class="meta" id="meta"></p>
+				<figure class="poster">
+					<img id="poster" alt="分享海报" decoding="async" />
+				</figure>
+				<p class="hint" id="hint"></p>
+				<div class="actions" id="actions"></div>
+				<p class="copy-status" id="copy-status" role="status"></p>
+			</div>
+
+			<div id="gone" class="state hidden">
+				<h1 id="gone-title">分享内容已失效</h1>
+				<p id="gone-message"></p>
+				<div class="actions">
+					<button class="button secondary hidden" id="retry" type="button">重新加载</button>
+					<a class="button primary" href="/">去 Astria天穹 看看</a>
+				</div>
+			</div>
+		</section>
+	</main>
+</Layout>
+
+<script>
+	type ShareEnv = 'wechat' | 'qq' | 'browser' | 'desktop';
+	type SharePlatform = 'ios' | 'android' | 'other';
+
+	interface ShareResolution {
+		code: string;
+		url: string;
+		status: 'ok' | 'revoked' | 'expired' | 'unavailable';
+		target: { type: string; id: string };
+		appLink: string | null;
+		preview: { title: string; subtitle: string | null; author: string | null } | null;
+	}
+
+	interface ShareAction {
+		label: string;
+		primary?: boolean;
+		href?: string;
+		copy?: { text: string; done: string };
+	}
+
+	const apiBase = (import.meta.env.PUBLIC_API_BASE_URL || 'https://ff14search.cxmeow.top/api').replace(
+		/\/$/,
+		'',
+	);
+
+	const KIND_LABELS: Record<string, string> = {
+		gearset: '配装',
+		gearset_list: '配装清单',
+	};
+
+	const GONE_MESSAGES: Record<string, string> = {
+		revoked: '作者已经撤回了这条分享。',
+		expired: '这条分享已经过期。',
+		unavailable: '内容已被删除，或作者已将它设为私密。',
+	};
+
+	const nodes = {
+		loading: document.querySelector<HTMLElement>('#loading'),
+		ready: document.querySelector<HTMLElement>('#ready'),
+		gone: document.querySelector<HTMLElement>('#gone'),
+		kind: document.querySelector<HTMLElement>('#kind'),
+		title: document.querySelector<HTMLElement>('#title'),
+		meta: document.querySelector<HTMLElement>('#meta'),
+		poster: document.querySelector<HTMLImageElement>('#poster'),
+		hint: document.querySelector<HTMLElement>('#hint'),
+		actions: document.querySelector<HTMLElement>('#actions'),
+		copyStatus: document.querySelector<HTMLElement>('#copy-status'),
+		goneTitle: document.querySelector<HTMLElement>('#gone-title'),
+		goneMessage: document.querySelector<HTMLElement>('#gone-message'),
+		retry: document.querySelector<HTMLButtonElement>('#retry'),
+	};
+
+	function show(target: HTMLElement | null) {
+		for (const node of [nodes.loading, nodes.ready, nodes.gone]) {
+			node?.classList.toggle('hidden', node !== target);
+		}
+	}
+
+	function showGone(title: string, message: string, retryable = false) {
+		if (nodes.goneTitle) nodes.goneTitle.textContent = title;
+		if (nodes.goneMessage) nodes.goneMessage.textContent = message;
+		nodes.retry?.classList.toggle('hidden', !retryable);
+		show(nodes.gone);
+	}
+
+	/** 短码在路径里（/s/<code>）；本地预览没有 nginx 回落时用 ?c=<code>。 */
+	function readCode(): string | null {
+		const fromPath = window.location.pathname.match(/^\/s\/([^/]+)/)?.[1];
+		const raw = fromPath
+			? decodeURIComponent(fromPath)
+			: new URLSearchParams(window.location.search).get('c');
+		if (!raw) return null;
+		const code = raw.replace(/[\s-]/g, '').toUpperCase();
+		return /^[0-9A-Z]{8}(?:[0-9A-Z]{4})?$/.test(code) ? code : null;
+	}
+
+	function detectContext(): { env: ShareEnv; platform: SharePlatform } {
+		const ua = navigator.userAgent;
+		const isIPadDesktopMode = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+		const platform: SharePlatform =
+			/iPhone|iPad|iPod/i.test(ua) || isIPadDesktopMode
+				? 'ios'
+				: /Android/i.test(ua)
+					? 'android'
+					: 'other';
+		if (/MicroMessenger/i.test(ua)) return { env: 'wechat', platform };
+		if (/\sQQ\//.test(ua)) return { env: 'qq', platform };
+		return { env: platform === 'other' ? 'desktop' : 'browser', platform };
+	}
+
+	function actionsFor(env: ShareEnv, share: ShareResolution): { hint: string; actions: ShareAction[] } {
+		const title = share.preview?.title ?? '';
+		const copyLink = { label: '复制链接', copy: { text: share.url, done: '链接已复制' } };
+		const copyCommand = {
+			label: '复制口令',
+			copy: {
+				text: `【Astria天穹】${title} 打开链接查看：${share.url}`,
+				done: '口令已复制，可以粘贴给好友',
+			},
+		};
+		const download = { label: '下载 Astria天穹', href: '/#download' };
+
+		switch (env) {
+			case 'wechat':
+				return {
+					hint: '长按上方海报识别二维码，就能在小程序里查看。想用 App 打开，可以复制链接到浏览器。',
+					actions: [{ ...copyLink, primary: true }],
+				};
+			case 'qq':
+				return {
+					hint: '点右上角「…」选择在浏览器打开，就能跳转到 Astria天穹 App。',
+					actions: [{ ...copyLink, primary: true }, copyCommand],
+				};
+			case 'browser':
+				return {
+					hint: '已经安装 Astria天穹？直接在 App 中打开。',
+					actions: [
+						...(share.appLink ? [{ label: '在 Astria天穹 中打开', href: share.appLink, primary: true }] : []),
+						download,
+						copyCommand,
+					],
+				};
+			case 'desktop':
+				return {
+					hint: '用手机微信或相机扫描海报上的二维码查看。',
+					actions: [download, copyLink],
+				};
+		}
+	}
+
+	async function copyText(text: string): Promise<boolean> {
+		try {
+			await navigator.clipboard.writeText(text);
+			return true;
+		} catch {
+			// 部分内置浏览器（如旧版微信）不开放 Clipboard API，退回到选中复制。
+			const field = document.createElement('textarea');
+			field.value = text;
+			field.setAttribute('readonly', '');
+			field.style.position = 'fixed';
+			field.style.opacity = '0';
+			document.body.append(field);
+			field.select();
+			const copied = document.execCommand('copy');
+			field.remove();
+			return copied;
+		}
+	}
+
+	function renderActions(actions: ShareAction[]) {
+		if (!nodes.actions) return;
+		nodes.actions.replaceChildren(
+			...actions.map(action => {
+				const element = document.createElement(action.href ? 'a' : 'button');
+				element.className = `button ${action.primary ? 'primary' : 'secondary'}`;
+				element.textContent = action.label;
+				if (element instanceof HTMLAnchorElement && action.href) {
+					element.href = action.href;
+				} else if (element instanceof HTMLButtonElement && action.copy) {
+					const copy = action.copy;
+					element.type = 'button';
+					element.addEventListener('click', async () => {
+						const copied = await copyText(copy.text);
+						if (nodes.copyStatus) {
+							nodes.copyStatus.textContent = copied ? copy.done : `复制失败，请手动复制：${copy.text}`;
+						}
+					});
+				}
+				return element;
+			}),
+		);
+	}
+
+	function render(share: ShareResolution, env: ShareEnv) {
+		const preview = share.preview;
+		if (!preview) return;
+		const kind = KIND_LABELS[share.target.type] ?? '分享';
+		if (nodes.kind) nodes.kind.textContent = `好友分享的${kind}`;
+		if (nodes.title) nodes.title.textContent = preview.title;
+		if (nodes.meta) {
+			nodes.meta.textContent = [preview.subtitle, preview.author ? `by ${preview.author}` : null]
+				.filter(Boolean)
+				.join(' · ');
+		}
+		if (nodes.poster) {
+			nodes.poster.src = `${apiBase}/share/links/${encodeURIComponent(share.code)}/poster.png`;
+			nodes.poster.alt = `${preview.title} 的分享海报`;
+		}
+		const { hint, actions } = actionsFor(env, share);
+		if (nodes.hint) nodes.hint.textContent = hint;
+		renderActions(actions);
+		document.title = `${preview.title} · Astria天穹`;
+		show(nodes.ready);
+	}
+
+	async function load() {
+		show(nodes.loading);
+		const code = readCode();
+		if (!code) {
+			showGone('链接不完整', '请确认链接是否复制完整。');
+			return;
+		}
+		const { env } = detectContext();
+		try {
+			const response = await fetch(
+				`${apiBase}/share/links/${encodeURIComponent(code)}?surface=web&env=${env}`,
+				{ cache: 'no-store', headers: { Accept: 'application/json' } },
+			);
+			if (response.status === 404) {
+				showGone('分享链接不存在', '请确认链接是否复制完整。');
+				return;
+			}
+			if (!response.ok) throw new Error(`HTTP ${response.status}`);
+			const share = (await response.json()) as ShareResolution;
+			if (share.status !== 'ok' || !share.preview) {
+				showGone('分享内容已失效', GONE_MESSAGES[share.status] ?? GONE_MESSAGES.unavailable);
+				return;
+			}
+			render(share, env);
+		} catch {
+			showGone('暂时打不开', '网络或服务暂时不可用，请稍后重试。', true);
+		}
+	}
+
+	nodes.retry?.addEventListener('click', () => void load());
+	void load();
+</script>
+
+<style>
+	.share-shell {
+		display: grid;
+		min-height: 100svh;
+		place-items: center;
+		padding: 28px 16px;
+	}
+
+	.share-panel {
+		width: min(460px, 100%);
+		padding: 24px;
+		border: 1px solid var(--line-strong);
+		border-radius: 8px;
+		background: rgba(11, 15, 24, 0.86);
+		box-shadow: var(--shadow);
+	}
+
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		margin-bottom: 22px;
+		font-weight: 700;
+	}
+
+	.brand img {
+		width: 32px;
+		height: 32px;
+		border-radius: 8px;
+	}
+
+	.state {
+		display: grid;
+		gap: 12px;
+	}
+
+	.hidden {
+		display: none !important;
+	}
+
+	#loading {
+		justify-items: center;
+		padding: 48px 0;
+		color: var(--muted);
+	}
+
+	.spinner {
+		width: 28px;
+		height: 28px;
+		border: 3px solid var(--line-strong);
+		border-top-color: var(--teal);
+		border-radius: 50%;
+		animation: spin 0.9s linear infinite;
+	}
+
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	.eyebrow {
+		margin: 0;
+		color: var(--teal);
+		font-size: 0.85rem;
+		font-weight: 600;
+	}
+
+	h1 {
+		margin: 0;
+		font-size: 1.5rem;
+		line-height: 1.3;
+		overflow-wrap: anywhere;
+	}
+
+	p {
+		margin: 0;
+		line-height: 1.6;
+	}
+
+	.meta {
+		color: var(--muted);
+	}
+
+	.poster {
+		margin: 4px 0 0;
+		overflow: hidden;
+		border: 1px solid var(--line);
+		border-radius: 8px;
+		background: var(--bg-2);
+		aspect-ratio: 3 / 4;
+	}
+
+	.poster img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+
+	.hint {
+		color: var(--soft);
+		font-size: 0.92rem;
+	}
+
+	.actions {
+		display: grid;
+		gap: 10px;
+		margin-top: 4px;
+	}
+
+	/* 操作按钮由脚本按环境生成，不带 Astro 作用域属性，所以挂在 .actions 下用 :global。 */
+	.actions :global(.button) {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 46px;
+		padding: 0 18px;
+		border: 1px solid var(--line-strong);
+		border-radius: 8px;
+		background: transparent;
+		color: var(--text);
+		font-weight: 600;
+		cursor: pointer;
+	}
+
+	.actions :global(.button.primary) {
+		border-color: transparent;
+		background: var(--teal);
+		color: #061014;
+	}
+
+	.copy-status {
+		min-height: 1.6em;
+		color: var(--ok);
+		font-size: 0.88rem;
+		overflow-wrap: anywhere;
+	}
+
+	#gone p {
+		color: var(--muted);
+	}
+</style>
