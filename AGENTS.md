@@ -8,6 +8,11 @@ astro dev --background
 
 Manage the background server with `astro dev stop`, `astro dev status`, and `astro dev logs`.
 
+## Deployment
+
+- `pnpm build:sh` builds the site and uploads it to the website host (`scripts/deploy-dist.sh`). The upload **clears the target directory** before extracting, so anything that must stay on the server (verification files, `.well-known`) has to be committed under `public/`.
+- The full production runbook (hosts, nginx, who may deploy what) lives in the private `astria-backend` repo at `docs/operations/production-deploy.md`. Read it before deploying.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build
