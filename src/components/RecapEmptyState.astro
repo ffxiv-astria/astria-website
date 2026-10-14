@@ -138,4 +138,12 @@ const initialAction = embed ? '关闭' : payload.emptyState.actionLabel;
 		background: rgba(255, 255, 255, 0.05);
 		color: rgba(214, 222, 233, 0.6);
 	}
+
+	/* App 内嵌：给原生关闭按钮让位，变量见 TravelRecapExperience 的 .recap-app.embed。 */
+	.embed-empty .brand-row {
+		top: var(--embed-chrome-top);
+		min-height: var(--embed-chrome-height);
+		padding-left: var(--embed-chrome-leading);
+		padding-right: var(--embed-chrome-trailing);
+	}
 </style>

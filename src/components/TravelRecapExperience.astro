@@ -153,10 +153,20 @@ const firstSlideFootnote = firstSlide.footnote && !internalCopyPattern.test(firs
 		--report-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 	}
 
+	/*
+	 * App 内嵌时页面铺满屏幕（viewport-fit=cover），App 把原生的关闭 / 分享按钮叠在页面顶行上。
+	 * App 在 <html> 上设置按钮的位置，页面据此让位：
+	 * --astria-host-top 按钮离安全区顶部的距离；--astria-host-leading / --astria-host-trailing
+	 * 顶行左右两侧要空出的宽度（没有按钮时为 0）。
+	 */
 	.recap-app.embed {
 		width: 100%;
 		max-width: 430px;
 		margin: 0;
+		--embed-chrome-top: calc(env(safe-area-inset-top, 0px) + var(--astria-host-top, 18px));
+		--embed-chrome-height: 44px;
+		--embed-chrome-leading: var(--astria-host-leading, 0px);
+		--embed-chrome-trailing: var(--astria-host-trailing, 0px);
 	}
 
 	.recap-app::after {
@@ -1661,5 +1671,40 @@ const firstSlideFootnote = firstSlide.footnote && !internalCopyPattern.test(firs
 			transition-duration: 0.001ms !important;
 			animation-duration: 0.001ms !important;
 		}
+	}
+
+	.recap-app.embed::after {
+		top: env(safe-area-inset-top, 0px);
+	}
+
+	.recap-app.embed .recap-frame {
+		padding-top: var(--embed-chrome-top);
+	}
+
+	.recap-app.embed .top-chrome,
+	.recap-app.embed .brand-row {
+		min-height: var(--embed-chrome-height);
+		padding-left: var(--embed-chrome-leading);
+		padding-right: var(--embed-chrome-trailing);
+	}
+
+	.recap-app.embed .brand-row {
+		top: var(--embed-chrome-top);
+	}
+
+	.recap-app.embed .icon-action {
+		top: calc(var(--embed-chrome-top) + var(--embed-chrome-height) + 8px);
+	}
+
+	.recap-app.embed .share-status {
+		top: calc(var(--embed-chrome-top) + var(--embed-chrome-height) + 6px);
+	}
+
+	.recap-app.embed .route-line {
+		top: calc(var(--embed-chrome-top) + 100px);
+	}
+
+	.recap-app.embed .start-orbit {
+		top: calc(var(--embed-chrome-top) + 136px);
 	}
 </style>
