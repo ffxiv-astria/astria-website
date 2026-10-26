@@ -47,7 +47,14 @@ Node.js 要求：
 | `/recap/travel/embed` | App 内 WKWebView 轻量版本 |
 | `/travel-annual-recap` | 历史兼容入口，跳转到 `/recap/travel` |
 | `/s/<code>` | 分享短链承接页（静态壳，nginx 把 `/s/*` 回落到 `/s/index.html`；本地预览用 `/s/?c=<code>`） |
-| `/.well-known/apple-app-site-association` | iOS Universal Links 声明，只认领 `/s/*`；需以 `application/json` 返回 |
+| `/pc/<code>` | 玩家挑战独立预览壳；本地预览用 `/pc/?c=<code>`，正式路由配置见下方说明 |
+| `/.well-known/apple-app-site-association` | Apple Universal Links 声明 `/s/*` 与 `/pc/*`；需以 `application/json` 返回，部署与设备验证另行执行 |
+
+玩家挑战分享（2026-10-22）：已实现 `/pc/` 静态预览壳，复用原短码解析服务，接受普通挑战及同题码两个目标，不重定向回 `/s/`。Android 设备只走网页预览与微信／QQ 小程序引导；Apple 浏览器提供经过白名单校验的 App 打开动作，保留小程序回退。网页不答题、不读取个人作答记录。AASA 本地声明已加入 `/pc/*`，nginx 及服务端 landing 配置、旧版 Apple App 和小程序实际落点仍需部署后验收，详见[路由与验收说明](docs/player-challenges-routing.md)及[产品设计](../astria-backend/docs/player-challenges/product-design.md)。
+
+玩家挑战标签筛选已确认纳入首发（产品设计 D150～D155），服务端已实现，客户端接入待完成：从筛选局生成的成绩海报及成绩分享图必须保留“已筛选”和实际题量，不能因题量未减少而省略；普通挑战海报不附个人局标记。分享仍回挑战详情，接收者的普通新局默认全选、不继承分享者筛选，官网预览不公开其整局记录或排除范围，不承担正式筛选及作答流程。
+
+玩家挑战同题码已确认 D156～D165，服务端及官网承接已实现，客户端接入待完成：服务端保存题组及规则快照，短码只是联网查询编号，不编码完整题目。独立入口复用既有解析，到同一挑战详情保留码上下文，由登录用户显式选择同题开局；普通新局默认全选，同题来源锁定原版本、顺序、规则和筛选。网页不正式出题或答题、不公开源玩家私人整局记录，可承接题组所需筛选上下文；成绩图保留同题码及短码、原已筛选及实际题量。码可用性遵守归档／下架暂停与强停旧码失效，不能通过重定向或重签绕过，Android App 仍零改动。
 
 年度回顾是 App 专属入口功能，首页和官网导航不主动指向它。
 
@@ -346,3 +353,5 @@ Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' h
 - 年度回顾的 App 内页面应保持移动端一屏体验，不做桌面大屏主适配；大屏由 App 侧限制 WKWebView 宽度。
 - 年度回顾对用户可见文案不要出现工程说明、隐私实现说明、统计窗口解释等产品注释。
 - 修改 `RecapPayload` 字段时，同步更新 schema、示例 payload、App 构建器和 WKWebView 文档。
+
+玩家挑战技术与接口依据：[技术方案](../astria-backend/docs/player-challenges/technical-design.md)、[分批实施清单](../astria-backend/docs/player-challenges/implementation-plan.md) B9。`pnpm test` 检查安全投影与平台动作，`pnpm test:browser` 构建静态站并使用合成 resolver 响应做浏览器回归；本地测试不代表线上代理、AASA 缓存、客户端深链或设备验收已完成。

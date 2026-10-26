@@ -1,0 +1,163 @@
+---
+import Layout from '../../layouts/Layout.astro';
+// nginx serves this shell for /pc/<code>; the address stays /pc/ and is never redirected to /s/.
+---
+
+<Layout title="FF14 玩家挑战 · Astria天穹" description="在 Astria天穹发现知识、音乐与绘画挑战。" noindex ogImage="https://astria.cxmeow.top/brand/astria-app-icon.png">
+  <main class="challenge-shell">
+    <section class="challenge-panel" aria-live="polite">
+      <a class="brand" href="/"><img src="/brand/astria-app-icon.png" alt="" /><span>Astria天穹</span></a>
+      <div id="pc-loading" class="state"><p>正在读取挑战…</p></div>
+      <div id="pc-ready" class="state" hidden>
+        <p class="eyebrow" id="pc-kind">FF14 玩家挑战</p>
+        <h1 id="pc-title"></h1>
+        <p class="subtitle" id="pc-subtitle"></p>
+        <p class="author" id="pc-author"></p>
+        <div class="same-set" id="pc-same-set" hidden>
+          <span>同题码</span><strong id="pc-code"></strong>
+          <p>进入挑战详情后，确认使用同题码，即可使用相同题组与规则。</p>
+        </div>
+        <p class="participation">请在支持玩家挑战的 Apple App 或微信／QQ 小程序中登录参与。</p>
+        <div class="actions">
+          <a id="pc-open-app" class="button primary" hidden>在 Apple App 中打开</a>
+          <button id="pc-copy" class="button secondary" type="button">复制挑战链接</button>
+        </div>
+        <p id="pc-context-hint" class="hint"></p>
+        <section id="pc-miniapp" class="miniapp" hidden>
+          <img id="pc-wxacode" alt="此挑战的微信小程序码" width="220" height="220" />
+          <p>微信内长按识别，或用微信扫描小程序码。QQ 用户可复制链接，在天穹 QQ 小程序内打开。</p>
+          <p id="pc-code-error" hidden>小程序码暂时无法加载，请复制链接到天穹小程序中打开。</p>
+        </section>
+        <p id="pc-copy-status" role="status"></p>
+      </div>
+      <div id="pc-unavailable" class="state" hidden>
+        <h1 id="pc-error-title">暂时无法查看挑战</h1>
+        <p id="pc-error-message"></p>
+        <button id="pc-retry" class="button secondary" type="button" hidden>重新加载</button>
+        <a class="home-link" href="/">返回 Astria天穹</a>
+      </div>
+      <noscript><p>请启用 JavaScript 查看挑战预览，或复制当前链接到天穹微信／QQ 小程序中打开。</p></noscript>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  import { canOpenAppleApp, challengeShareUrl, detectShareContext, parseChallengeShare, readChallengeCode } from '../../lib/player-challenge-share';
+
+  const apiBase = (import.meta.env.PUBLIC_API_BASE_URL || 'https://ff14search.cxmeow.top/api').replace(/\/$/, '');
+  const get = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+  const loading = get('pc-loading');
+  const ready = get('pc-ready');
+  const unavailable = get('pc-unavailable');
+  const retry = get<HTMLButtonElement>('pc-retry');
+  const context = detectShareContext(navigator.userAgent, navigator.platform, navigator.maxTouchPoints);
+  const code = readChallengeCode(location.pathname, location.search);
+  let currentUrl = '';
+  let requestNumber = 0;
+
+  function show(section: HTMLElement) {
+    for (const node of [loading, ready, unavailable]) node.hidden = node !== section;
+  }
+  function fail(title: string, message: string, retryable = false) {
+    get('pc-error-title').textContent = title;
+    get('pc-error-message').textContent = message;
+    retry.hidden = !retryable;
+    show(unavailable);
+  }
+  async function load() {
+    const request = ++requestNumber;
+    show(loading);
+    if (!code) { fail('链接不完整', '请检查分享链接或八位同题码是否完整。'); return; }
+    try {
+      const response = await fetch(`${apiBase}/share/links/${encodeURIComponent(code)}?surface=web&env=${context.environment}`, {
+        cache: 'no-store', credentials: 'omit', headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(15000),
+      });
+      if (request !== requestNumber) return;
+      if (response.status === 404) { fail('挑战链接不存在', '请核对链接，或向分享者索取新的链接。'); return; }
+      if (!response.ok) throw new Error('Unavailable');
+      const share = parseChallengeShare(await response.json(), code);
+      if (request !== requestNumber) return;
+      if (!share) { fail('这不是玩家挑战链接', '请使用玩家挑战页面生成的分享链接。'); return; }
+      if (share.status !== 'ok') {
+        fail(share.status === 'revoked' ? '分享链接已撤回' : '挑战暂不可用', share.status === 'revoked'
+          ? '此链接已被撤回，请向分享者确认。' : '挑战可能已下架，或同题码引用的内容已失效。请在小程序内查看最新状态。');
+        return;
+      }
+      // All author text is rendered as text, never HTML. Only whitelisted public fields reach the DOM.
+      get('pc-title').textContent = share.title;
+      get('pc-subtitle').textContent = share.subtitle ?? '';
+      get('pc-author').textContent = share.author ? `出题人 · ${share.author}` : '';
+      const sameSet = share.kind === 'player_challenge_same_set';
+      get('pc-kind').textContent = sameSet ? 'FF14 玩家挑战 · 同一题组' : 'FF14 玩家挑战';
+      get('pc-same-set').hidden = !sameSet;
+      get('pc-code').textContent = share.code;
+      currentUrl = challengeShareUrl(location.origin, share.code);
+      const appButton = get<HTMLAnchorElement>('pc-open-app');
+      appButton.hidden = !canOpenAppleApp(context, share);
+      appButton.removeAttribute('href');
+      if (!appButton.hidden && share.appLink) appButton.href = share.appLink;
+      get('pc-context-hint').textContent = context.platform === 'android'
+        ? 'Android 设备请使用微信／QQ 小程序参与。'
+        : context.environment === 'wechat' || context.environment === 'qq'
+          ? '可在小程序中参与；Apple 用户也可将链接复制到系统浏览器。'
+          : '若 App 未安装或版本暂不支持，仍可通过下方微信小程序码参与。';
+      get('pc-miniapp').hidden = !share.miniappAvailable;
+      const wxacode = get<HTMLImageElement>('pc-wxacode');
+      get('pc-code-error').hidden = true;
+      wxacode.hidden = false;
+      if (share.miniappAvailable) wxacode.src = `${apiBase}/share/links/${encodeURIComponent(share.code)}/wxacode.png`;
+      else wxacode.removeAttribute('src');
+      document.title = `${share.title} · Astria天穹`;
+      show(ready);
+    } catch {
+      if (request === requestNumber) fail('暂时无法查看挑战', '网络或服务暂时不可用，请稍后重试。', true);
+    }
+  }
+  get<HTMLImageElement>('pc-wxacode').addEventListener('error', () => {
+    get('pc-wxacode').hidden = true;
+    get('pc-code-error').hidden = false;
+  });
+  get('pc-copy').addEventListener('click', async () => {
+    if (!currentUrl) return;
+    try {
+      await navigator.clipboard.writeText(currentUrl);
+      get('pc-copy-status').textContent = '挑战链接已复制';
+    } catch {
+      get('pc-copy-status').textContent = `请长按复制：${currentUrl}`;
+    }
+  });
+  retry.addEventListener('click', () => void load());
+  document.addEventListener('visibilitychange', () => {
+    // Returning from an old or unsupported app retains the web fallback and refreshes takedowns.
+    if (document.visibilityState === 'visible') void load();
+  });
+  void load();
+</script>
+
+<style>
+  [hidden] { display: none !important; }
+  .challenge-shell { display: grid; min-height: 100svh; place-items: center; padding: 40px 20px; }
+  .challenge-panel { width: min(560px, 100%); padding: clamp(24px, 6vw, 40px); border: 1px solid var(--line-strong); border-radius: 18px; background: var(--surface); box-shadow: var(--shadow); }
+  .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 36px; font-weight: 650; }
+  .brand img { width: 36px; height: 36px; border-radius: 10px; }
+  .state { display: grid; gap: 16px; }
+  .eyebrow { color: var(--teal); font-size: .85rem; font-weight: 650; letter-spacing: .06em; }
+  h1 { margin: 0; font-size: clamp(1.65rem, 5vw, 2rem); line-height: 1.3; overflow-wrap: anywhere; }
+  p { margin: 0; line-height: 1.7; overflow-wrap: anywhere; white-space: pre-wrap; }
+  .subtitle { color: var(--soft); }
+  .author, .hint { color: var(--muted); font-size: .875rem; }
+  .same-set { padding: 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg-2); }
+  .same-set span { color: var(--muted); margin-right: 16px; }
+  .same-set strong { font-family: ui-monospace, monospace; letter-spacing: .13em; color: var(--gold); }
+  .same-set p { margin-top: 8px; font-size: .875rem; }
+  .participation { margin-top: 8px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+  .button { display: inline-flex; justify-content: center; align-items: center; min-height: 46px; padding: 10px 18px; border: 1px solid var(--line-strong); border-radius: 9px; cursor: pointer; font-weight: 650; }
+  .primary { background: var(--teal); color: var(--bg); }
+  .secondary { background: var(--surface-strong); color: var(--text); }
+  .button:focus-visible, .home-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  .miniapp { display: grid; justify-items: center; gap: 14px; padding-top: 20px; border-top: 1px solid var(--line); text-align: center; color: var(--muted); font-size: .875rem; }
+  .miniapp img { max-width: 100%; height: auto; padding: 10px; background: white; border-radius: 10px; }
+  #pc-copy-status { font-size: .875rem; color: var(--teal); user-select: all; }
+  .home-link { color: var(--teal); }
+</style>

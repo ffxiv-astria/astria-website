@@ -10,6 +10,10 @@
           {
             "/": "/s/*",
             "comment": "分享短链，见 astria-backend/docs/share/share-and-return-design.md"
+          },
+          {
+            "/": "/pc/*",
+            "comment": "玩家挑战独立分享入口，仅支持此功能的 Apple App 处理；网页提供小程序回退"
           }
         ]
       }

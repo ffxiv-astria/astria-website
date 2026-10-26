@@ -11,7 +11,9 @@
     "build:sh": "bash ./scripts/deploy-dist.sh",
     "deploy:dist": "bash ./scripts/deploy-dist.sh",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "node --test tests/*.test.ts",
+    "test:browser": "pnpm build && node --test tests/player-challenge-share.browser.mjs"
   },
   "dependencies": {
     "astro": "^7.0.6",
@@ -19,6 +21,7 @@
     "qrcode": "^1.5.4"
   },
   "devDependencies": {
-    "@types/qrcode": "^1.5.6"
+    "@types/qrcode": "^1.5.6",
+    "playwright": "1.60.0"
   }
 }
