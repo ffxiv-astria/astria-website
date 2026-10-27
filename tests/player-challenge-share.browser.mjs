@@ -14,7 +14,7 @@ const fixture = {
   code, status: 'ok', target: { type: 'player_challenge_same_set', id: 'template-id' },
   url: `https://astria.cxmeow.top/pc/${code}`,
   appLink: `astria://player-challenges/${id}?sameSetCode=${code}`,
-  miniappPath: `subPackages/player-challenges/pages/detail/index?id=${id}&sameSetCode=${code}`,
+  miniappPath: `/subPackages/player-challenges/pages/detail/index?id=${id}&sameSetCode=${code}`,
   preview: { title: '<img src=x onerror="window.__injected=true">艾欧泽亚知识挑战', subtitle: '知识 · 即时挑战 · 10 题', author: '天穹出题人' },
   sourceRunId: 'private-run-secret', standardAnswer: 'private-answer-secret',
 };
