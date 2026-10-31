@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { canOpenAppleApp, challengeShareUrl, detectShareContext, parseChallengeShare, readChallengeCode } from '../src/lib/player-challenge-share.ts';
+import { canOpenAppleApp, challengeShareUrl, detectShareContext, normalizeChallengeCode, parseChallengeShare, readChallengeCode } from '../src/lib/player-challenge-share.ts';
 
 const share = {
   code: 'ABCD2345', status: 'ok', target: { type: 'player_challenge_same_set', id: 'id' },
@@ -12,8 +12,25 @@ const share = {
 test('only exact independent public challenge paths and eight character codes are accepted', () => {
   assert.equal(readChallengeCode('/pc/abcd2345', ''), 'ABCD2345');
   assert.equal(readChallengeCode('/pc/', '?c=ABCD2345'), 'ABCD2345');
-  for (const path of ['/s/ABCD2345', '/pc/ABCD2345/extra', '/pc/%E0%A4%A', '/pc/ABCD23456789', '/pc/IIIIIIII']) {
+  for (const path of ['/s/ABCD2345', '/pc/ABCD2345/extra', '/pc/%E0%A4%A', '/pc/ABCD23456789', '/pc/UUUUUUUU', '/pc/%ZZ']) {
     assert.equal(readChallengeCode(path, '?c=ABCD2345'), null);
+  }
+});
+
+// Mirrors astria-backend libs/share-domain/src/share-url.spec.ts and share-code.ts.
+test('challenge codes are normalized the same way as the backend', () => {
+  assert.equal(readChallengeCode('/pc/7kq2-m9xh', ''), '7KQ2M9XH');
+  assert.equal(readChallengeCode('/pc/7kq2-m9xh/', ''), '7KQ2M9XH');
+  assert.equal(readChallengeCode('/pc/%37KQ2M9XH', ''), '7KQ2M9XH');
+  assert.equal(readChallengeCode('/pc/%207KQ2%20M9XH', ''), '7KQ2M9XH');
+  assert.equal(readChallengeCode('/pc/', '?c=7kq2-m9xh'), '7KQ2M9XH');
+  assert.equal(readChallengeCode('/pc/', '?c=7kq2+m9xh'), '7KQ2M9XH');
+  assert.equal(normalizeChallengeCode(' 7kq2 m9xh '), '7KQ2M9XH');
+  assert.equal(normalizeChallengeCode('IL0O-2345'), '11002345');
+  assert.equal(normalizeChallengeCode('il0o2345'), '11002345');
+  assert.equal(readChallengeCode('/pc/IIIIIIII', ''), '11111111');
+  for (const input of ['7KQ2M9X', '7KQ2M9XHA', '7KQ2M9XHABCD', '7KQ2M9XU', '7KQ2_M9XH', '']) {
+    assert.equal(normalizeChallengeCode(input), null);
   }
 });
 

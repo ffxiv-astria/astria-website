@@ -17,6 +17,16 @@ export interface ShareContext {
 
 const CODE = /^[0-9A-HJKMNP-TV-Z]{8}$/;
 
+/**
+ * Mirrors the backend's normalizeShareCode (astria-backend libs/share-domain/src/share-code.ts):
+ * drop whitespace and hyphens, upper-case, and read I/L as 1 and O as 0. Challenge links only use
+ * eight-character public codes, so anything else is rejected.
+ */
+export function normalizeChallengeCode(input: string): string | null {
+  const code = input.replace(/[\s-]/g, '').toUpperCase().replace(/[IL]/g, '1').replace(/O/g, '0');
+  return CODE.test(code) ? code : null;
+}
+
 export function readChallengeCode(pathname: string, search: string): string | null {
   const match = /^\/pc\/([^/]+)\/?$/.exec(pathname);
   let raw: string | null;
@@ -26,8 +36,7 @@ export function readChallengeCode(pathname: string, search: string): string | nu
   } catch {
     return null;
   }
-  const code = raw?.trim().toUpperCase();
-  return code && CODE.test(code) ? code : null;
+  return raw == null ? null : normalizeChallengeCode(raw);
 }
 
 export function detectShareContext(ua: string, platform = '', touchPoints = 0): ShareContext {

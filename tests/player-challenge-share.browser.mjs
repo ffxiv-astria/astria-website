@@ -51,13 +51,16 @@ async function open(ua, response = fixture, path = `/pc/${code}`) {
   const page = await context.newPage();
   const writes = [];
   const external = [];
+  const apiRequests = [];
   await page.route('**/*', async (route) => {
     const request = route.request();
     if (request.method() !== 'GET') writes.push(request.url());
     const url = new URL(request.url());
     if (url.origin === origin) { await route.continue(); return; }
     if (url.pathname.endsWith(`/${code}`)) {
-      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(response) }); return;
+      apiRequests.push(url);
+      const body = typeof response === 'function' ? response(apiRequests.length) : response;
+      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(body) }); return;
     }
     if (url.pathname.endsWith('.png')) {
       await route.fulfill({ status: 200, contentType: 'image/png', body: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLbtAAAAABJRU5ErkJggg==', 'base64') }); return;
@@ -65,7 +68,7 @@ async function open(ua, response = fixture, path = `/pc/${code}`) {
     external.push(url.href); await route.abort();
   });
   await page.goto(`${origin}${path}`);
-  return { page, context, writes, external };
+  return { page, context, writes, external, apiRequests };
 }
 
 test('Android page uses safe text, preserves the same-set code and never offers an App action', async () => {
@@ -132,5 +135,31 @@ test('old /s sharing continues to resolve its existing target types', async () =
     await page.locator('#ready').waitFor({ state: 'visible' });
     assert.equal(await page.locator('#title').textContent(), '原配装分享');
     assert.equal(new URL(page.url()).pathname, `/s/${code}`);
+  } finally { await context.close(); }
+});
+
+test('becoming visible again re-checks without recording a visit or flashing the loading state', async () => {
+  const { page, context, apiRequests } = await open('Mozilla/5.0 Android Mobile', (n) => n < 3 ? fixture : { ...fixture, status: 'revoked' });
+  try {
+    await page.locator('#pc-ready').waitFor({ state: 'visible' });
+    assert.equal(await page.title(), `${fixture.preview.title} · Astria天穹`);
+    assert.equal(apiRequests[0].searchParams.get('surface'), 'web');
+    await page.evaluate(() => {
+      window.__loadingShown = false;
+      new MutationObserver(() => { if (!document.getElementById('pc-loading').hidden) window.__loadingShown = true; })
+        .observe(document.getElementById('pc-loading'), { attributes: true });
+      document.dispatchEvent(new Event('visibilitychange'));
+    });
+    while (apiRequests.length < 2) await page.waitForTimeout(20);
+    await page.waitForTimeout(100);
+    assert.equal(await page.locator('#pc-ready').isVisible(), true);
+    assert.equal(apiRequests[1].search, '');
+    assert.equal(await page.evaluate(() => window.__loadingShown), false);
+    await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
+    await page.locator('#pc-unavailable').waitFor({ state: 'visible' });
+    assert.equal(apiRequests.length, 3);
+    assert.equal(apiRequests[2].search, '');
+    assert.equal(await page.title(), 'FF14 玩家挑战 · Astria天穹');
+    assert.equal(await page.evaluate(() => window.__loadingShown), false);
   } finally { await context.close(); }
 });

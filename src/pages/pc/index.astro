@@ -52,8 +52,11 @@ import Layout from '../../layouts/Layout.astro';
   const retry = get<HTMLButtonElement>('pc-retry');
   const context = detectShareContext(navigator.userAgent, navigator.platform, navigator.maxTouchPoints);
   const code = readChallengeCode(location.pathname, location.search);
+  const defaultTitle = document.title;
   let currentUrl = '';
   let requestNumber = 0;
+  // The backend records a visit whenever `surface` is present, so only an explicit open sends it.
+  let visitRecorded = false;
 
   function show(section: HTMLElement) {
     for (const node of [loading, ready, unavailable]) node.hidden = node !== section;
@@ -62,16 +65,27 @@ import Layout from '../../layouts/Layout.astro';
     get('pc-error-title').textContent = title;
     get('pc-error-message').textContent = message;
     retry.hidden = !retryable;
+    document.title = defaultTitle;
     show(unavailable);
   }
-  async function load() {
+  /**
+   * `refresh` is a re-check when the page becomes visible again: it records no visit, keeps the
+   * current view instead of flashing the loading state, and keeps a shown preview on network errors.
+   */
+  async function load({ refresh = false } = {}) {
     const request = ++requestNumber;
-    show(loading);
+    const recordVisit = !refresh && !visitRecorded;
+    if (!refresh) {
+      document.title = defaultTitle;
+      show(loading);
+    }
     if (!code) { fail('链接不完整', '请检查分享链接或八位同题码是否完整。'); return; }
+    const query = recordVisit ? `?surface=web&env=${context.environment}` : '';
     try {
-      const response = await fetch(`${apiBase}/share/links/${encodeURIComponent(code)}?surface=web&env=${context.environment}`, {
+      const response = await fetch(`${apiBase}/share/links/${encodeURIComponent(code)}${query}`, {
         cache: 'no-store', credentials: 'omit', headers: { Accept: 'application/json' }, signal: AbortSignal.timeout(15000),
       });
+      if (recordVisit) visitRecorded = true;
       if (request !== requestNumber) return;
       if (response.status === 404) { fail('挑战链接不存在', '请核对链接，或向分享者索取新的链接。'); return; }
       if (!response.ok) throw new Error('Unavailable');
@@ -110,7 +124,10 @@ import Layout from '../../layouts/Layout.astro';
       document.title = `${share.title} · Astria天穹`;
       show(ready);
     } catch {
-      if (request === requestNumber) fail('暂时无法查看挑战', '网络或服务暂时不可用，请稍后重试。', true);
+      if (request !== requestNumber) return;
+      // A failed background re-check keeps the preview already shown; takedowns still replace it.
+      if (refresh && !ready.hidden) return;
+      fail('暂时无法查看挑战', '网络或服务暂时不可用，请稍后重试。', true);
     }
   }
   get<HTMLImageElement>('pc-wxacode').addEventListener('error', () => {
@@ -129,7 +146,7 @@ import Layout from '../../layouts/Layout.astro';
   retry.addEventListener('click', () => void load());
   document.addEventListener('visibilitychange', () => {
     // Returning from an old or unsupported app retains the web fallback and refreshes takedowns.
-    if (document.visibilityState === 'visible') void load();
+    if (document.visibilityState === 'visible') void load({ refresh: true });
   });
   void load();
 </script>

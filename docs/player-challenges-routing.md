@@ -19,9 +19,11 @@ location ^~ /pc/ {
 }
 ```
 
+注意：nginx 的 `add_header` 不叠加继承——`location` 内只要写了一条 `add_header`，server 级的 `add_header`（如 HSTS、`X-Content-Type-Options`、CSP）在该 location 中全部失效；合并时需把需要的安全头在这两个 location 内重写一遍，或改用 `include` 公共片段。
+
 `/pc/` 不代理或重定向到 `/s/`。API origin 通过 `PUBLIC_API_BASE_URL` 构建配置选择。当前静态壳使用固定站点 Open Graph 元信息，安全挑战预览由页面 resolver 读取；没有为新路径接入旧 `/s/` 的服务端动态HTML注入，不应将旧 landing 服务直接配置到新路径。
 
-已有 `public/.well-known/apple-app-site-association` 新增 `/pc/*`，保留原 `/s/*`。上线时需核对内容类型与不重定向要求，并验证 Apple 关联缓存；本地文件存在不能证明 CDN／关联缓存已生效。Android manifest 本次不改，新路径不匹配旧版 `/s/` 接管。
+`public/.well-known/apple-app-site-association` 目前**只声明 `/s/*`，暂不声明 `/pc/*`**（2026-10-31 复审移除）。已发布的 App Store／TestFlight 版本还不会解析 `/pc/` 链接，若 AASA 先声明 `/pc/*`，这些版本会接管链接却无法落地，用户也拿不到网页与小程序回退。只有在能解析 `/pc/` 的 iOS 版本发布并被广泛安装之后，才把 `/pc/*` component 加回来（保留 `/s/*` 不变）；届时上线需核对内容类型与不重定向要求，并验证 Apple 关联缓存，本地文件存在不能证明 CDN／关联缓存已生效。Android manifest 本次不改，新路径不匹配旧版 `/s/` 接管。
 
 ## 验收边界
 
