@@ -1,286 +1,729 @@
 ---
-import CrystalScene from '../components/CrystalScene.astro';
+import { Image } from 'astro:assets';
 import SiteHeader from '../components/SiteHeader.astro';
 import Layout from '../layouts/Layout.astro';
+import gameData from '../assets/home/game-data.png';
+import market from '../assets/home/market.png';
+import partyFinder from '../assets/home/party-finder.png';
+
+const appStoreURL = 'https://apps.apple.com/app/id6785364401';
+const features = [
+	{ number: '01', title: '资料与市场', description: '查询道具、任务、副本与 NPC，看看市场价格、成交记录和行情走势。' },
+	{ number: '02', title: '角色与招募', description: '查看角色与个人数据，浏览跨服招募，找到适合自己的队伍。' },
+	{ number: '03', title: '配装与日常工具', description: '配装、采集时钟、天气、房屋信息与收集规划，照顾冒险里的日常。' },
+	{ number: '04', title: '社区与交流', description: '逛逛石之家和云雾街社区，看看新鲜事，也聊聊游戏里的见闻。' },
+];
+const screenshots = [
+	{ image: gameData, title: '游戏资料', description: '从道具查到配方、用途和获取来源。', alt: '天穹游戏资料界面：紫水晶的道具信息、制作配方和用途' },
+	{ image: market, title: '市场行情', description: '价格、成交与走势，买卖前先看一眼。', alt: '天穹市场查询界面：道具最低价、价格曲线和市场概览' },
+	{ image: partyFinder, title: '跨服招募', description: '按副本和玩法筛选，随时翻翻招募板。', alt: '天穹远程招募板界面：招募搜索、副本分类和队伍列表' },
+];
 ---
 
 <Layout
-	title="Astria天穹 - 公共服务"
-	description="Astria天穹官网首页、下载入口、功能介绍与公共服务页面。"
+	title="Astria天穹 - FF14 国服玩家的随身工具箱"
+	description="天穹 iOS 正式版已上架 App Store。为最终幻想14国服玩家提供游戏资料、市场行情、角色与招募查询，以及配装、采集、天气和社区等日常工具。"
+	ogImage="https://astria.cxmeow.top/brand/astria-app-icon.png"
 >
 	<SiteHeader active="home" />
-	<main>
-		<section class="hero">
+	<main id="main-content">
+		<section class="hero section-width" aria-labelledby="hero-title">
 			<div class="hero-copy">
-				<h1>Astria天穹</h1>
-				<p>
-					面向国服玩家的工具型 App。这里是官网首页、下载入口和公共服务页。
-				</p>
+				<p class="release-badge"><span aria-hidden="true"></span>iOS 1.0.0 正式上线</p>
+				<p class="eyebrow">ASTRIA · 天穹</p>
+				<h1 id="hero-title">艾欧泽亚的<br /><span>随身工具箱。</span></h1>
+				<p class="hero-description">为《最终幻想14》国服玩家准备的原生 App。<br class="desktop-break" />从查资料、看行情，到安排日常，把常用的工具放在一起。</p>
 				<div class="hero-actions">
-					<a class="primary" href="#download">前往下载</a>
+					<a class="app-store-badge" href={appStoreURL}>
+						<img src="/brand/download-on-the-app-store-zh-cn.svg" alt="在 App Store 下载" width="109" height="40" />
+					</a>
+					<a class="feature-link" href="#features">了解功能<span aria-hidden="true">↓</span></a>
 				</div>
+				<p class="platform-note">免费下载 · 适用于 iPhone 和 iPad</p>
 			</div>
-			<div class="hero-visual">
-				<CrystalScene />
+			<div class="hero-visual" aria-label="天穹游戏资料与市场查询界面展示">
+				<div class="visual-orbit orbit-one" aria-hidden="true"></div>
+				<div class="visual-orbit orbit-two" aria-hidden="true"></div>
+				<div class="visual-star" aria-hidden="true">✦</div>
+				<div class="hero-shot shot-back">
+					<Image src={gameData} alt="游戏资料：道具、任务、副本一查就有" width={440} format="webp" loading="eager" />
+				</div>
+				<div class="hero-shot shot-front">
+					<Image src={market} alt="市价查询：最低价、成交记录与价格曲线" width={600} format="webp" loading="eager" fetchpriority="high" />
+				</div>
+				<p class="visual-caption"><span aria-hidden="true">✧</span> 让冒险里的琐事，顺手一点。</p>
 			</div>
 		</section>
 
-		<section class="download" id="download" aria-labelledby="download-title">
-			<div class="section-copy">
-				<h2 id="download-title">下载 Astria天穹</h2>
-				<p>先预留正式官网下载入口。后续可接 App Store、TestFlight 或平台分发页。</p>
-			</div>
-			<div class="download-panel">
+		<section class="features section-width" id="features" aria-labelledby="features-title">
+			<div class="section-heading">
 				<div>
-					<strong>iPhone / iPad / Mac</strong>
-					<span>Apple 平台客户端</span>
+					<p class="eyebrow">为每次上线，做些准备</p>
+					<h2 id="features-title">常用的事，<br />在这里一起办好。</h2>
 				</div>
-				<a href="#" aria-disabled="true">即将开放</a>
+				<p class="section-description">查资料、安排日常，或者找人一起出发。<br />从你需要的那个小工具开始。</p>
+			</div>
+			<div class="feature-grid">
+				{features.map((feature) => (
+					<article class="feature-card">
+						<span class="feature-number" aria-hidden="true">{feature.number}</span>
+						<h3>{feature.title}</h3>
+						<p>{feature.description}</p>
+					</article>
+				))}
 			</div>
 		</section>
 
-		<section class="services" id="features" aria-labelledby="features-title">
-			<div class="section-copy">
-				<h2 id="features-title">功能介绍</h2>
-				<p>先把稳定入口搭好，后续官网信息、协议、注销和更多功能页可以沿同一套视觉系统扩展。</p>
+		<section class="showcase section-width" aria-labelledby="showcase-title">
+			<div class="section-heading">
+				<div>
+					<p class="eyebrow">先看几眼</p>
+					<h2 id="showcase-title">熟悉的游戏，<br />顺手的工具。</h2>
+				</div>
+				<p class="section-description">从资料、行情到队伍，<br />把常用的信息带在身边。</p>
 			</div>
-			<div class="service-list">
-				<a href="/legal/ffxiv-materials/">
-					<strong>法律与数据来源</strong>
-					<span>FFXIV 素材声明、第三方数据服务与权利说明</span>
-				</a>
-				<a href="/legal/privacy/">
-					<strong>隐私政策</strong>
-					<span>统一承载后续正式政策文本</span>
-				</a>
-				<a href="/account-deletion/">
-					<strong>账号注销</strong>
-					<span>面向 App 审核与用户自助流程</span>
-				</a>
+			<div class="screenshot-grid">
+				{screenshots.map((shot) => (
+					<figure class="screenshot-card">
+						<div class="screenshot-image">
+							<Image src={shot.image} alt={shot.alt} width={660} widths={[330, 660, 990]} sizes="(max-width: 600px) calc(100vw - 64px), (max-width: 920px) calc((100vw - 60px) / 2), 360px" format="webp" loading="lazy" />
+						</div>
+						<figcaption><h3>{shot.title}</h3><p>{shot.description}</p></figcaption>
+					</figure>
+				))}
+			</div>
+		</section>
+
+		<section class="download section-width" id="download" aria-labelledby="download-title">
+			<div class="download-panel">
+				<div class="download-copy">
+					<img class="download-icon" src="/brand/astria-app-icon.png" alt="天穹 App 图标" width="72" height="72" loading="lazy" />
+					<div>
+						<p class="eyebrow">正式版已上线</p>
+						<h2 id="download-title">下一次冒险，带上天穹。</h2>
+						<p class="download-description">iOS 1.0.0 · iPhone / iPad · 免费下载</p>
+					</div>
+				</div>
+				<a class="store-link" href={appStoreURL}>前往 App Store<span aria-hidden="true">↗</span></a>
 			</div>
 		</section>
 	</main>
+	<footer class="site-footer section-width" aria-labelledby="services-title">
+		<div class="footer-intro">
+			<a class="footer-brand" href="/">Astria天穹</a>
+			<p>陪你安排好，冒险里的日常。</p>
+		</div>
+		<div class="footer-services">
+			<h2 id="services-title">公共服务</h2>
+			<nav aria-label="公共服务">
+				<a href="/legal/privacy/">隐私政策</a>
+				<a href="/legal/terms/">服务协议</a>
+				<a href="/account-deletion/">账号注销</a>
+				<a href="/legal/ffxiv-materials/">法律与数据来源</a>
+			</nav>
+		</div>
+	</footer>
 </Layout>
 
 <style>
 	main {
-		position: relative;
 		overflow: hidden;
 	}
 
-	main::before {
-		content: '';
-		position: absolute;
-		inset: 0;
-		z-index: -1;
-		background-image:
-			radial-gradient(circle, rgba(255, 255, 255, 0.42) 0 1px, transparent 1.4px),
-			linear-gradient(120deg, transparent 0 42%, rgba(98, 230, 221, 0.08) 42.2% 42.5%, transparent 42.7%);
-		background-size: 96px 96px, 100% 100%;
-		opacity: 0.45;
+	.section-width {
+		width: min(1160px, calc(100% - 64px));
+		margin-inline: auto;
 	}
 
-	.hero,
-	.download,
-	.services {
-		width: min(1160px, calc(100% - 36px));
-		margin: 0 auto;
+	.eyebrow {
+		margin: 0 0 20px;
+		color: var(--teal);
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+	}
+
+	.hero {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		align-items: center;
+		gap: 36px;
+		padding-block: 74px 94px;
+	}
+
+	.release-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 9px;
+		margin: 0 0 38px;
+		padding: 8px 12px;
+		border: 1px solid rgba(98, 230, 221, 0.24);
+		border-radius: 6px;
+		background: rgba(98, 230, 221, 0.055);
+		color: var(--soft);
+		font-size: 12px;
+	}
+
+	.release-badge span {
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: var(--teal);
+		box-shadow: 0 0 12px rgba(98, 230, 221, 0.5);
+	}
+
+	h1 {
+		margin: 0;
+		font-size: clamp(46px, 5.1vw, 68px);
+		line-height: 1.24;
+		font-weight: 750;
+		letter-spacing: -0.04em;
+	}
+
+	h1 span {
+		color: var(--teal);
+	}
+
+	.hero-description {
+		max-width: 470px;
+		margin: 26px 0 0;
+		color: var(--soft);
+		font-size: 16px;
+		line-height: 1.95;
+	}
+
+	.hero-actions {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 14px;
+		margin-top: 19.5px;
+		margin-left: -12.5px;
+	}
+
+	.app-store-badge {
+		display: inline-flex;
+		padding: 12.5px;
+		flex-shrink: 0;
+	}
+
+	.app-store-badge img {
+		display: block;
+		width: auto;
+		height: 50px;
+	}
+
+	.store-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 12px;
+		min-height: 44px;
+		padding-block: 8px;
+		border-bottom: 1px solid var(--line-strong);
+		color: var(--soft);
+		font-size: 14px;
+		font-weight: 650;
+		white-space: nowrap;
+		flex-shrink: 0;
+	}
+
+	.feature-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 12px;
+		padding-block: 12px;
+		color: var(--soft);
+		font-size: 14px;
+	}
+
+	.platform-note {
+		margin: 2.5px 0 0;
+		color: var(--muted);
+		font-size: 12px;
+	}
+
+	.hero-visual {
+		position: relative;
+		min-height: 590px;
+		isolation: isolate;
+	}
+
+	.hero-visual::before {
+		content: '';
+		position: absolute;
+		inset: 0 -50px;
+		z-index: -1;
+		background: radial-gradient(ellipse at 50% 46%, rgba(98, 230, 221, 0.16), transparent 65%);
+	}
+
+	.hero-shot {
+		position: absolute;
+		overflow: hidden;
+		border: 1px solid rgba(255, 255, 255, 0.25);
+		border-radius: 18px;
+		box-shadow: 0 26px 70px rgba(0, 0, 0, 0.45);
+	}
+
+	.hero-shot img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	.shot-back {
+		width: 43%;
+		left: 2%;
+		top: 42px;
+		transform: rotate(-8deg);
+	}
+
+	.shot-front {
+		width: 48%;
+		right: 3%;
+		top: 7px;
+		transform: rotate(7deg);
+	}
+
+	.visual-orbit {
+		position: absolute;
+		inset: 90px -40px;
+		z-index: -1;
+		border: 1px solid rgba(98, 230, 221, 0.2);
+		border-radius: 50%;
+		transform: rotate(-24deg);
+	}
+
+	.orbit-two {
+		inset: 145px -34px;
+		border-color: rgba(231, 189, 98, 0.17);
+		transform: rotate(28deg);
+	}
+
+	.visual-star {
+		position: absolute;
+		top: -12px;
+		left: 45%;
+		color: var(--gold);
+		font-size: 32px;
+	}
+
+	.visual-caption {
+		position: absolute;
+		bottom: -8px;
+		left: 0;
+		right: 0;
+		margin: 0;
+		text-align: center;
+		color: var(--muted);
+		font-size: 12px;
+		letter-spacing: 0.03em;
+	}
+
+	.visual-caption span {
+		color: var(--gold);
+		margin-right: 6px;
+	}
+
+	.features, .showcase {
+		padding-block: 74px;
+		border-top: 1px solid var(--line);
+		scroll-margin-top: 90px;
+	}
+
+	.section-heading {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		gap: 28px;
+		margin-bottom: 38px;
+	}
+
+	h2 {
+		margin: 0;
+		font-size: clamp(29px, 3.3vw, 42px);
+		line-height: 1.4;
+		font-weight: 700;
+		letter-spacing: -0.025em;
+	}
+
+	.section-description {
+		margin: 0 0 4px;
+		color: var(--muted);
+		font-size: 14px;
+		line-height: 1.9;
+	}
+
+	.feature-grid {
+		display: grid;
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		border: 1px solid var(--line);
+		border-radius: 10px;
+		overflow: hidden;
+		background: rgba(255, 255, 255, 0.025);
+	}
+
+	.feature-card {
+		padding: 26px 24px 28px;
+	}
+
+	.feature-card + .feature-card {
+		border-left: 1px solid var(--line);
+	}
+
+	.feature-number {
+		color: var(--teal);
+		font-size: 12px;
+		font-variant-numeric: tabular-nums;
+	}
+
+	h3 {
+		margin: 22px 0 12px;
+		font-size: 18px;
+		font-weight: 650;
+	}
+
+	.feature-card p {
+		margin: 0;
+		color: var(--muted);
+		font-size: 13px;
+		line-height: 1.9;
+	}
+
+	.screenshot-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 24px;
+	}
+
+	.screenshot-card {
+		min-width: 0;
+		margin: 0;
+	}
+
+	.screenshot-image {
+		overflow: hidden;
+		border: 1px solid var(--line-strong);
+		border-radius: 12px;
+		background: #eef2fc;
+	}
+
+	.screenshot-image img {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	figcaption {
+		padding: 0 2px;
+	}
+
+	figcaption h3 {
+		margin: 22px 0 8px;
+		font-size: 17px;
+	}
+
+	figcaption p {
+		margin: 0;
+		color: var(--muted);
+		font-size: 13px;
+		line-height: 1.8;
 	}
 
 	.download {
-		display: grid;
-		grid-template-columns: minmax(260px, 0.58fr) minmax(0, 1fr);
-		gap: 28px;
-		align-items: center;
-		padding: 70px 0;
-		border-top: 1px solid var(--line);
+		padding-block: 22px 76px;
+		scroll-margin-top: 100px;
 	}
 
 	.download-panel {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 20px;
-		padding: 22px;
-		border: 1px solid var(--line-strong);
-		border-radius: 8px;
-		background: rgba(255, 255, 255, 0.055);
-		box-shadow: var(--shadow);
+		gap: 32px;
+		padding: 36px;
+		border: 1px solid rgba(98, 230, 221, 0.26);
+		border-radius: 12px;
+		background: linear-gradient(120deg, rgba(98, 230, 221, 0.09), rgba(159, 140, 255, 0.045));
 	}
 
-	.download-panel strong,
-	.download-panel span {
-		display: block;
-	}
-
-	.download-panel strong {
-		font-size: 22px;
-	}
-
-	.download-panel span {
-		margin-top: 8px;
-		color: var(--muted);
-		font-size: 14px;
-	}
-
-	.download-panel a {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		min-height: 42px;
-		padding: 0 16px;
-		border: 1px solid rgba(231, 189, 98, 0.38);
-		border-radius: 8px;
-		color: var(--gold);
-		font-size: 14px;
-		font-weight: 760;
-		white-space: nowrap;
-	}
-
-	.hero {
-		display: grid;
-		grid-template-columns: minmax(0, 0.88fr) minmax(420px, 1fr);
-		align-items: center;
-		gap: 44px;
-		min-height: calc(100svh - 68px);
-		padding: 54px 0 72px;
-	}
-
-	.hero-copy h1 {
-		margin: 0;
-		font-size: clamp(48px, 7vw, 86px);
-		line-height: 0.94;
-		letter-spacing: 0;
-		white-space: nowrap;
-	}
-
-	.hero-copy p {
-		max-width: 620px;
-		margin: 28px 0 0;
-		color: var(--soft);
-		font-size: clamp(17px, 2vw, 21px);
-		line-height: 1.8;
-	}
-
-	.hero-actions {
+	.download-copy {
 		display: flex;
-		flex-wrap: wrap;
-		gap: 12px;
-		margin-top: 34px;
-	}
-
-	.primary,
-	.secondary {
-		display: inline-flex;
 		align-items: center;
-		justify-content: center;
-		min-height: 46px;
-		padding: 0 18px;
-		border-radius: 8px;
-		font-size: 15px;
-		font-weight: 760;
+		gap: 24px;
 	}
 
-	.primary {
-		background: linear-gradient(135deg, var(--teal), #b3fbf3);
-		color: #071014;
-		box-shadow: 0 18px 44px rgba(98, 230, 221, 0.18);
+	.download-icon {
+		flex: 0 0 auto;
+		border-radius: 16px;
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 	}
 
-	.secondary {
-		border: 1px solid var(--line-strong);
-		background: rgba(255, 255, 255, 0.05);
-		color: var(--text);
+	.download-copy .eyebrow {
+		margin-bottom: 10px;
+		font-size: 11px;
 	}
 
-	.section-copy h2 {
-		margin: 0;
-		font-size: clamp(30px, 4.2vw, 56px);
-		line-height: 1.08;
-		letter-spacing: 0;
+	.download-copy h2 {
+		font-size: clamp(22px, 2.3vw, 28px);
 	}
 
-	.section-copy p {
-		margin: 16px 0 0;
+	.download-description {
+		margin: 12px 0 0;
 		color: var(--muted);
-		font-size: 16px;
-		line-height: 1.8;
+		font-size: 12px;
 	}
 
-	.services {
-		padding: 72px 0 100px;
+
+	.site-footer {
+		display: flex;
+		justify-content: space-between;
+		gap: 40px;
+		padding-block: 34px 46px;
 		border-top: 1px solid var(--line);
 	}
 
-	.service-list {
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: 12px;
-		margin-top: 28px;
-	}
-
-	.service-list a {
-		min-height: 132px;
-		padding: 18px;
-		border: 1px solid var(--line);
-		border-radius: 8px;
-		background: rgba(255, 255, 255, 0.045);
-	}
-
-	.service-list strong,
-	.service-list span {
-		display: block;
-	}
-
-	.service-list strong {
+	.footer-brand {
 		font-size: 18px;
+		font-weight: 750;
 	}
 
-	.service-list span {
-		margin-top: 12px;
+	.footer-intro p {
+		margin: 12px 0 0;
 		color: var(--muted);
-		font-size: 14px;
-		line-height: 1.6;
+		font-size: 12px;
 	}
 
-	@media (max-width: 920px) {
-		.hero,
-		.download {
-			grid-template-columns: 1fr;
-		}
+	.footer-services h2 {
+		margin: 2px 0 16px;
+		font-size: 12px;
+		color: var(--muted);
+		font-weight: 500;
+	}
 
+	.footer-services nav {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 16px 24px;
+	}
+
+	.footer-services a {
+		color: var(--soft);
+		font-size: 12px;
+	}
+
+	.feature-link:hover, .footer-services a:hover, .store-link:hover {
+		color: var(--teal);
+	}
+
+	:global(a:focus-visible) {
+		outline: 2px solid var(--teal);
+		outline-offset: 6px;
+	}
+
+	@media (min-width: 1240px) {
 		.hero {
-			min-height: 0;
-			padding-top: 38px;
+			gap: 64px;
 		}
 
-		.service-list {
-			grid-template-columns: repeat(2, 1fr);
-		}
 	}
 
-	@media (max-width: 580px) {
-		.hero,
-		.download,
-		.services {
-			width: min(100% - 28px, 1160px);
+	@media (max-width: 1040px) {
+		.hero {
+			gap: 12px;
+			padding-top: 56px;
 		}
 
-		.hero-actions,
-		.primary,
-		.secondary,
-		.download-panel,
-		.download-panel a {
-			width: 100%;
+		.hero-visual {
+			min-height: 500px;
+		}
+
+		h1 {
+			font-size: 48px;
+		}
+
+		.feature-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.feature-card:nth-child(3) {
+			border-left: 0;
+		}
+
+		.feature-card:nth-child(n + 3) {
+			border-top: 1px solid var(--line);
 		}
 
 		.download-panel {
-			align-items: flex-start;
 			flex-direction: column;
+			align-items: flex-start;
 		}
 
-		.service-list {
+	}
+
+	@media (max-width: 760px) {
+		.section-width {
+			width: calc(100% - 40px);
+		}
+
+		.hero {
+			grid-template-columns: 1fr;
+			gap: 40px;
+			padding-block: 40px 58px;
+		}
+
+		.release-badge {
+			margin-bottom: 30px;
+		}
+
+		h1 {
+			font-size: clamp(42px, 8vw, 60px);
+		}
+
+		.hero-description {
+			max-width: 100%;
+		}
+
+		.hero-visual {
+			width: min(440px, 100%);
+			min-height: 500px;
+			justify-self: center;
+		}
+
+		.shot-back {
+			left: 5%;
+		}
+
+		.shot-front {
+			right: 6%;
+		}
+
+		.features, .showcase {
+			padding-block: 52px;
+		}
+
+		.section-heading {
+			align-items: flex-start;
+			flex-direction: column;
+			gap: 18px;
+			margin-bottom: 28px;
+		}
+
+		.section-description br {
+			display: none;
+		}
+
+		.screenshot-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 28px 18px;
+		}
+
+		.site-footer {
+			flex-direction: column;
+			gap: 30px;
+		}
+
+		.download {
+			padding-bottom: 52px;
+		}
+
+	}
+
+	@media (max-width: 480px) {
+		.hero-visual {
+			min-height: 440px;
+		}
+
+		.hero-shot {
+			border-radius: 12px;
+		}
+
+		.visual-orbit {
+			inset-inline: -12px;
+		}
+
+		.hero-description {
+			font-size: 15px;
+		}
+
+		.desktop-break {
+			display: none;
+		}
+
+		.hero-actions {
+			gap: 10px;
+		}
+
+
+		.feature-card {
+			padding: 22px 18px;
+		}
+
+		.feature-card h3 {
+			font-size: 16px;
+		}
+
+		.feature-card p {
+			font-size: 12px;
+		}
+
+		.screenshot-grid {
+			grid-template-columns: 1fr;
+			gap: 34px;
+		}
+
+		.screenshot-card {
+			width: min(100%, 340px);
+			justify-self: center;
+		}
+
+		.download-panel {
+			padding: 24px;
+			gap: 26px;
+		}
+
+		.download-copy {
+			align-items: flex-start;
+			gap: 16px;
+		}
+
+		.download-icon {
+			width: 48px;
+			height: 48px;
+			border-radius: 11px;
+		}
+
+		.download-copy h2 {
+			font-size: 22px;
+		}
+
+		.download-description {
+			line-height: 1.8;
+		}
+
+
+		.footer-services nav {
+			gap: 16px 20px;
+		}
+
+	}
+
+	@media (max-width: 360px) {
+		.hero-visual {
+			min-height: 390px;
+		}
+
+		h1 {
+			font-size: 38px;
+		}
+
+		.feature-grid {
 			grid-template-columns: 1fr;
 		}
+
+		.feature-card + .feature-card {
+			border-left: 0;
+			border-top: 1px solid var(--line);
+		}
+
 	}
+
 </style>

@@ -18,7 +18,8 @@
   "dependencies": {
     "astro": "^7.0.6",
     "html-to-image": "^1.11.13",
-    "qrcode": "^1.5.4"
+    "qrcode": "^1.5.4",
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
     "@types/qrcode": "^1.5.6",
