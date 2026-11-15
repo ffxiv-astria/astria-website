@@ -1,729 +1,936 @@
 ---
-import { Image } from 'astro:assets';
-import SiteHeader from '../components/SiteHeader.astro';
-import Layout from '../layouts/Layout.astro';
-import gameData from '../assets/home/game-data.png';
-import market from '../assets/home/market.png';
-import partyFinder from '../assets/home/party-finder.png';
-
-const appStoreURL = 'https://apps.apple.com/app/id6785364401';
-const features = [
-	{ number: '01', title: '资料与市场', description: '查询道具、任务、副本与 NPC，看看市场价格、成交记录和行情走势。' },
-	{ number: '02', title: '角色与招募', description: '查看角色与个人数据，浏览跨服招募，找到适合自己的队伍。' },
-	{ number: '03', title: '配装与日常工具', description: '配装、采集时钟、天气、房屋信息与收集规划，照顾冒险里的日常。' },
-	{ number: '04', title: '社区与交流', description: '逛逛石之家和云雾街社区，看看新鲜事，也聊聊游戏里的见闻。' },
-];
-const screenshots = [
-	{ image: gameData, title: '游戏资料', description: '从道具查到配方、用途和获取来源。', alt: '天穹游戏资料界面：紫水晶的道具信息、制作配方和用途' },
-	{ image: market, title: '市场行情', description: '价格、成交与走势，买卖前先看一眼。', alt: '天穹市场查询界面：道具最低价、价格曲线和市场概览' },
-	{ image: partyFinder, title: '跨服招募', description: '按副本和玩法筛选，随时翻翻招募板。', alt: '天穹远程招募板界面：招募搜索、副本分类和队伍列表' },
-];
+import { Image } from "astro:assets";
+import SiteLayout from "../layouts/SiteLayout.astro";
+import GuideCard from "../components/site/GuideCard.astro";
+import { featureGroups, guides, updates } from "../data/site";
+import gameData from "../assets/home/game-data.png";
+import market from "../assets/home/market.png";
+import partyFinder from "../assets/home/party-finder.png";
+import ipadGearing from "../assets/screenshots/apple/ipad-gearing.png";
+const featuredGuides = [
+  "getting-started",
+  "account-sync",
+  "data-freshness",
+].map((slug) => guides.find((guide) => guide.slug === slug)!);
+const latest = updates.find((update) => update.kind === "Apple App")!;
 ---
 
-<Layout
-	title="Astria天穹 - FF14 国服玩家的随身工具箱"
-	description="天穹 iOS 正式版已上架 App Store。为最终幻想14国服玩家提供游戏资料、市场行情、角色与招募查询，以及配装、采集、天气和社区等日常工具。"
-	ogImage="https://astria.cxmeow.top/brand/astria-app-icon.png"
+<SiteLayout
+  title="Astria天穹 — FF14 国服资料查询、市场行情与日常工具"
+  description="为最终幻想14国服玩家准备的资料、行情、配装、日常工具与玩家社区。了解天穹 App 和微信小程序，找到适合自己的使用入口。"
 >
-	<SiteHeader active="home" />
-	<main id="main-content">
-		<section class="hero section-width" aria-labelledby="hero-title">
-			<div class="hero-copy">
-				<p class="release-badge"><span aria-hidden="true"></span>iOS 1.0.0 正式上线</p>
-				<p class="eyebrow">ASTRIA · 天穹</p>
-				<h1 id="hero-title">艾欧泽亚的<br /><span>随身工具箱。</span></h1>
-				<p class="hero-description">为《最终幻想14》国服玩家准备的原生 App。<br class="desktop-break" />从查资料、看行情，到安排日常，把常用的工具放在一起。</p>
-				<div class="hero-actions">
-					<a class="app-store-badge" href={appStoreURL}>
-						<img src="/brand/download-on-the-app-store-zh-cn.svg" alt="在 App Store 下载" width="109" height="40" />
-					</a>
-					<a class="feature-link" href="#features">了解功能<span aria-hidden="true">↓</span></a>
-				</div>
-				<p class="platform-note">免费下载 · 适用于 iPhone 和 iPad</p>
-			</div>
-			<div class="hero-visual" aria-label="天穹游戏资料与市场查询界面展示">
-				<div class="visual-orbit orbit-one" aria-hidden="true"></div>
-				<div class="visual-orbit orbit-two" aria-hidden="true"></div>
-				<div class="visual-star" aria-hidden="true">✦</div>
-				<div class="hero-shot shot-back">
-					<Image src={gameData} alt="游戏资料：道具、任务、副本一查就有" width={440} format="webp" loading="eager" />
-				</div>
-				<div class="hero-shot shot-front">
-					<Image src={market} alt="市价查询：最低价、成交记录与价格曲线" width={600} format="webp" loading="eager" fetchpriority="high" />
-				</div>
-				<p class="visual-caption"><span aria-hidden="true">✧</span> 让冒险里的琐事，顺手一点。</p>
-			</div>
-		</section>
-
-		<section class="features section-width" id="features" aria-labelledby="features-title">
-			<div class="section-heading">
-				<div>
-					<p class="eyebrow">为每次上线，做些准备</p>
-					<h2 id="features-title">常用的事，<br />在这里一起办好。</h2>
-				</div>
-				<p class="section-description">查资料、安排日常，或者找人一起出发。<br />从你需要的那个小工具开始。</p>
-			</div>
-			<div class="feature-grid">
-				{features.map((feature) => (
-					<article class="feature-card">
-						<span class="feature-number" aria-hidden="true">{feature.number}</span>
-						<h3>{feature.title}</h3>
-						<p>{feature.description}</p>
-					</article>
-				))}
-			</div>
-		</section>
-
-		<section class="showcase section-width" aria-labelledby="showcase-title">
-			<div class="section-heading">
-				<div>
-					<p class="eyebrow">先看几眼</p>
-					<h2 id="showcase-title">熟悉的游戏，<br />顺手的工具。</h2>
-				</div>
-				<p class="section-description">从资料、行情到队伍，<br />把常用的信息带在身边。</p>
-			</div>
-			<div class="screenshot-grid">
-				{screenshots.map((shot) => (
-					<figure class="screenshot-card">
-						<div class="screenshot-image">
-							<Image src={shot.image} alt={shot.alt} width={660} widths={[330, 660, 990]} sizes="(max-width: 600px) calc(100vw - 64px), (max-width: 920px) calc((100vw - 60px) / 2), 360px" format="webp" loading="lazy" />
-						</div>
-						<figcaption><h3>{shot.title}</h3><p>{shot.description}</p></figcaption>
-					</figure>
-				))}
-			</div>
-		</section>
-
-		<section class="download section-width" id="download" aria-labelledby="download-title">
-			<div class="download-panel">
-				<div class="download-copy">
-					<img class="download-icon" src="/brand/astria-app-icon.png" alt="天穹 App 图标" width="72" height="72" loading="lazy" />
-					<div>
-						<p class="eyebrow">正式版已上线</p>
-						<h2 id="download-title">下一次冒险，带上天穹。</h2>
-						<p class="download-description">iOS 1.0.0 · iPhone / iPad · 免费下载</p>
-					</div>
-				</div>
-				<a class="store-link" href={appStoreURL}>前往 App Store<span aria-hidden="true">↗</span></a>
-			</div>
-		</section>
-	</main>
-	<footer class="site-footer section-width" aria-labelledby="services-title">
-		<div class="footer-intro">
-			<a class="footer-brand" href="/">Astria天穹</a>
-			<p>陪你安排好，冒险里的日常。</p>
-		</div>
-		<div class="footer-services">
-			<h2 id="services-title">公共服务</h2>
-			<nav aria-label="公共服务">
-				<a href="/legal/privacy/">隐私政策</a>
-				<a href="/legal/terms/">服务协议</a>
-				<a href="/account-deletion/">账号注销</a>
-				<a href="/legal/ffxiv-materials/">法律与数据来源</a>
-			</nav>
-		</div>
-	</footer>
-</Layout>
-
+  <section class="hero wrap">
+    <div class="hero-copy">
+      <a class="release-note" href="/updates/#ios-1-1-0">
+        <span class="release-dot" aria-hidden="true"></span>Apple App{" "}
+        {latest.version} 已发布<span aria-hidden="true">↗</span>
+      </a>
+      <p class="eyebrow">为艾欧泽亚的每一天</p>
+      <h1>
+        把冒险里的日常，
+        <br />
+        <span>安排好。</span>
+      </h1>
+      <p class="hero-description">
+        查一件道具，看看行情，找一支队伍。
+        <br />
+        从上线前的准备，到下线后的惦记，
+        <br class="hero-break" />
+        天穹把常用的工具与玩家内容放在一起。
+      </p>
+      <div class="actions">
+        <a class="button primary" href="/start/">
+          开始使用<span aria-hidden="true">↗</span>
+        </a>
+        <a class="text-link" href="/features/">
+          看看能做什么<span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <p class="hero-platforms">
+        iPhone · iPad · 微信小程序<span>为《最终幻想14》国服玩家制作</span>
+      </p>
+    </div>
+    <div class="hero-visual">
+      <span class="hero-orbit orbit-one" aria-hidden="true"></span>
+      <span class="hero-orbit orbit-two" aria-hidden="true"></span>
+      <span class="hero-spark" aria-hidden="true">
+        ✦
+      </span>
+      <div class="hero-shot shot-back">
+        <Image
+          src={gameData}
+          alt="天穹游戏资料界面，展示道具信息、制作配方与用途"
+          width={430}
+          format="webp"
+          loading="eager"
+        />
+      </div>
+      <div class="hero-shot shot-front">
+        <Image
+          src={market}
+          alt="天穹市场界面，展示价格、成交记录与行情曲线"
+          width={620}
+          format="webp"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+      <div class="visual-note">
+        <span aria-hidden="true">✧</span>
+        <span>熟悉的游戏，顺手的工具。</span>
+      </div>
+    </div>
+  </section>
+  <section class="entry-strip wrap" id="download" aria-label="选择使用入口">
+    <div>
+      <p>从你习惯的地方开始。</p>
+      <span>下载 App，或在微信里随手查询。</span>
+    </div>
+    <a href="/start/#apple">
+      <span class="entry-icon" aria-hidden="true">
+        ↗
+      </span>
+      <span>
+        天穹 App<small>iPhone 与 iPad</small>
+      </span>
+      <span aria-hidden="true">→</span>
+    </a>
+    <a href="/start/#wechat">
+      <span class="entry-icon wechat-icon" aria-hidden="true">
+        ◉
+      </span>
+      <span>
+        微信小程序<small>搜索「FF14检索工具」</small>
+      </span>
+      <span aria-hidden="true">→</span>
+    </a>
+  </section>
+  <section class="section wrap" id="features">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">从你需要的那件小事开始</p>
+        <h2>
+          一个问题，
+          <br />
+          总能找到一点线索。
+        </h2>
+      </div>
+      <p>
+        查资料、做准备、安排日常，
+        <br />
+        也看看其他玩家正在经历什么。
+      </p>
+    </div>
+    <div class="scenario-grid">
+      {featureGroups.map((group) => (
+        <a
+          class={`scenario scenario-${group.id}`}
+          href={`/features/#${group.id}`}
+        >
+          <div class="scenario-top">
+            <span class="number">{group.number}</span>
+            <span aria-hidden="true">↗</span>
+          </div>
+          <h3>{group.title}</h3>
+          <p>{group.description}</p>
+          <div class="scenario-tags">
+            {group.items.slice(0, 2).map((item) => (
+              <span>{item}</span>
+            ))}
+          </div>
+        </a>
+      ))}
+      <a class="scenario scenario-all" href="/features/">
+        <span class="number">EXPLORE</span>
+        <h3>
+          还有哪些
+          <br />
+          顺手的小工具？
+        </h3>
+        <span class="text-link">
+          完整功能介绍<span aria-hidden="true">→</span>
+        </span>
+      </a>
+    </div>
+  </section>
+  <section class="showcase section section-top">
+    <div class="wrap">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">先看几眼</p>
+          <h2>
+            信息放在一起，
+            <br />
+            准备就有了头绪。
+          </h2>
+        </div>
+        <p>
+          真实应用界面。
+          <br />
+          从资料、行情到队伍，一步步继续探索。
+        </p>
+      </div>
+      <div class="showcase-grid">
+        <figure>
+          <div class="screen-frame">
+            <Image
+              src={gameData}
+              alt="道具详情页面，包含制作配方、用途和获取来源"
+              width={720}
+              format="webp"
+              loading="lazy"
+            />
+          </div>
+          <figcaption>
+            <span>01 / 资料</span>
+            <h3>从一件道具，继续查下去。</h3>
+            <p>配方、来源、用途，沿着关联信息找到下一步。</p>
+          </figcaption>
+        </figure>
+        <figure>
+          <div class="screen-frame">
+            <Image
+              src={market}
+              alt="市场行情页面，包含当前价格、成交与走势"
+              width={720}
+              format="webp"
+              loading="lazy"
+            />
+          </div>
+          <figcaption>
+            <span>02 / 行情</span>
+            <h3>买卖之前，多一点依据。</h3>
+            <p>结合价格、成交和更新时间，做好自己的判断。</p>
+          </figcaption>
+        </figure>
+        <figure>
+          <div class="screen-frame">
+            <Image
+              src={partyFinder}
+              alt="跨服招募页面，包含副本筛选与招募队伍列表"
+              width={720}
+              format="webp"
+              loading="lazy"
+            />
+          </div>
+          <figcaption>
+            <span>03 / 队伍</span>
+            <h3>找到一起出发的人。</h3>
+            <p>按副本与玩法筛选，在游戏外也能翻翻招募板。</p>
+          </figcaption>
+        </figure>
+      </div>
+      <p class="screenshot-note">
+        界面示例；数据内容与功能开放情况以实际客户端为准。
+      </p>
+    </div>
+  </section>
+  <section class="workspace section wrap">
+    <div class="workspace-copy">
+      <p class="eyebrow">给更大的屏幕，也多一点空间</p>
+      <h2>
+        摊开来看，
+        <br />
+        细节就有了位置。
+      </h2>
+      <p>
+        在 iPad 上，把配装、属性和说明，
+        <br />
+        并列放进更宽的工作空间里。
+      </p>
+      <a class="text-link" href="/features/#planning">
+        了解配装与规划<span aria-hidden="true">↗</span>
+      </a>
+      <span class="workspace-caption">iPad App 界面 · 演示配装与示例数据</span>
+    </div>
+    <figure class="workspace-screen">
+      <Image
+        src={ipadGearing}
+        alt="天穹 iPad 配装详情示例，核心数据、属性和装备并列展示，使用演示数据"
+        width={1400}
+        format="webp"
+        loading="lazy"
+      />
+    </figure>
+  </section>
+  <section class="section wrap">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">不用自己摸索所有细节</p>
+        <h2>用之前，先看这一篇。</h2>
+      </div>
+      <a class="text-link" href="/guides/">
+        全部使用指南<span aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <div class="guide-grid">
+      {featuredGuides.map((guide) => (
+        <GuideCard guide={guide} />
+      ))}
+    </div>
+  </section>
+  <section class="update-section section-top wrap">
+    <div>
+      <p class="eyebrow">最近更新</p>
+      <h2>天穹，还在慢慢变好。</h2>
+    </div>
+    <a href="/updates/#ios-1-1-0" class="latest-update">
+      <div class="pills">
+        <span class="pill teal">
+          {latest.kind} {latest.version}
+        </span>
+        <time datetime={latest.date}>{latest.date.replaceAll("-", ".")}</time>
+      </div>
+      <h3>{latest.title}</h3>
+      <p>{latest.summary}</p>
+      <span class="text-link">
+        查看更新记录<span aria-hidden="true">→</span>
+      </span>
+    </a>
+  </section>
+  <section class="wrap closing">
+    <div class="cta-panel">
+      <div>
+        <h2>下一次冒险，带上天穹。</h2>
+        <p>从一个顺手的入口，开始安排游戏里的日常。</p>
+      </div>
+      <div class="actions">
+        <a class="button primary" href="/start/">
+          选择使用入口<span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</SiteLayout>
 <style>
-	main {
-		overflow: hidden;
-	}
-
-	.section-width {
-		width: min(1160px, calc(100% - 64px));
-		margin-inline: auto;
-	}
-
-	.eyebrow {
-		margin: 0 0 20px;
-		color: var(--teal);
-		font-size: 12px;
-		font-weight: 700;
-		letter-spacing: 0.12em;
-	}
-
-	.hero {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		align-items: center;
-		gap: 36px;
-		padding-block: 74px 94px;
-	}
-
-	.release-badge {
-		display: inline-flex;
-		align-items: center;
-		gap: 9px;
-		margin: 0 0 38px;
-		padding: 8px 12px;
-		border: 1px solid rgba(98, 230, 221, 0.24);
-		border-radius: 6px;
-		background: rgba(98, 230, 221, 0.055);
-		color: var(--soft);
-		font-size: 12px;
-	}
-
-	.release-badge span {
-		width: 6px;
-		height: 6px;
-		border-radius: 50%;
-		background: var(--teal);
-		box-shadow: 0 0 12px rgba(98, 230, 221, 0.5);
-	}
-
-	h1 {
-		margin: 0;
-		font-size: clamp(46px, 5.1vw, 68px);
-		line-height: 1.24;
-		font-weight: 750;
-		letter-spacing: -0.04em;
-	}
-
-	h1 span {
-		color: var(--teal);
-	}
-
-	.hero-description {
-		max-width: 470px;
-		margin: 26px 0 0;
-		color: var(--soft);
-		font-size: 16px;
-		line-height: 1.95;
-	}
-
-	.hero-actions {
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
-		gap: 14px;
-		margin-top: 19.5px;
-		margin-left: -12.5px;
-	}
-
-	.app-store-badge {
-		display: inline-flex;
-		padding: 12.5px;
-		flex-shrink: 0;
-	}
-
-	.app-store-badge img {
-		display: block;
-		width: auto;
-		height: 50px;
-	}
-
-	.store-link {
-		display: inline-flex;
-		align-items: center;
-		gap: 12px;
-		min-height: 44px;
-		padding-block: 8px;
-		border-bottom: 1px solid var(--line-strong);
-		color: var(--soft);
-		font-size: 14px;
-		font-weight: 650;
-		white-space: nowrap;
-		flex-shrink: 0;
-	}
-
-	.feature-link {
-		display: inline-flex;
-		align-items: center;
-		gap: 12px;
-		padding-block: 12px;
-		color: var(--soft);
-		font-size: 14px;
-	}
-
-	.platform-note {
-		margin: 2.5px 0 0;
-		color: var(--muted);
-		font-size: 12px;
-	}
-
-	.hero-visual {
-		position: relative;
-		min-height: 590px;
-		isolation: isolate;
-	}
-
-	.hero-visual::before {
-		content: '';
-		position: absolute;
-		inset: 0 -50px;
-		z-index: -1;
-		background: radial-gradient(ellipse at 50% 46%, rgba(98, 230, 221, 0.16), transparent 65%);
-	}
-
-	.hero-shot {
-		position: absolute;
-		overflow: hidden;
-		border: 1px solid rgba(255, 255, 255, 0.25);
-		border-radius: 18px;
-		box-shadow: 0 26px 70px rgba(0, 0, 0, 0.45);
-	}
-
-	.hero-shot img {
-		display: block;
-		width: 100%;
-		height: auto;
-	}
-
-	.shot-back {
-		width: 43%;
-		left: 2%;
-		top: 42px;
-		transform: rotate(-8deg);
-	}
-
-	.shot-front {
-		width: 48%;
-		right: 3%;
-		top: 7px;
-		transform: rotate(7deg);
-	}
-
-	.visual-orbit {
-		position: absolute;
-		inset: 90px -40px;
-		z-index: -1;
-		border: 1px solid rgba(98, 230, 221, 0.2);
-		border-radius: 50%;
-		transform: rotate(-24deg);
-	}
-
-	.orbit-two {
-		inset: 145px -34px;
-		border-color: rgba(231, 189, 98, 0.17);
-		transform: rotate(28deg);
-	}
-
-	.visual-star {
-		position: absolute;
-		top: -12px;
-		left: 45%;
-		color: var(--gold);
-		font-size: 32px;
-	}
-
-	.visual-caption {
-		position: absolute;
-		bottom: -8px;
-		left: 0;
-		right: 0;
-		margin: 0;
-		text-align: center;
-		color: var(--muted);
-		font-size: 12px;
-		letter-spacing: 0.03em;
-	}
-
-	.visual-caption span {
-		color: var(--gold);
-		margin-right: 6px;
-	}
-
-	.features, .showcase {
-		padding-block: 74px;
-		border-top: 1px solid var(--line);
-		scroll-margin-top: 90px;
-	}
-
-	.section-heading {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-end;
-		gap: 28px;
-		margin-bottom: 38px;
-	}
-
-	h2 {
-		margin: 0;
-		font-size: clamp(29px, 3.3vw, 42px);
-		line-height: 1.4;
-		font-weight: 700;
-		letter-spacing: -0.025em;
-	}
-
-	.section-description {
-		margin: 0 0 4px;
-		color: var(--muted);
-		font-size: 14px;
-		line-height: 1.9;
-	}
-
-	.feature-grid {
-		display: grid;
-		grid-template-columns: repeat(4, minmax(0, 1fr));
-		border: 1px solid var(--line);
-		border-radius: 10px;
-		overflow: hidden;
-		background: rgba(255, 255, 255, 0.025);
-	}
-
-	.feature-card {
-		padding: 26px 24px 28px;
-	}
-
-	.feature-card + .feature-card {
-		border-left: 1px solid var(--line);
-	}
-
-	.feature-number {
-		color: var(--teal);
-		font-size: 12px;
-		font-variant-numeric: tabular-nums;
-	}
-
-	h3 {
-		margin: 22px 0 12px;
-		font-size: 18px;
-		font-weight: 650;
-	}
-
-	.feature-card p {
-		margin: 0;
-		color: var(--muted);
-		font-size: 13px;
-		line-height: 1.9;
-	}
-
-	.screenshot-grid {
-		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: 24px;
-	}
-
-	.screenshot-card {
-		min-width: 0;
-		margin: 0;
-	}
-
-	.screenshot-image {
-		overflow: hidden;
-		border: 1px solid var(--line-strong);
-		border-radius: 12px;
-		background: #eef2fc;
-	}
-
-	.screenshot-image img {
-		display: block;
-		width: 100%;
-		height: auto;
-	}
-
-	figcaption {
-		padding: 0 2px;
-	}
-
-	figcaption h3 {
-		margin: 22px 0 8px;
-		font-size: 17px;
-	}
-
-	figcaption p {
-		margin: 0;
-		color: var(--muted);
-		font-size: 13px;
-		line-height: 1.8;
-	}
-
-	.download {
-		padding-block: 22px 76px;
-		scroll-margin-top: 100px;
-	}
-
-	.download-panel {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 32px;
-		padding: 36px;
-		border: 1px solid rgba(98, 230, 221, 0.26);
-		border-radius: 12px;
-		background: linear-gradient(120deg, rgba(98, 230, 221, 0.09), rgba(159, 140, 255, 0.045));
-	}
-
-	.download-copy {
-		display: flex;
-		align-items: center;
-		gap: 24px;
-	}
-
-	.download-icon {
-		flex: 0 0 auto;
-		border-radius: 16px;
-		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-	}
-
-	.download-copy .eyebrow {
-		margin-bottom: 10px;
-		font-size: 11px;
-	}
-
-	.download-copy h2 {
-		font-size: clamp(22px, 2.3vw, 28px);
-	}
-
-	.download-description {
-		margin: 12px 0 0;
-		color: var(--muted);
-		font-size: 12px;
-	}
-
-
-	.site-footer {
-		display: flex;
-		justify-content: space-between;
-		gap: 40px;
-		padding-block: 34px 46px;
-		border-top: 1px solid var(--line);
-	}
-
-	.footer-brand {
-		font-size: 18px;
-		font-weight: 750;
-	}
-
-	.footer-intro p {
-		margin: 12px 0 0;
-		color: var(--muted);
-		font-size: 12px;
-	}
-
-	.footer-services h2 {
-		margin: 2px 0 16px;
-		font-size: 12px;
-		color: var(--muted);
-		font-weight: 500;
-	}
-
-	.footer-services nav {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 16px 24px;
-	}
-
-	.footer-services a {
-		color: var(--soft);
-		font-size: 12px;
-	}
-
-	.feature-link:hover, .footer-services a:hover, .store-link:hover {
-		color: var(--teal);
-	}
-
-	:global(a:focus-visible) {
-		outline: 2px solid var(--teal);
-		outline-offset: 6px;
-	}
-
-	@media (min-width: 1240px) {
-		.hero {
-			gap: 64px;
-		}
-
-	}
-
-	@media (max-width: 1040px) {
-		.hero {
-			gap: 12px;
-			padding-top: 56px;
-		}
-
-		.hero-visual {
-			min-height: 500px;
-		}
-
-		h1 {
-			font-size: 48px;
-		}
-
-		.feature-grid {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
-
-		.feature-card:nth-child(3) {
-			border-left: 0;
-		}
-
-		.feature-card:nth-child(n + 3) {
-			border-top: 1px solid var(--line);
-		}
-
-		.download-panel {
-			flex-direction: column;
-			align-items: flex-start;
-		}
-
-	}
-
-	@media (max-width: 760px) {
-		.section-width {
-			width: calc(100% - 40px);
-		}
-
-		.hero {
-			grid-template-columns: 1fr;
-			gap: 40px;
-			padding-block: 40px 58px;
-		}
-
-		.release-badge {
-			margin-bottom: 30px;
-		}
-
-		h1 {
-			font-size: clamp(42px, 8vw, 60px);
-		}
-
-		.hero-description {
-			max-width: 100%;
-		}
-
-		.hero-visual {
-			width: min(440px, 100%);
-			min-height: 500px;
-			justify-self: center;
-		}
-
-		.shot-back {
-			left: 5%;
-		}
-
-		.shot-front {
-			right: 6%;
-		}
-
-		.features, .showcase {
-			padding-block: 52px;
-		}
-
-		.section-heading {
-			align-items: flex-start;
-			flex-direction: column;
-			gap: 18px;
-			margin-bottom: 28px;
-		}
-
-		.section-description br {
-			display: none;
-		}
-
-		.screenshot-grid {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-			gap: 28px 18px;
-		}
-
-		.site-footer {
-			flex-direction: column;
-			gap: 30px;
-		}
-
-		.download {
-			padding-bottom: 52px;
-		}
-
-	}
-
-	@media (max-width: 480px) {
-		.hero-visual {
-			min-height: 440px;
-		}
-
-		.hero-shot {
-			border-radius: 12px;
-		}
-
-		.visual-orbit {
-			inset-inline: -12px;
-		}
-
-		.hero-description {
-			font-size: 15px;
-		}
-
-		.desktop-break {
-			display: none;
-		}
-
-		.hero-actions {
-			gap: 10px;
-		}
-
-
-		.feature-card {
-			padding: 22px 18px;
-		}
-
-		.feature-card h3 {
-			font-size: 16px;
-		}
-
-		.feature-card p {
-			font-size: 12px;
-		}
-
-		.screenshot-grid {
-			grid-template-columns: 1fr;
-			gap: 34px;
-		}
-
-		.screenshot-card {
-			width: min(100%, 340px);
-			justify-self: center;
-		}
-
-		.download-panel {
-			padding: 24px;
-			gap: 26px;
-		}
-
-		.download-copy {
-			align-items: flex-start;
-			gap: 16px;
-		}
-
-		.download-icon {
-			width: 48px;
-			height: 48px;
-			border-radius: 11px;
-		}
-
-		.download-copy h2 {
-			font-size: 22px;
-		}
-
-		.download-description {
-			line-height: 1.8;
-		}
-
-
-		.footer-services nav {
-			gap: 16px 20px;
-		}
-
-	}
-
-	@media (max-width: 360px) {
-		.hero-visual {
-			min-height: 390px;
-		}
-
-		h1 {
-			font-size: 38px;
-		}
-
-		.feature-grid {
-			grid-template-columns: 1fr;
-		}
-
-		.feature-card + .feature-card {
-			border-left: 0;
-			border-top: 1px solid var(--line);
-		}
-
-	}
-
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 35px;
+    min-height: 720px;
+    padding-block: 65px 85px;
+  }
+  .hero-copy {
+    position: relative;
+    z-index: 2;
+  }
+  .release-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    color: var(--soft);
+    margin-bottom: 42px;
+    padding: 7px 10px;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.025);
+  }
+  .release-note > span:last-child {
+    margin-left: 8px;
+    color: var(--teal);
+  }
+  .release-dot {
+    height: 5px;
+    width: 5px;
+    border-radius: 50%;
+    background: var(--teal);
+    box-shadow: 0 0 13px rgba(98, 230, 221, 0.6);
+  }
+  .hero h1 {
+    font-size: clamp(42px, 4.6vw, 64px);
+    line-height: 1.33;
+    letter-spacing: -0.045em;
+    margin-bottom: 23px;
+  }
+  .hero h1 > span {
+    color: var(--teal);
+  }
+  .hero-description {
+    font-size: 15px;
+    line-height: 2;
+    color: var(--soft);
+    margin: 0;
+  }
+  .hero-platforms {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin: 24px 0 0;
+  }
+  .hero-platforms > span {
+    display: block;
+    color: #8996a8;
+    font-size: 10px;
+    margin-top: 3px;
+  }
+  .hero-visual {
+    position: relative;
+    height: 570px;
+    isolation: isolate;
+  }
+  .hero-shot {
+    position: absolute;
+    width: 53%;
+    border: 1px solid rgba(207, 232, 245, 0.2);
+    border-radius: 25px;
+    overflow: hidden;
+    background: #101722;
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.45);
+  }
+  .hero-shot {
+    max-height: 82%;
+  }
+  .hero-shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .shot-back {
+    left: 5%;
+    top: 4%;
+    transform: rotate(-8deg);
+    z-index: 1;
+    opacity: 0.85;
+  }
+  .shot-front {
+    left: 39%;
+    top: 10%;
+    transform: rotate(7deg);
+    z-index: 2;
+  }
+  .hero-orbit {
+    position: absolute;
+    z-index: -1;
+    inset: 10%;
+    border: 1px solid rgba(98, 230, 221, 0.09);
+    border-radius: 50%;
+    transform: rotate(-25deg);
+  }
+  .orbit-two {
+    inset: 20% -8%;
+    transform: rotate(25deg);
+    border-color: rgba(159, 140, 255, 0.11);
+  }
+  .hero-spark {
+    position: absolute;
+    color: var(--teal);
+    font-size: 55px;
+    left: 0;
+    top: 63%;
+    font-weight: 300;
+  }
+  .visual-note {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: absolute;
+    bottom: 0;
+    right: 15%;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .visual-note > span:first-child {
+    font-size: 20px;
+    color: var(--teal);
+  }
+  .entry-strip {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr;
+    align-items: center;
+    border-block: 1px solid var(--line);
+    padding-block: 27px;
+    gap: 36px;
+  }
+  .entry-strip > div p {
+    font-size: 16px;
+    margin: 0 0 4px;
+  }
+  .entry-strip > div > span {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .entry-strip > a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-left: 30px;
+    border-left: 1px solid var(--line);
+    font-size: 14px;
+  }
+  .entry-strip > a > span:last-child {
+    margin-left: auto;
+    color: var(--teal);
+  }
+  .entry-strip a small {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 5px;
+  }
+  .entry-icon {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    color: var(--teal);
+    font-size: 23px;
+    border: 1px solid rgba(98, 230, 221, 0.25);
+    border-radius: 10px;
+    background: rgba(98, 230, 221, 0.04);
+  }
+  .wechat-icon {
+    color: #8ce3a1;
+  }
+  .scenario-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .scenario {
+    display: flex;
+    flex-direction: column;
+    padding: 30px 30px 26px;
+    min-height: 280px;
+    background: rgba(17, 23, 33, 0.5);
+    border-bottom: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+    transition: background 0.2s;
+  }
+  .scenario:nth-child(3n) {
+    border-right: 0;
+  }
+  .scenario:nth-child(n + 4) {
+    border-bottom: 0;
+  }
+  .scenario:hover {
+    background: rgba(98, 230, 221, 0.055);
+  }
+  .scenario-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  .scenario-top > span:last-child {
+    font-size: 17px;
+    color: var(--muted);
+  }
+  .scenario h3 {
+    font-size: 20px;
+    margin-bottom: 13px;
+  }
+  .scenario p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 25px;
+  }
+  .scenario-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    margin-top: auto;
+    color: var(--soft);
+    font-size: 10px;
+  }
+  .scenario-tags span {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 3px;
+  }
+  .scenario-all {
+    background: linear-gradient(
+      135deg,
+      rgba(98, 230, 221, 0.09),
+      rgba(98, 230, 221, 0.025)
+    );
+    justify-content: space-between;
+  }
+  .scenario-all h3 {
+    font-size: 28px;
+    line-height: 1.6;
+    margin: 20px 0;
+  }
+  .scenario-all .text-link {
+    font-size: 12px;
+  }
+  .showcase {
+    background: rgba(255, 255, 255, 0.012);
+  }
+  .showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 30px;
+  }
+  .showcase figure {
+    margin: 0;
+  }
+  .screen-frame {
+    background: linear-gradient(
+      130deg,
+      rgba(98, 230, 221, 0.08),
+      rgba(159, 140, 255, 0.04)
+    );
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 27px 35px 0;
+    overflow: hidden;
+    height: 460px;
+  }
+  .screen-frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 15px 15px 0 0;
+    box-shadow: 0 0 35px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .showcase figcaption {
+    margin-top: 25px;
+  }
+  .showcase figcaption > span {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--teal);
+  }
+  .showcase figcaption h3 {
+    font-size: 18px;
+    margin: 11px 0;
+  }
+  .showcase figcaption p {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+  }
+  .screenshot-note {
+    font-size: 10px;
+    color: #8d9aac;
+    margin: 28px 0 0;
+  }
+  .update-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    padding-block: 65px;
+  }
+  .update-section h2 {
+    font-size: 32px;
+  }
+  .latest-update time {
+    font-size: 11px;
+    color: var(--muted);
+    align-self: center;
+    margin-left: auto;
+  }
+  .latest-update h3 {
+    margin: 18px 0 11px;
+    font-size: 23px;
+  }
+  .latest-update p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 15px;
+  }
+  .latest-update .text-link {
+    font-size: 12px;
+  }
+  .closing {
+    padding-block: 10px 95px;
+  }
+  .workspace {
+    display: grid;
+    grid-template-columns: 0.8fr 1.3fr;
+    gap: 65px;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+  }
+  .workspace-copy > p:not(.eyebrow) {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.95;
+  }
+  .workspace-caption {
+    display: block;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 25px;
+  }
+  .workspace-screen {
+    margin: 0;
+    height: 520px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    background: #f7f8fb;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transform: perspective(1800px) rotateY(-5deg) rotateX(2deg);
+  }
+  .workspace-screen img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  @media (min-width: 1250px) {
+    .hero {
+      grid-template-columns: 1fr 1.05fr;
+    }
+    .hero-visual {
+      height: 625px;
+    }
+    .hero {
+      min-height: 790px;
+    }
+    .screen-frame {
+      height: 510px;
+    }
+  }
+  @media (max-width: 950px) {
+    .workspace {
+      gap: 35px;
+      grid-template-columns: 0.85fr 1.2fr;
+    }
+    .workspace-screen {
+      height: 450px;
+    }
+    .hero {
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      min-height: 620px;
+    }
+    .hero-visual {
+      height: 440px;
+    }
+    .hero h1 {
+      font-size: 44px;
+    }
+    .hero-description {
+      font-size: 14px;
+    }
+    .hero-shot {
+      border-radius: 20px;
+    }
+    .hero-break {
+      display: none;
+    }
+    .release-note {
+      margin-bottom: 30px;
+    }
+    .entry-strip {
+      gap: 20px;
+      grid-template-columns: 1fr 1fr;
+    }
+    .entry-strip > div {
+      grid-column: 1/-1;
+    }
+    .entry-strip > a {
+      border-left: 0;
+      padding-left: 0;
+    }
+    .scenario {
+      padding: 25px;
+    }
+    .scenario-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .scenario:nth-child(3n) {
+      border-right: 1px solid var(--line);
+    }
+    .scenario:nth-child(2n) {
+      border-right: 0;
+    }
+    .scenario:nth-child(n + 4) {
+      border-bottom: 1px solid var(--line);
+    }
+    .scenario:nth-child(n + 5) {
+      border-bottom: 0;
+    }
+    .showcase-grid {
+      gap: 18px;
+    }
+    .screen-frame {
+      padding: 22px 20px 0;
+      height: 340px;
+    }
+    .update-section {
+      gap: 35px;
+    }
+  }
+  @media (max-width: 650px) {
+    .workspace {
+      grid-template-columns: 1fr;
+      gap: 35px;
+    }
+    .workspace-screen {
+      height: 420px;
+      border-radius: 13px;
+      transform: none;
+    }
+    .workspace-copy > p:not(.eyebrow) {
+      font-size: 13px;
+    }
+    .workspace-caption {
+      margin-top: 17px;
+    }
+    .hero {
+      display: flex;
+      flex-direction: column;
+      padding-block: 38px 35px;
+      gap: 28px;
+      align-items: stretch;
+      min-height: 0;
+    }
+    .hero h1 {
+      font-size: clamp(32px, 10.8vw, 46px);
+    }
+    .hero-description {
+      font-size: 14px;
+    }
+    .release-note {
+      margin-bottom: 32px;
+    }
+    .hero-visual {
+      height: 450px;
+      margin-inline: 10px;
+    }
+    .hero-shot {
+      width: 45%;
+      border-radius: 20px;
+    }
+    .shot-back {
+      left: 10%;
+      top: 3%;
+    }
+    .shot-front {
+      left: 43%;
+      top: 10%;
+    }
+    .visual-note {
+      right: 8%;
+      bottom: 0;
+    }
+    .hero-spark {
+      top: 65%;
+      font-size: 40px;
+    }
+    .hero-platforms {
+      font-size: 11px;
+    }
+    .entry-strip {
+      padding-block: 24px;
+      gap: 24px 16px;
+    }
+    .entry-strip > div p {
+      font-size: 17px;
+    }
+    .entry-strip > a {
+      gap: 10px;
+      font-size: 13px;
+    }
+    .entry-strip > a > span:last-child {
+      display: none;
+    }
+    .entry-icon {
+      width: 30px;
+      height: 30px;
+      flex-shrink: 0;
+      font-size: 20px;
+    }
+    .entry-strip a small {
+      font-size: 10px;
+      line-height: 1.6;
+      max-width: 120px;
+    }
+    .scenario-grid {
+      grid-template-columns: 1fr;
+    }
+    .scenario {
+      min-height: 0;
+      padding: 28px;
+      border-right: 0 !important;
+      border-bottom: 1px solid var(--line) !important;
+    }
+    .scenario:last-child {
+      border-bottom: 0 !important;
+    }
+    .scenario-top {
+      margin-bottom: 22px;
+    }
+    .scenario p {
+      margin-bottom: 20px;
+    }
+    .scenario-all h3 br {
+      display: none;
+    }
+    .scenario-all h3 {
+      font-size: 25px;
+    }
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+    .showcase figure {
+      display: grid;
+      grid-template-columns: 0.95fr 1fr;
+      align-items: center;
+      gap: 20px;
+    }
+    .screen-frame {
+      padding: 15px 14px 0;
+      height: 270px;
+      border-radius: 9px;
+    }
+    .showcase figcaption {
+      margin: 0;
+    }
+    .showcase figcaption h3 {
+      font-size: 18px;
+      line-height: 1.65;
+    }
+    .showcase figcaption p {
+      font-size: 11px;
+    }
+    .update-section {
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding-block: 50px;
+    }
+    .latest-update {
+      border-top: 1px solid var(--line);
+      padding-top: 28px;
+    }
+    .closing {
+      padding-block: 0 65px;
+    }
+  }
+  @media (max-width: 380px) {
+    .hero h1 {
+      font-size: clamp(32px, 10.8vw, 40px);
+    }
+    .hero-visual {
+      height: 390px;
+    }
+    .entry-strip {
+      grid-template-columns: 1fr;
+    }
+    .entry-strip > div {
+      grid-column: auto;
+    }
+    .entry-strip > a > span:last-child {
+      display: block;
+    }
+    .entry-strip a small {
+      max-width: none;
+    }
+    .showcase figure {
+      grid-template-columns: 1fr;
+    }
+    .screen-frame {
+      height: 380px;
+      padding-inline: 45px;
+    }
+  }
 </style>

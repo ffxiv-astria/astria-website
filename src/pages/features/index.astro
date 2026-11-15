@@ -1,0 +1,715 @@
+---
+import { Image } from "astro:assets";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { featureGroups } from "../../data/site";
+import { featurePages } from "../../data/feature-pages";
+import workbench from "../../assets/screenshots/apple/iphone-workbench.png";
+import blueMage from "../../assets/screenshots/apple/iphone-blue-mage-detail.png";
+import androidMarket from "../../assets/screenshots/android/market-detail.png";
+import androidWorkbench from "../../assets/screenshots/android/workbench.png";
+const commonFeatures = [
+  { name: "资料与市场", apple: "支持", android: "测试版支持", wechat: "支持" },
+  {
+    name: "跨服招募与角色战绩",
+    apple: "支持",
+    android: "测试版支持",
+    wechat: "支持",
+  },
+  {
+    name: "采集、天气与房屋",
+    apple: "支持",
+    android: "测试版支持",
+    wechat: "支持",
+  },
+  {
+    name: "配装、青魔法与幻卡",
+    apple: "支持",
+    android: "测试版支持",
+    wechat: "支持",
+  },
+  {
+    name: "石之家与官方授权服务",
+    apple: "按功能支持",
+    android: "部分功能",
+    wechat: "不提供",
+  },
+];
+---
+
+<SiteLayout
+  title="FF14 道具、市场、配装与日常工具介绍 — Astria天穹"
+  description="了解天穹 App 与微信小程序的 FF14 国服道具查询、Universalis 市场价格、Asvel 配装器、采集时钟、天气预报、房屋与收集功能。"
+  active="features"
+>
+  <section class="page-hero wrap">
+    <p class="eyebrow">围绕你的游戏日常</p>
+    <h1>
+      从查一件道具，
+      <br />
+      到准备下一场冒险。
+    </h1>
+    <p class="lede">
+      把分散的资料、工具和玩家内容放在一起。
+      <br />
+      找到你眼下需要的那个功能，再沿着线索继续探索。
+    </p>
+    <nav class="feature-nav" aria-label="功能分类">
+      {featureGroups.map((group) => (
+        <a href={`#${group.id}`}>
+          {group.number}
+          <span>
+            {
+              {
+                "game-data": "资料查询",
+                market: "市场行情",
+                daily: "日常工具",
+                planning: "配装收集",
+                players: "玩家与队伍",
+              }[group.id]
+            }
+          </span>
+        </a>
+      ))}
+    </nav>
+  </section>
+  <section class="section wrap" aria-labelledby="feature-topics-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">找到你需要的工具</p>
+        <h2 id="feature-topics-title">先从一个具体问题开始。</h2>
+      </div>
+      <p>了解使用步骤与数据边界，再前往 App 或微信小程序。</p>
+    </div>
+    <div class="guide-grid">
+      {featurePages.map((feature) => (
+        <article class="topic-card panel">
+          <h3>
+            <a href={`/features/${feature.slug}/`}>{feature.title}</a>
+          </h3>
+          <p>{feature.intro}</p>
+          <a class="text-link" href={`/features/${feature.slug}/`}>
+            了解{feature.label}
+            <span aria-hidden="true">→</span>
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+  <div class="wrap feature-sections">
+    {featureGroups.map((group) => (
+      <section class="feature-detail" id={group.id}>
+        <div class="feature-intro">
+          <p class="eyebrow">
+            {group.number} / {group.label}
+          </p>
+          <h2>{group.title}</h2>
+          <p>{group.description}</p>
+          <div class="pills">
+            {group.platforms.map((platform) => (
+              <span class="pill">{platform}</span>
+            ))}
+          </div>
+          <p class="access-note">{group.access}</p>
+        </div>
+        <div class="feature-context">
+          <p class="context-label">你可以用它</p>
+          <ul class="feature-list">
+            {group.items.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+          <div class="example">
+            <span>比如这一次</span>
+            <p>{group.example}</p>
+          </div>
+          <a class="text-link" href={`/guides/${group.guide}/`}>
+            阅读相关指南<span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
+    ))}
+  </div>
+  <section class="section wrap extra-tools" aria-labelledby="extra-tools-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">还有这些顺手的小工具</p>
+        <h2 id="extra-tools-title">每次上线，少一点琐事。</h2>
+      </div>
+      <p>按自己的玩法，找到需要的那一个。</p>
+    </div>
+    <div class="extra-tools-grid">
+      <article class="tool-card panel">
+        <h3>宏方案库</h3>
+        <p>浏览和收藏常用宏方案，按需要复制到游戏中使用。</p>
+        <div class="pills">
+          <span class="pill">Apple App</span>
+          <span class="pill">Android 测试版</span>
+          <span class="pill">微信小程序</span>
+        </div>
+      </article>
+      <article class="tool-card panel">
+        <h3>幻巧拼图</h3>
+        <p>输入已知的棋盘状态，查看揭示建议与策略参考。</p>
+        <div class="pills">
+          <span class="pill">Apple App</span>
+          <span class="pill">Android 测试版</span>
+          <span class="pill">微信小程序</span>
+        </div>
+      </article>
+      <article class="tool-card panel">
+        <h3>Raid 掉落规划</h3>
+        <p>查看副本奖励与装备获取规划，整理自己的目标。</p>
+        <div class="pills">
+          <span class="pill">Apple App</span>
+          <span class="pill">Android 测试版</span>
+        </div>
+      </article>
+    </div>
+  </section>
+  <section class="section section-top platform-showcase">
+    <div class="wrap">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">熟悉的内容，各自顺手的体验</p>
+          <h2>
+            在适合的设备上，
+            <br />
+            找到适合的入口。
+          </h2>
+        </div>
+        <p>
+          Apple App 与 Android 测试版真实界面。
+          <br />
+          两端持续演进，功能开放范围各有不同。
+        </p>
+      </div>
+      <div class="platform-screens">
+        <figure>
+          <div class="platform-device apple">
+            <Image
+              src={workbench}
+              alt="天穹 Apple App 工作台界面，按场景整理常用工具"
+              width={650}
+              format="webp"
+              loading="lazy"
+            />
+          </div>
+          <figcaption>
+            <span class="pill teal">Apple App</span>
+            <h3>常用工具，按自己的习惯安排。</h3>
+            <p>iPhone 与 iPad 使用原生界面；大屏设备可利用更宽的内容空间。</p>
+          </figcaption>
+        </figure>
+        <figure>
+          <div class="platform-device android">
+            <Image
+              src={androidWorkbench}
+              alt="天穹 Android 测试版工作台界面，展示工具与功能分类"
+              width={650}
+              format="webp"
+              loading="lazy"
+            />
+          </div>
+          <figcaption>
+            <span class="pill">Android 测试版</span>
+            <h3>手机和平板，也在逐步完善。</h3>
+            <p>
+              Android 目前处于测试阶段；需要立即查询时，可先使用微信小程序。
+            </p>
+          </figcaption>
+        </figure>
+      </div>
+      <p class="screenshot-note">
+        Apple 截图使用示例数据展示界面；Android
+        截图来自测试版游客界面。具体内容以实际客户端为准。
+      </p>
+    </div>
+  </section>
+  <section class="section wrap detail-examples">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">线索不止停在列表</p>
+        <h2>
+          点进去，
+          <br />
+          把需要的细节看清楚。
+        </h2>
+      </div>
+      <p>
+        从青魔法的学习途径，
+        <br />
+        到市场的报价与成交，让一次查询继续下去。
+      </p>
+    </div>
+    <div class="example-screens">
+      <figure>
+        <div class="example-device">
+          <Image
+            src={blueMage}
+            alt="Apple App 青魔法详情示例，包含技能信息与可学习的副本线索"
+            width={660}
+            format="webp"
+            loading="lazy"
+          />
+        </div>
+        <figcaption>
+          <span class="pill teal">Apple App · 青魔法书</span>
+          <h3>把学习线索，整理在技能旁边。</h3>
+          <p>查看技能信息，再沿着副本、区域与相关说明安排自己的学习路线。</p>
+        </figcaption>
+      </figure>
+      <figure>
+        <div class="example-device">
+          <Image
+            src={androidMarket}
+            alt="Android 测试版市场详情，展示真实公开行情的价格与成交信息"
+            width={660}
+            format="webp"
+            loading="lazy"
+          />
+        </div>
+        <figcaption>
+          <span class="pill">Android 测试版 · 市场</span>
+          <h3>看报价，也看成交与更新时间。</h3>
+          <p>选择服务器范围，结合挂单、成交和走势，为买卖做些准备。</p>
+        </figcaption>
+      </figure>
+    </div>
+    <p class="screenshot-note">
+      Apple 为演示界面与示例数据；Android
+      为测试版公开行情截图。行情内容会随时间变化。
+    </p>
+  </section>
+  <section class="section wrap" id="platforms">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">选择前，先了解差异</p>
+        <h2>
+          同一个天穹，
+          <br />
+          各端有所不同。
+        </h2>
+      </div>
+      <p>
+        这是一份主要功能概览。
+        <br />
+        具体入口、权限与开放状态以客户端为准。
+      </p>
+    </div>
+    <div
+      class="comparison-scroll"
+      tabindex="0"
+      role="region"
+      aria-label="主要功能客户端支持对照，可横向滚动"
+    >
+      <table class="comparison">
+        <caption>主要功能与客户端支持情况</caption>
+        <thead>
+          <tr>
+            <th scope="col">功能场景</th>
+            <th scope="col">Apple App</th>
+            <th scope="col">Android</th>
+            <th scope="col">微信小程序</th>
+          </tr>
+        </thead>
+        <tbody>
+          {commonFeatures.map((row) => (
+            <tr>
+              <th scope="row">{row.name}</th>
+              <td>{row.apple}</td>
+              <td>{row.android}</td>
+              <td>{row.wechat}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">
+      Android 尚未提供官网公开下载。萌新招待、陆行鸟礼物站与水晶冲突排行榜目前以
+      Apple App 正式版为准。
+    </p>
+    <div class="note">
+      <p>
+        登录同一天穹账号，可继续访问该账号下、且当前客户端已支持的服务端内容。设备偏好、工具的本地记录与草稿等，不会全部自动跨端同步。
+      </p>
+      <a class="text-link" href="/guides/account-sync/">
+        了解账号与数据保存方式<span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+  <section class="wrap feature-close">
+    <div class="cta-panel">
+      <div>
+        <h2>从你最需要的那个功能开始。</h2>
+        <p>选好入口，给下一次上线做一点准备。</p>
+      </div>
+      <a class="button primary" href="/start/">
+        开始使用<span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </section>
+</SiteLayout>
+<style>
+  .topic-card,
+  .tool-card {
+    padding: 27px;
+  }
+  .topic-card h3,
+  .tool-card h3 {
+    font-size: 18px;
+  }
+  .topic-card p,
+  .tool-card p {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .topic-card .text-link {
+    font-size: 12px;
+  }
+  .extra-tools {
+    padding-top: 35px;
+  }
+  .extra-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .tool-card .pills {
+    margin-top: 24px;
+  }
+  @media (max-width: 650px) {
+    .extra-tools-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .feature-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 42px;
+  }
+  .feature-nav a {
+    display: inline-flex;
+    gap: 12px;
+    padding: 11px 16px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--teal);
+    font-size: 10px;
+  }
+  .feature-nav a span {
+    color: var(--soft);
+    font-size: 12px;
+  }
+  .feature-nav a:hover {
+    background: rgba(98, 230, 221, 0.06);
+    border-color: rgba(98, 230, 221, 0.4);
+  }
+  .feature-sections {
+    padding-bottom: 35px;
+  }
+  .feature-detail {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 100px;
+    padding-block: 65px;
+    border-top: 1px solid var(--line);
+    scroll-margin-top: 85px;
+  }
+  .feature-intro > p:not(.eyebrow):not(.access-note) {
+    max-width: 550px;
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 25px;
+  }
+  .access-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin: 13px 0 0;
+  }
+  .feature-context {
+    padding-top: 4px;
+  }
+  .context-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 15px;
+  }
+  .feature-list {
+    margin: 0 0 20px;
+    display: grid;
+    gap: 0;
+  }
+  .feature-list li {
+    font-size: 16px;
+    padding-block: 10px;
+    border-bottom: 1px solid rgba(184, 203, 223, 0.08);
+  }
+  .example {
+    border-left: 2px solid rgba(98, 230, 221, 0.45);
+    padding-left: 18px;
+    margin: 25px 0 12px;
+  }
+  .example span {
+    font-size: 10px;
+    color: var(--teal);
+  }
+  .example p {
+    font-size: 12px;
+    line-height: 1.9;
+    color: var(--muted);
+    margin: 6px 0;
+  }
+  .feature-context .text-link {
+    font-size: 12px;
+  }
+  .platform-showcase {
+    background: rgba(255, 255, 255, 0.015);
+  }
+  .platform-screens {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+  }
+  .platform-screens figure {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 30px;
+  }
+  .platform-device {
+    height: 395px;
+    overflow: hidden;
+    transform: rotate(-3deg);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    background: #101722;
+  }
+  .platform-device img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .platform-device.android {
+    transform: rotate(3deg);
+  }
+  .platform-screens figcaption h3 {
+    font-size: 22px;
+    margin: 20px 0 14px;
+    line-height: 1.6;
+  }
+  .platform-screens figcaption p {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .screenshot-note,
+  .table-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin: 35px 0 0;
+  }
+  .comparison-scroll {
+    overflow: auto;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
+  .comparison {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 650px;
+    text-align: left;
+    font-size: 13px;
+  }
+  .comparison caption {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .comparison th,
+  .comparison td {
+    padding: 20px 25px;
+    border-bottom: 1px solid var(--line);
+    line-height: 1.7;
+  }
+  .comparison thead th {
+    font-size: 12px;
+    font-weight: 500;
+    background: rgba(98, 230, 221, 0.045);
+    color: var(--teal);
+  }
+  .comparison tbody th {
+    font-weight: 500;
+    color: var(--soft);
+  }
+  .comparison td {
+    color: var(--muted);
+  }
+  .comparison tr:last-child > * {
+    border-bottom: 0;
+  }
+  .table-note {
+    margin-top: 18px;
+    line-height: 1.9;
+  }
+  .note {
+    margin-top: 30px;
+  }
+  .note .text-link {
+    font-size: 12px;
+  }
+  .feature-close {
+    padding-bottom: 95px;
+  }
+  .detail-examples {
+    border-bottom: 1px solid var(--line);
+  }
+  .example-screens {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 45px;
+  }
+  .example-screens figure {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 0.9fr;
+    align-items: center;
+    gap: 25px;
+  }
+  .example-device {
+    height: 430px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: #f5f7fa;
+    box-shadow: var(--shadow);
+  }
+  .example-device img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .example-screens h3 {
+    font-size: 23px;
+    line-height: 1.6;
+    margin-top: 18px;
+  }
+  .example-screens p {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  @media (max-width: 950px) {
+    .example-screens figure {
+      display: block;
+    }
+    .example-device {
+      max-width: 250px;
+      margin: auto;
+    }
+    .example-screens figcaption {
+      margin-top: 30px;
+    }
+    .feature-detail {
+      gap: 45px;
+    }
+    .platform-screens {
+      gap: 35px;
+    }
+    .platform-screens figure {
+      display: block;
+    }
+    .platform-device {
+      width: 65%;
+      height: 420px;
+      margin: auto;
+    }
+    .platform-screens figcaption {
+      margin-top: 35px;
+    }
+    .platform-screens figcaption h3 {
+      font-size: 21px;
+    }
+  }
+  @media (max-width: 650px) {
+    .example-screens {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .example-screens figure {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 23px;
+    }
+    .example-screens figcaption {
+      margin: 0;
+    }
+    .example-device {
+      height: 330px;
+      border-radius: 13px;
+    }
+    .example-screens h3 {
+      font-size: 19px;
+    }
+    .example-screens p {
+      font-size: 11px;
+    }
+    .feature-nav {
+      gap: 8px;
+      margin-top: 30px;
+    }
+    .feature-nav a {
+      padding: 9px 12px;
+    }
+    .feature-detail {
+      grid-template-columns: 1fr;
+      gap: 30px;
+      padding-block: 43px;
+      scroll-margin-top: 20px;
+    }
+    .feature-intro h2 {
+      font-size: 30px;
+    }
+    .feature-intro > p:not(.eyebrow):not(.access-note) {
+      font-size: 14px;
+    }
+    .feature-list li {
+      font-size: 14px;
+    }
+    .platform-screens {
+      grid-template-columns: 1fr;
+      gap: 45px;
+    }
+    .platform-screens figure {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+    .platform-device {
+      width: 100%;
+      height: 320px;
+      border-radius: 16px;
+    }
+    .platform-screens figcaption {
+      margin: 0;
+    }
+    .platform-screens figcaption h3 {
+      font-size: 19px;
+    }
+    .platform-screens figcaption p {
+      font-size: 11px;
+    }
+    .comparison th,
+    .comparison td {
+      padding: 16px;
+    }
+    .screenshot-note {
+      font-size: 10px;
+    }
+    .feature-close {
+      padding-bottom: 65px;
+    }
+  }
+</style>

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /bind/
+# Share and App-only shells emit noindex; allow crawlers to read that directive.
+Sitemap: https://astria.cxmeow.top/sitemap.xml

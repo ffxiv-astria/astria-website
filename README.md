@@ -14,7 +14,7 @@ https://astria.cxmeow.top
 
 当前承担的页面：
 
-- 官网首页、下载入口、功能介绍
+- 官网首页、统一使用入口、功能介绍、使用指南与更新日志
 - 隐私政策、服务协议
 - 账号注销说明、邮箱/Apple 身份验证、数据影响预览、提交与回执状态查询
 - 超域旅行年度回顾 Web 展示
@@ -39,7 +39,14 @@ Node.js 要求：
 
 | 路由 | 用途 |
 | --- | --- |
-| `/` | 官网首页、下载入口、功能介绍 |
+| `/` | 官网首页，保留 `#download` 与 `#features` 兼容锚点 |
+| `/start/` | App Store、官方微信小程序码、搜索步骤与 Android 测试状态 |
+| `/features/` | 按场景整理的功能介绍、真实界面与各端支持说明 |
+| `/features/<slug>/` | 六个具体功能专题与使用说明 |
+| `/guides/` | 使用指南索引，支持本地搜索与分类 |
+| `/guides/<slug>/` | 独立使用指南 |
+| `/updates/` | 正式 App 版本与官网更新记录 |
+| `/sitemap.xml` | 仅公共内容页的站点地图 |
 | `/legal/privacy` | 隐私政策 |
 | `/legal/terms` | 服务协议 |
 | `/account-deletion` | 账号注销说明与入口 |
@@ -355,3 +362,7 @@ Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' h
 - 修改 `RecapPayload` 字段时，同步更新 schema、示例 payload、App 构建器和 WKWebView 文档。
 
 玩家挑战技术与接口依据：[技术方案](../astria-backend/docs/player-challenges/technical-design.md)、[分批实施清单](../astria-backend/docs/player-challenges/implementation-plan.md) B9。`pnpm test` 检查安全投影与平台动作，`pnpm test:browser` 构建静态站并使用合成 resolver 响应做浏览器回归；本地测试不代表线上代理、AASA 缓存、客户端深链或设备验收已完成。
+
+## 官网内容维护
+
+第一轮公共门户的内容来源、平台边界、截图与验证约定见 [官网内容维护](docs/website-content.md)。功能文案、指南与更新记录主要在 `src/data/site.ts` 维护；开始使用页的系统要求与平台对照分别位于 `src/pages/start/index.astro`、`src/pages/features/index.astro`。

@@ -1,0 +1,38 @@
+---
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout
+  title="没有找到这个页面 — Astria天穹"
+  description="页面可能已经移动。返回天穹首页、查阅使用指南，或选择使用入口。"
+  noindex={true}
+>
+  <section class="wrap page-hero not-found">
+    <p class="eyebrow">404 / 这条路暂时走不到</p>
+    <h1>先回到熟悉的地方。</h1>
+    <p class="lede">
+      页面可能已经移动，或链接不完整。
+      <br />
+      你可以回到首页，也可以在使用指南里找找答案。
+    </p>
+    <div class="actions">
+      <a class="button primary" href="/">
+        返回首页<span aria-hidden="true">→</span>
+      </a>
+      <a class="button" href="/guides/">
+        查看使用指南<span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </section>
+</SiteLayout>
+<style>
+  .not-found {
+    padding-block: 120px 150px;
+    min-height: 55vh;
+  }
+  @media (max-width: 650px) {
+    .not-found {
+      padding-block: 80px 100px;
+    }
+  }
+</style>

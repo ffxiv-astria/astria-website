@@ -1,0 +1,32 @@
+---
+import Layout from "./Layout.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/site/SiteFooter.astro";
+import "../styles/site.css";
+import { pageStructuredData, socialImage } from "../lib/seo";
+interface Props {
+  title: string;
+  description: string;
+  active?: string;
+  noindex?: boolean;
+}
+const { title, description, active = "home", noindex = false } = Astro.props;
+---
+
+<Layout
+  title={title}
+  description={description}
+  noindex={noindex}
+  canonicalPath={Astro.url.pathname}
+  ogImage={socialImage}
+  ogImageWidth={1200}
+  ogImageHeight={630}
+  ogType={Astro.url.pathname.startsWith('/guides/') && Astro.url.pathname !== '/guides/' ? 'article' : 'website'}
+  structuredData={pageStructuredData(Astro.url.pathname, title, description)}
+>
+  <SiteHeader active={active} />
+  <main id="main-content">
+    <slot />
+  </main>
+  <SiteFooter />
+</Layout>

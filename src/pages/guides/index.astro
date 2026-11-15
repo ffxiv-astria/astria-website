@@ -1,0 +1,308 @@
+---
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import GuideCard from "../../components/site/GuideCard.astro";
+import { guides, guideCategories, site } from "../../data/site";
+---
+
+<SiteLayout
+  title="天穹 FF14 工具使用指南与帮助 — 账号、行情与房屋订阅"
+  description="了解天穹 App 与微信小程序的账号、数据同步、行情时效、房屋订阅、分享打开方式与反馈流程。"
+  active="guides"
+>
+  <section class="page-hero wrap">
+    <p class="eyebrow">有些小问题，在这里解答</p>
+    <h1>
+      用得顺手，
+      <br />
+      从弄清这一点开始。
+    </h1>
+    <p class="lede">
+      账号怎么接着用，行情为什么会有延迟，分享怎么打开。
+      <br />
+      把常见的问题，写成几篇短一点的说明。
+    </p>
+    <div class="guide-search">
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        aria-hidden="true"
+      >
+        <circle
+          cx="10.5"
+          cy="10.5"
+          r="6.5"
+          stroke="currentColor"
+          stroke-width="1.5"
+        />
+        <path
+          d="m16 16 4 4"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+        />
+      </svg>
+      <label class="visually-hidden" for="guide-search">
+        搜索使用指南
+      </label>
+      <input
+        id="guide-search"
+        type="search"
+        placeholder="搜索账号、行情、分享……"
+        autocomplete="off"
+      />
+    </div>
+  </section>
+  <section class="wrap guides-library" aria-label="使用指南文章">
+    <div class="guide-toolbar">
+      <div class="guide-filters" role="group" aria-label="按指南分类筛选">
+        <button
+          type="button"
+          class="selected"
+          data-category="all"
+          aria-pressed="true"
+        >
+          全部指南
+        </button>
+        {guideCategories.map((category) => (
+          <button type="button" data-category={category} aria-pressed="false">
+            {category}
+          </button>
+        ))}
+      </div>
+      <p id="guide-count" role="status" aria-live="polite">
+        共 {guides.length} 篇指南
+      </p>
+    </div>
+    <div class="guide-grid" id="guide-results">
+      {guides.map((guide) => (
+        <div
+          class="searchable-guide"
+          data-category={guide.category}
+          data-search={`${guide.title} ${guide.summary} ${guide.category}`}
+        >
+          <GuideCard guide={guide} />
+        </div>
+      ))}
+    </div>
+    <div class="empty-guides panel" id="empty-guides" hidden>
+      <h2>暂时没有找到对应的指南。</h2>
+      <p>试试更短的关键词，例如“账号”“行情”或“分享”。</p>
+      <button type="button" class="button" id="reset-guides">
+        查看全部指南<span aria-hidden="true">→</span>
+      </button>
+    </div>
+  </section>
+  <section class="wrap help-contact">
+    <div class="cta-panel">
+      <div>
+        <h2>还没找到答案？</h2>
+        <p>通过应用内反馈提交问题，也可以联系支持邮箱。</p>
+        <a class="support-email" href={`mailto:${site.supportEmail}`}>
+          {site.supportEmail}
+        </a>
+      </div>
+      <a class="button" href="/guides/feedback/">
+        怎样提交有效反馈<span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </section>
+</SiteLayout>
+<script>
+  const input = document.querySelector<HTMLInputElement>("#guide-search");
+  const filters = [
+    ...document.querySelectorAll<HTMLButtonElement>(".guide-filters button"),
+  ];
+  const cards = [
+    ...document.querySelectorAll<HTMLElement>(".searchable-guide"),
+  ];
+  const count = document.querySelector<HTMLElement>("#guide-count");
+  const empty = document.querySelector<HTMLElement>("#empty-guides");
+  let category = "all";
+  function updateGuides() {
+    const query = input?.value.trim().toLocaleLowerCase() ?? "";
+    let visible = 0;
+    cards.forEach((card) => {
+      const matches =
+        (category === "all" || card.dataset.category === category) &&
+        (card.dataset.search ?? "").toLocaleLowerCase().includes(query);
+      card.hidden = !matches;
+      if (matches) visible++;
+    });
+    if (count)
+      count.textContent =
+        query || category !== "all"
+          ? `找到 ${visible} 篇指南`
+          : `共 ${visible} 篇指南`;
+    if (empty) empty.hidden = visible !== 0;
+    filters.forEach((button) => {
+      const selected = button.dataset.category === category;
+      button.classList.toggle("selected", selected);
+      button.setAttribute("aria-pressed", String(selected));
+    });
+  }
+  input?.addEventListener("input", updateGuides);
+  filters.forEach((button) =>
+    button.addEventListener("click", () => {
+      category = button.dataset.category ?? "all";
+      updateGuides();
+    }),
+  );
+  document.querySelector("#reset-guides")?.addEventListener("click", () => {
+    category = "all";
+    if (input) input.value = "";
+    updateGuides();
+    input?.focus();
+  });
+</script>
+<style>
+  .guide-search {
+    max-width: 640px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 0 20px;
+    min-height: 59px;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    background: rgba(17, 23, 33, 0.75);
+    margin-top: 34px;
+    color: var(--muted);
+  }
+  .guide-search:focus-within {
+    border-color: rgba(98, 230, 221, 0.7);
+  }
+  .guide-search input {
+    width: 100%;
+    padding-block: 18px;
+    border: 0;
+    background: none;
+    color: var(--text);
+    font-size: 14px;
+    outline: 0;
+  }
+  .guide-search input::placeholder {
+    color: #8f9caf;
+  }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+  .guides-library {
+    padding-bottom: 75px;
+  }
+  .guide-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border-block: 1px solid var(--line);
+    padding-block: 19px;
+    margin-bottom: 32px;
+  }
+  .guide-filters {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+  }
+  .guide-filters button {
+    font-size: 12px;
+    color: var(--muted);
+    padding: 9px 13px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    background: transparent;
+  }
+  .guide-filters button:hover {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .guide-filters button.selected {
+    color: var(--teal);
+    background: rgba(98, 230, 221, 0.065);
+    border-color: rgba(98, 230, 221, 0.2);
+  }
+  #guide-count {
+    font-size: 11px;
+    white-space: nowrap;
+    color: var(--muted);
+    margin: 0;
+  }
+  .searchable-guide {
+    display: flex;
+  }
+  .searchable-guide[hidden] {
+    display: none;
+  }
+  .searchable-guide :global(.guide-card) {
+    width: 100%;
+    min-height: 270px;
+  }
+  .empty-guides {
+    padding: 50px;
+    text-align: center;
+  }
+  .empty-guides[hidden] {
+    display: none;
+  }
+  .empty-guides h2 {
+    font-size: 26px;
+  }
+  .empty-guides p {
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .help-contact {
+    padding-bottom: 95px;
+  }
+  .support-email {
+    display: inline-block;
+    margin-top: 15px;
+    font-size: 12px;
+    color: var(--teal);
+  }
+  @media (max-width: 650px) {
+    .guide-toolbar {
+      display: block;
+      padding-block: 16px;
+    }
+    .guide-filters {
+      gap: 5px;
+    }
+    .guide-filters button {
+      font-size: 11px;
+      padding: 8px 10px;
+    }
+    #guide-count {
+      margin: 15px 0 0 10px;
+    }
+    .guides-library {
+      padding-bottom: 45px;
+    }
+    .empty-guides {
+      padding: 35px 20px;
+    }
+    .empty-guides h2 {
+      font-size: 22px;
+    }
+    .empty-guides p {
+      font-size: 12px;
+    }
+    .help-contact {
+      padding-bottom: 65px;
+    }
+    .help-contact .button {
+      margin-top: 25px;
+    }
+    .guide-search {
+      min-height: 55px;
+    }
+    .guide-search input {
+      font-size: 13px;
+    }
+  }
+</style>

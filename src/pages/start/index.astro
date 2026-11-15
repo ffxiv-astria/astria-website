@@ -1,0 +1,652 @@
+---
+import QRCode from "qrcode";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { site } from "../../data/site";
+const appStoreQR = await QRCode.toDataURL(site.appStoreURL, {
+  width: 220,
+  margin: 1,
+  color: { dark: "#071014", light: "#ffffff" },
+});
+---
+
+<SiteLayout
+  title="天穹 App 下载与微信小程序入口 — FF14 国服工具"
+  description="下载天穹 iPhone、iPad App，或在微信搜索 FF14检索工具小程序。了解系统要求、Mac 兼容信息和 Android 测试状态。"
+  active="start"
+>
+  <section class="page-hero wrap">
+    <p class="eyebrow">把天穹带在身边</p>
+    <h1>
+      选一个顺手的入口，
+      <br />
+      开始你的下一次冒险。
+    </h1>
+    <p class="lede">
+      下载 App，或在微信里随手查询。
+      <br />
+      无论从哪里开始，都可以先了解功能，再按需要登录。
+    </p>
+  </section>
+  <section class="wrap start-options" aria-label="使用入口">
+    <article class="platform-card apple-card" id="apple">
+      <div class="platform-card-heading">
+        <img
+          src="/brand/astria-app-icon.png"
+          alt="天穹 App 图标"
+          width="58"
+          height="58"
+        />
+        <span class="pill teal">正式版 · App Store</span>
+      </div>
+      <p class="eyebrow">APPLE APP</p>
+      <h2>
+        在 iPhone 和 iPad 上，
+        <br />
+        用天穹。
+      </h2>
+      <p class="platform-description">
+        原生界面、系统分享与适合大屏的布局，
+        <br />
+        把常用资料、工具与玩家内容放在一起。
+      </p>
+      <div class="apple-download">
+        <div>
+          <a class="app-store-badge" href={site.appStoreURL}>
+            <img
+              src="/brand/download-on-the-app-store-zh-cn.svg"
+              alt="在 App Store 下载"
+              width="163"
+              height="60"
+            />
+          </a>
+          <p class="download-hint">手机直接打开，电脑也可以扫码。</p>
+        </div>
+        <figure class="download-qr">
+          <img
+            src={appStoreQR}
+            alt="App Store 下载链接二维码"
+            width="110"
+            height="110"
+          />
+          <figcaption>扫码前往 App Store</figcaption>
+        </figure>
+      </div>
+      <dl class="requirements">
+        <div>
+          <dt>iPhone / iPad</dt>
+          <dd>iOS / iPadOS 18.6 或更高版本</dd>
+        </div>
+        <div>
+          <dt>兼容 Mac</dt>
+          <dd>
+            Apple M1 或更新芯片，macOS 15.6 或更高版本；兼容情况以 App Store
+            为准。
+          </dd>
+        </div>
+        <div>
+          <dt>正式版本</dt>
+          <dd>
+            1.1.0 <a href="/updates/#ios-1-1-0">查看更新 →</a>
+          </dd>
+        </div>
+      </dl>
+    </article>
+    <article class="platform-card wechat-card" id="wechat">
+      <div class="platform-card-heading">
+        <span class="wechat-mark" aria-hidden="true">
+          <svg width="38" height="34" viewBox="0 0 38 34" fill="none">
+            <path
+              d="M22 14.5C22 20.3 17.3 25 11.5 25c-1.2 0-2.4-.2-3.5-.6L3 27l1.2-5C2.2 20.1 1 17.4 1 14.5 1 8.7 5.7 4 11.5 4S22 8.7 22 14.5Z"
+              fill="currentColor"
+            />
+            <path
+              d="M17 21c0 5 4.3 9 9.5 9 1.2 0 2.4-.2 3.4-.6L34 32l-.9-4.4C34.9 26 36 23.6 36 21c0-5-4.3-9-9.5-9S17 16 17 21Z"
+              fill="#0e1920"
+              stroke="currentColor"
+              stroke-width="1.7"
+            />
+            <circle cx="8" cy="13" r="1.2" fill="#0e1920" />
+            <circle cx="15" cy="13" r="1.2" fill="#0e1920" />
+            <circle cx="23" cy="20" r="1" fill="currentColor" />
+            <circle cx="30" cy="20" r="1" fill="currentColor" />
+          </svg>
+        </span>
+        <span class="pill">微信小程序</span>
+      </div>
+      <p class="eyebrow">WECHAT MINI PROGRAM</p>
+      <h2>
+        在微信里，
+        <br />
+        随手查一查。
+      </h2>
+      <p class="platform-description">
+        不用安装 App。查资料、看行情、翻翻招募，
+        <br />
+        从微信里熟悉的入口开始。
+      </p>
+      <div class="wechat-code-layout">
+        <figure class="wechat-code">
+          <img
+            src="/brand/wechat-miniapp-code.jpg"
+            alt="FF14检索工具官方微信小程序码"
+            width="128"
+            height="128"
+          />
+          <figcaption>微信扫码 · 微信内可长按识别</figcaption>
+        </figure>
+        <div class="miniapp-search">
+          <span class="search-caption">也可在微信中搜索</span>
+          <div>
+            <strong>{site.miniappName}</strong>
+            <button
+              id="copy-miniapp"
+              type="button"
+              aria-label="复制微信小程序名称"
+            >
+              复制名称
+            </button>
+          </div>
+          <span id="copy-status" role="status" aria-live="polite">
+            也可长按选择名称复制
+          </span>
+        </div>
+      </div>
+      <ol class="open-steps">
+        <li>
+          <span>01</span>
+          <div>打开微信，进入搜索</div>
+        </li>
+        <li>
+          <span>02</span>
+          <div>搜索「{site.miniappName}」</div>
+        </li>
+        <li>
+          <span>03</span>
+          <div>在小程序结果中打开，选择所需功能</div>
+        </li>
+      </ol>
+      <a class="text-link" href="/features/#platforms">
+        了解 App 与小程序的区别<span aria-hidden="true">→</span>
+      </a>
+    </article>
+  </section>
+  <section class="wrap android-status" id="android">
+    <div>
+      <span class="pill">Android · 测试版本</span>
+      <h2>Android 也在继续完善。</h2>
+      <p>
+        支持 Android 8.0 或更高版本，面向手机与平板。
+        <br />
+        目前处于测试阶段，官网暂不提供公开下载入口。
+      </p>
+      <p>现在需要查资料、看行情，可以先使用微信小程序。</p>
+    </div>
+    <div class="android-actions">
+      <a class="button" href="#wechat">
+        使用微信小程序<span aria-hidden="true">↑</span>
+      </a>
+      <a class="text-link" href="/features/#platforms">
+        查看功能与界面<span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </section>
+  <section class="section wrap">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">开始之前，你可能想知道</p>
+        <h2>
+          换一个入口，
+          <br />
+          也认得自己的账号。
+        </h2>
+      </div>
+      <p>
+        先确认原来的账号和数据保存方式，
+        <br />
+        继续使用时会更顺手。
+      </p>
+    </div>
+    <div class="start-guides">
+      <a href="/guides/account-sync/">
+        <span>账号与同步</span>
+        <h3>已经在小程序里用过了？</h3>
+        <p>
+          给原账号绑定邮箱，再在 App
+          使用同一邮箱登录。已分别创建的账号不会合并。
+        </p>
+        <span class="text-link">查看操作说明 →</span>
+      </a>
+      <a href="/guides/accounts/">
+        <span>官方服务授权</span>
+        <h3>叨鱼账号需要重新注册吗？</h3>
+        <p>天穹账号与叨鱼授权用途不同。连接官方服务前，先了解各自负责什么。</p>
+        <span class="text-link">了解账号关系 →</span>
+      </a>
+      <a href="/guides/getting-started/">
+        <span>第一次使用</span>
+        <h3>先从哪个功能开始？</h3>
+        <p>
+          选好服务器，从一次熟悉的查询开始。需要保存或互动时，再按页面提示登录。
+        </p>
+        <span class="text-link">阅读入门指南 →</span>
+      </a>
+    </div>
+  </section>
+</SiteLayout>
+<script>
+  const button = document.querySelector<HTMLButtonElement>("#copy-miniapp");
+  const status = document.querySelector<HTMLElement>("#copy-status");
+  button?.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText("FF14检索工具");
+      if (status) status.textContent = "已复制，打开微信搜索小程序名称即可";
+      button.textContent = "已复制";
+    } catch {
+      if (status) status.textContent = "请长按选择「FF14检索工具」并复制";
+    }
+  });
+</script>
+<style>
+  .start-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .platform-card {
+    border: 1px solid var(--line);
+    background: rgba(17, 23, 33, 0.7);
+    border-radius: 14px;
+    padding: 36px;
+    scroll-margin-top: 110px;
+  }
+  .apple-card {
+    background: linear-gradient(
+      145deg,
+      rgba(98, 230, 221, 0.065),
+      rgba(17, 23, 33, 0.7) 60%
+    );
+  }
+  .platform-card-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 38px;
+  }
+  .platform-card-heading > img {
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+  }
+  .wechat-mark {
+    height: 58px;
+    width: 58px;
+    display: grid;
+    place-items: center;
+    border-radius: 15px;
+    background: rgba(140, 227, 161, 0.07);
+    border: 1px solid rgba(140, 227, 161, 0.15);
+    color: #8ce3a1;
+  }
+  .platform-card h2 {
+    font-size: 34px;
+    line-height: 1.5;
+  }
+  .platform-card .eyebrow {
+    font-size: 10px;
+  }
+  .wechat-card .eyebrow {
+    color: #8ce3a1;
+  }
+  .platform-description {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.9;
+    margin-bottom: 0;
+  }
+  .apple-download {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+    margin: 35px 0 30px;
+    padding-block: 22px;
+    border-block: 1px solid var(--line);
+  }
+  .app-store-badge {
+    display: inline-flex;
+  }
+  .app-store-badge img {
+    max-width: 100%;
+    height: auto;
+  }
+  .download-hint {
+    font-size: 10px;
+    color: var(--muted);
+    margin: 5px 0 0;
+  }
+  .download-qr {
+    margin: 0;
+    flex-shrink: 0;
+    text-align: center;
+  }
+  .download-qr img {
+    display: block;
+    border: 6px solid white;
+    border-radius: 5px;
+  }
+  .download-qr figcaption {
+    font-size: 9px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+  .requirements {
+    display: grid;
+    gap: 16px;
+    margin: 0;
+  }
+  .requirements > div {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 14px;
+    font-size: 11px;
+    line-height: 1.9;
+  }
+  .requirements dt {
+    color: var(--soft);
+  }
+  .requirements dd {
+    margin: 0;
+    color: var(--muted);
+  }
+  .requirements dd a {
+    color: var(--teal);
+    margin-left: 9px;
+    white-space: nowrap;
+  }
+  .miniapp-search {
+    padding: 24px;
+    border: 1px solid rgba(140, 227, 161, 0.18);
+    border-radius: 8px;
+    background: rgba(140, 227, 161, 0.035);
+    margin-top: 36px;
+  }
+  .search-caption {
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .miniapp-search > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin: 12px 0 15px;
+  }
+  .miniapp-search strong {
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    user-select: all;
+  }
+  .miniapp-search button {
+    border: 1px solid var(--line-strong);
+    border-radius: 5px;
+    padding: 8px 10px;
+    font-size: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--soft);
+    white-space: nowrap;
+  }
+  .miniapp-search button:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+  }
+  #copy-status {
+    font-size: 10px;
+    color: var(--muted);
+  }
+  .open-steps {
+    padding: 0;
+    margin: 27px 0 13px;
+    list-style: none;
+    display: grid;
+    gap: 18px;
+  }
+  .open-steps li {
+    display: flex;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--soft);
+    line-height: 1.8;
+  }
+  .open-steps li > span {
+    font-size: 10px;
+    color: #8ce3a1;
+    letter-spacing: 0.08em;
+  }
+  .wechat-card > .text-link {
+    font-size: 11px;
+    margin-top: 8px;
+  }
+  .android-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    border-block: 1px solid var(--line);
+    padding-block: 40px;
+    margin-top: 40px;
+  }
+  .android-status h2 {
+    font-size: 28px;
+    margin: 20px 0 15px;
+  }
+  .android-status p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .android-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    flex-shrink: 0;
+  }
+  .android-actions .text-link {
+    font-size: 12px;
+  }
+  .start-guides {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 35px;
+  }
+  .start-guides > a {
+    border-top: 1px solid var(--line);
+    padding-top: 25px;
+  }
+  .start-guides > a > span:first-child {
+    font-size: 10px;
+    color: var(--teal);
+  }
+  .start-guides h3 {
+    font-size: 20px;
+    margin: 18px 0 14px;
+  }
+  .start-guides p {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .start-guides .text-link {
+    font-size: 12px;
+  }
+  .wechat-code-layout {
+    display: grid;
+    grid-template-columns: 128px minmax(0, 1fr);
+    align-items: center;
+    gap: 23px;
+    margin-top: 32px;
+    padding: 22px;
+    border: 1px solid rgba(140, 227, 161, 0.18);
+    border-radius: 8px;
+    background: rgba(140, 227, 161, 0.035);
+  }
+  .wechat-code {
+    margin: 0;
+    text-align: center;
+  }
+  .wechat-code img {
+    display: block;
+    width: 128px;
+    height: 128px;
+    max-width: 100%;
+    object-fit: contain;
+    background: #fff;
+    border-radius: 4px;
+  }
+  .wechat-code figcaption {
+    font-size: 9px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-top: 8px;
+  }
+  .wechat-code-layout .miniapp-search {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    background: none;
+    min-width: 0;
+  }
+  .wechat-code-layout .miniapp-search > div {
+    display: block;
+    margin-block: 10px;
+  }
+  .wechat-code-layout .miniapp-search strong {
+    font-size: 21px;
+    display: block;
+    line-height: 1.6;
+  }
+  .wechat-code-layout .miniapp-search button {
+    margin-top: 10px;
+  }
+  #copy-status {
+    display: block;
+    line-height: 1.7;
+  }
+  @media (max-width: 950px) {
+    .platform-card {
+      padding: 27px;
+    }
+    .platform-card h2 {
+      font-size: 29px;
+    }
+    .miniapp-search {
+      padding: 18px;
+    }
+    .miniapp-search strong {
+      font-size: 20px;
+    }
+    .apple-download {
+      gap: 10px;
+    }
+    .download-qr img {
+      width: 90px;
+      height: 90px;
+    }
+    .requirements > div {
+      grid-template-columns: 80px 1fr;
+      gap: 10px;
+    }
+  }
+  @media (max-width: 650px) {
+    .wechat-code-layout {
+      grid-template-columns: 112px minmax(0, 1fr);
+      gap: 18px;
+      padding: 17px;
+    }
+    .wechat-code img {
+      width: 112px;
+      height: 112px;
+    }
+    .wechat-code-layout .miniapp-search strong {
+      font-size: 19px;
+    }
+    .search-caption {
+      font-size: 9px;
+    }
+    #copy-status {
+      font-size: 9px;
+    }
+    .start-options {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .platform-card {
+      padding: 28px;
+      scroll-margin-top: 20px;
+    }
+    .platform-card-heading {
+      margin-bottom: 30px;
+    }
+    .platform-card h2 {
+      font-size: 30px;
+    }
+    .platform-description {
+      font-size: 13px;
+    }
+    .apple-download {
+      margin-block: 28px;
+      gap: 20px;
+    }
+    .download-qr img {
+      width: 95px;
+      height: 95px;
+    }
+    .requirements > div {
+      grid-template-columns: 82px 1fr;
+    }
+    .miniapp-search strong {
+      font-size: 22px;
+    }
+    .miniapp-search {
+      margin-top: 28px;
+    }
+    .android-status {
+      display: block;
+      margin-top: 30px;
+      padding-block: 32px;
+    }
+    .android-status h2 {
+      font-size: 26px;
+    }
+    .android-status p {
+      font-size: 12px;
+    }
+    .android-actions {
+      align-items: flex-start;
+      margin-top: 25px;
+      gap: 10px;
+    }
+    .start-guides {
+      grid-template-columns: 1fr;
+      gap: 25px;
+    }
+    .start-guides h3 {
+      font-size: 19px;
+    }
+    .start-guides p {
+      font-size: 12px;
+    }
+  }
+</style>
+
+<style>
+  @media (max-width: 380px) {
+    .wechat-code-layout {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+    }
+    .wechat-code-layout .miniapp-search strong {
+      font-size: 21px;
+    }
+  }
+</style>

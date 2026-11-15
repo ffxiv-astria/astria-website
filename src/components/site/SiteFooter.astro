@@ -1,0 +1,47 @@
+---
+import { site } from "../../data/site";
+---
+
+<footer class="site-footer wrap">
+  <div class="footer-main">
+    <div class="footer-intro">
+      <a class="footer-brand" href="/">
+        Astria天穹<span aria-hidden="true">✦</span>
+      </a>
+      <p>
+        把常用的工具放在一起，
+        <br />
+        陪你安排好冒险里的日常。
+      </p>
+    </div>
+    <div>
+      <p class="footer-label">探索天穹</p>
+      <nav aria-label="探索天穹">
+        <a href="/features/">功能介绍</a>
+        <a href="/start/">开始使用</a>
+        <a href="/updates/">更新日志</a>
+      </nav>
+    </div>
+    <div>
+      <p class="footer-label">获取帮助</p>
+      <nav aria-label="获取帮助">
+        <a href="/guides/">使用指南</a>
+        <a href="/guides/account-sync/">账号与同步</a>
+        <a href="/guides/feedback/">反馈与联系</a>
+      </nav>
+    </div>
+    <div>
+      <p class="footer-label">公共服务</p>
+      <nav aria-label="公共服务">
+        <a href="/legal/privacy/">隐私政策</a>
+        <a href="/legal/terms/">服务协议</a>
+        <a href="/account-deletion/">账号注销</a>
+        <a href="/legal/ffxiv-materials/">法律与数据来源</a>
+      </nav>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>为《最终幻想14》国服玩家制作的非官方工具。</p>
+    <a href={`mailto:${site.supportEmail}`}>{site.supportEmail}</a>
+  </div>
+</footer>

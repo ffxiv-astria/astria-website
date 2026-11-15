@@ -1,0 +1,124 @@
+---
+import { Image } from "astro:assets";
+import SiteLayout from "../../layouts/SiteLayout.astro";
+import { featurePages } from "../../data/feature-pages";
+import { guides } from "../../data/site";
+import gameData from "../../assets/home/game-data.png";
+import market from "../../assets/home/market.png";
+import workbench from "../../assets/screenshots/apple/iphone-workbench.png";
+import gearing from "../../assets/screenshots/apple/ipad-gearing.png";
+import blueMage from "../../assets/screenshots/apple/iphone-blue-mage-detail.png";
+
+interface Props {
+  feature: (typeof featurePages)[number];
+}
+
+export function getStaticPaths() {
+  return featurePages.map((feature) => ({
+    params: { slug: feature.slug },
+    props: { feature },
+  }));
+}
+const { feature } = Astro.props;
+const images = { gameData, market, workbench, gearing, blueMage };
+const relatedGuides = guides.filter((guide) =>
+  (feature.guides as readonly string[]).includes(guide.slug),
+);
+const relatedFeatures = featurePages.filter((item) =>
+  (feature.related as readonly string[]).includes(item.slug),
+);
+---
+
+<SiteLayout
+  title={`${feature.title} — Astria天穹`}
+  description={feature.description}
+  active="features"
+>
+  <div class="wrap">
+    <section class="page-hero feature-page-hero">
+      <nav class="breadcrumbs" aria-label="面包屑">
+        <a href="/">首页</a><span aria-hidden="true">/</span>
+        <a href="/features/">功能介绍</a><span aria-hidden="true">/</span>
+        <span>{feature.label}</span>
+      </nav>
+      <p class="eyebrow">{feature.label}</p>
+      <h1>{feature.title}</h1>
+      <p class="lede">{feature.intro}</p>
+      <div class="actions">
+        <a class="button primary" href="/start/">在 App 或微信小程序中使用<span aria-hidden="true">↗</span></a>
+        <a class="text-link" href="/features/#platforms">查看各端支持范围<span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+    <div class="feature-page-layout">
+      <article class="feature-page-body">
+        <section>
+          <p class="eyebrow">从一个具体问题开始</p>
+          <h2>{feature.scenario}</h2>
+          <ol class="feature-steps">
+            {feature.steps.map((step) => <li>{step}</li>)}
+          </ol>
+        </section>
+        {feature.sections.map((section) => (
+          <section>
+            <h2>{section.title}</h2>
+            <p>{section.text}</p>
+          </section>
+        ))}
+        <section class="note">
+          <h2>使用前，先了解这些边界</h2>
+          <p>{feature.boundary}</p>
+        </section>
+        <section class="feature-reading">
+          <h2>相关使用指南</h2>
+          {relatedGuides.map((guide) => <a class="text-link" href={`/guides/${guide.slug}/`}>{guide.title}<span aria-hidden="true">↗</span></a>)}
+        </section>
+        <section class="feature-reading">
+          <h2>接着了解</h2>
+          {relatedFeatures.map((item) => <a class="text-link" href={`/features/${item.slug}/`}>{item.label}<span aria-hidden="true">→</span></a>)}
+        </section>
+      </article>
+      <aside class:list={["feature-page-image", feature.image === "gearing" && "wide"]} aria-label="App 界面示例">
+        <figure>
+          <Image src={images[feature.image]} alt={feature.imageAlt} width={feature.image === "gearing" ? 1000 : 560} format="webp" loading="lazy" />
+          <figcaption>Apple App 真实界面，使用示例数据展示；具体内容以客户端为准。</figcaption>
+        </figure>
+      </aside>
+    </div>
+    <section class="section feature-page-start">
+      <h2>找到适合你的使用入口。</h2>
+      <p>iPhone 与 iPad 可前往 App Store；微信内可使用「FF14检索工具」小程序。</p>
+      <a class="button primary" href="/start/">开始使用天穹<span aria-hidden="true">↗</span></a>
+    </section>
+  </div>
+</SiteLayout>
+
+<style>
+  .feature-page-hero { max-width: 960px; }
+  .feature-page-hero h1 { font-size: clamp(33px, 4.2vw, 53px); line-height: 1.4; max-width: 900px; }
+  .feature-page-hero .breadcrumbs { margin-bottom: 32px; }
+  .feature-page-layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, .8fr); gap: 64px; align-items: start; }
+  .feature-page-body { min-width: 0; }
+  .feature-page-body section { margin-bottom: 40px; }
+  .feature-page-body h2 { font-size: 24px; line-height: 1.55; margin: 0 0 16px; }
+  .feature-page-body p, .feature-steps { color: var(--soft); line-height: 1.95; font-size: 15px; }
+  .feature-steps { padding-left: 24px; }
+  .feature-steps li { padding-left: 5px; margin-bottom: 16px; }
+  .feature-steps li::marker { color: var(--teal); font-weight: 700; }
+  .feature-page-image figure { margin: 0; }
+  .feature-page-image img { display: block; width: 100%; height: auto; border-radius: 18px; border: 1px solid var(--line); }
+  .feature-page-image figcaption { color: var(--muted); font-size: 12px; line-height: 1.8; margin-top: 16px; }
+  .feature-reading .text-link { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid var(--line); line-height: 1.7; }
+  .feature-page-start { border-top: 1px solid var(--line); margin-top: 40px; }
+  .feature-page-start h2 { font-size: clamp(27px, 3vw, 39px); margin: 0 0 16px; }
+  .feature-page-start p { color: var(--muted); line-height: 1.9; margin-bottom: 26px; }
+  @media (max-width: 900px) {
+    .feature-page-layout { grid-template-columns: minmax(0, 1.3fr) minmax(0, .8fr); gap: 32px; }
+  }
+  @media (max-width: 650px) {
+    .feature-page-layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+    .feature-page-image { max-width: 320px; justify-self: center; }
+    .feature-page-image.wide { max-width: none; }
+    .feature-page-body h2 { font-size: 22px; }
+    .feature-page-body section { margin-bottom: 32px; }
+  }
+</style>
