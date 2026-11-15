@@ -1,0 +1,93 @@
+{
+  "upstream": "https://github.com/google/fonts",
+  "revision": "cc39c4c2c304bc368c9b7c311ea2bcc6013299fe",
+  "fontToolsVersion": "4.59.0",
+  "brotliVersion": "1.1.0",
+  "sourceTextFiles": [
+    "src/pages/index.astro",
+    "src/data/starbook.ts",
+    "src/components/starbook/Polaroid.astro",
+    "docs/redesign/starbook/reference.dc.html"
+  ],
+  "corpusSHA256": "6d4b476531be3097a3465f440fc62d83cf56f8f86cc64ff5f017ce137874c67e",
+  "corpusCharacters": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~·—↑→↓↙、。《》「」一上下与业两个中为主么之九也书了云亚些交享什今从以件价任伍住作你使例信做允入全公共关具兼内再冒冲准几出分别到制前副办功加务动势募化匹区协单卖南卡去发变口叨可号各合后启和哪售器国图在地场块备大天失夹套子学守完宏官定实客宫家容导小就屏属工左巧己已市带帮常并幻广序库度开式张当录待律微心志怎性息情惦想成或战户房手打扫找报抽招拼拿挂指按挑换据掉排接提搜搭摊收攻放政数整料新方日时明星晚晶更替最有服未本材条来板查标核格案桌检楼榜次欧正段气水没法注泽活消涨清源演点热然照片版牌物独玩现理用界略登的目盯相看着知石码示礼社私程穹空突窗站端等策筛签算系索紫线终绑给统绩缺网者职能自航色艾芯英萌落行街补装要角解订议记许询该详说谜账购资走赶跌跨跳身轮载边过还这连适选途通逛速道那部都配醒采里量鉴钉钟销错门间阅队阶际陆限险随隐雄集雨零雾需青非面页顺预首魔鱼鸟齐，：；？",
+  "license": "SIL Open Font License 1.1; no Reserved Font Names declared in these upstream license headers",
+  "fallback": "Long Cang has no arrow glyphs. Use Starbook Noto Serif SC after Starbook Long Cang in the handwritten font stack.",
+  "faces": [
+    {
+      "file": "noto-serif-sc-600.woff2",
+      "family": "Noto Serif SC",
+      "cssFamily": "Starbook Noto Serif SC",
+      "weight": 600,
+      "bytes": 109048,
+      "sha256": "a4f217aefc34623f9a5dbe7cab7afdf6a5be1a97f15455dcc19b61951884d9c6",
+      "sourceURL": "https://raw.githubusercontent.com/google/fonts/cc39c4c2c304bc368c9b7c311ea2bcc6013299fe/ofl/notoserifsc/NotoSerifSC%5Bwght%5D.ttf",
+      "sourceSHA256": "050080d9255a86808f2945bffac582b31ef32bc36411ce29563b4961670c66f9",
+      "sourceVersion": "Version 2.003-H1;hotconv 1.1.1;makeotfexe 2.6.0",
+      "licenseFile": "OFL-NotoSerifSC.txt",
+      "licenseSHA256": "5e0da210fb04058a8c0087985d2d456b931c2579811a49655721d3cf0c36b6d6",
+      "characters": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~·—↑→↓↙、。《》「」一上下与业两个中为主么之九也书了云亚些交享什今从以件价任伍住作你使例信做允入全公共关具兼内再冒冲准几出分别到制前副办功加务动势募化匹区协单卖南卡去发变口叨可号各合后启和哪售器国图在地场块备大天失夹套子学守完宏官定实客宫家容导小就屏属工左巧己已市带帮常并幻广序库度开式张当录待律微心志怎性息情惦想成或战户房手打扫找报抽招拼拿挂指按挑换据掉排接提搜搭摊收攻放政数整料新方日时明星晚晶更替最有服未本材条来板查标核格案桌检楼榜次欧正段气水没法注泽活消涨清源演点热然照片版牌物独玩现理用界略登的目盯相看着知石码示礼社私程穹空突窗站端等策筛签算系索紫线终绑给统绩缺网者职能自航色艾芯英萌落行街补装要角解订议记许询该详说谜账购资走赶跌跨跳身轮载边过还这连适选途通逛速道那部都配醒采里量鉴钉钟销错门间阅队阶际陆限险随隐雄集雨零雾需青非面页顺预首魔鱼鸟齐，：；？",
+      "copyright": "(c) 2017-2024 Adobe (http://www.adobe.com/)."
+    },
+    {
+      "file": "noto-serif-sc-900.woff2",
+      "family": "Noto Serif SC",
+      "cssFamily": "Starbook Noto Serif SC",
+      "weight": 900,
+      "bytes": 108564,
+      "sha256": "845c16e5ca47f130f6f44246a97d4dd842d75333915e396a5163270743a99e8a",
+      "sourceURL": "https://raw.githubusercontent.com/google/fonts/cc39c4c2c304bc368c9b7c311ea2bcc6013299fe/ofl/notoserifsc/NotoSerifSC%5Bwght%5D.ttf",
+      "sourceSHA256": "050080d9255a86808f2945bffac582b31ef32bc36411ce29563b4961670c66f9",
+      "sourceVersion": "Version 2.003-H1;hotconv 1.1.1;makeotfexe 2.6.0",
+      "licenseFile": "OFL-NotoSerifSC.txt",
+      "licenseSHA256": "5e0da210fb04058a8c0087985d2d456b931c2579811a49655721d3cf0c36b6d6",
+      "characters": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~·—↑→↓↙、。《》「」一上下与业两个中为主么之九也书了云亚些交享什今从以件价任伍住作你使例信做允入全公共关具兼内再冒冲准几出分别到制前副办功加务动势募化匹区协单卖南卡去发变口叨可号各合后启和哪售器国图在地场块备大天失夹套子学守完宏官定实客宫家容导小就屏属工左巧己已市带帮常并幻广序库度开式张当录待律微心志怎性息情惦想成或战户房手打扫找报抽招拼拿挂指按挑换据掉排接提搜搭摊收攻放政数整料新方日时明星晚晶更替最有服未本材条来板查标核格案桌检楼榜次欧正段气水没法注泽活消涨清源演点热然照片版牌物独玩现理用界略登的目盯相看着知石码示礼社私程穹空突窗站端等策筛签算系索紫线终绑给统绩缺网者职能自航色艾芯英萌落行街补装要角解订议记许询该详说谜账购资走赶跌跨跳身轮载边过还这连适选途通逛速道那部都配醒采里量鉴钉钟销错门间阅队阶际陆限险随隐雄集雨零雾需青非面页顺预首魔鱼鸟齐，：；？",
+      "copyright": "(c) 2017-2024 Adobe (http://www.adobe.com/)."
+    },
+    {
+      "file": "cinzel-600.woff2",
+      "family": "Cinzel",
+      "cssFamily": "Starbook Cinzel",
+      "weight": 600,
+      "bytes": 14908,
+      "sha256": "e391e5b848aad642d81fafef77d23fc8b3f13696789896096d9996687ff51827",
+      "sourceURL": "https://raw.githubusercontent.com/google/fonts/cc39c4c2c304bc368c9b7c311ea2bcc6013299fe/ofl/cinzel/Cinzel%5Bwght%5D.ttf",
+      "sourceSHA256": "f4d83d34d1f6c741193e4acf4b3dff9531e5a67b6aa65228d00a7db72a4e0f34",
+      "sourceVersion": "Version 2.000",
+      "licenseFile": "OFL-Cinzel.txt",
+      "licenseSHA256": "f2b3029aba64c378bf0963b62945eee15e564fe4330b934c8f2eb058282b5e83",
+      "characters": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~·—",
+      "copyright": "Copyright 2020 The Cinzel Project Authors (https://github.com/NDISCOVER/Cinzel)"
+    },
+    {
+      "file": "cinzel-700.woff2",
+      "family": "Cinzel",
+      "cssFamily": "Starbook Cinzel",
+      "weight": 700,
+      "bytes": 14956,
+      "sha256": "f884dc955ada9dde55406cf33dad000ace8165dff4292c5292a226bf9cc81c1a",
+      "sourceURL": "https://raw.githubusercontent.com/google/fonts/cc39c4c2c304bc368c9b7c311ea2bcc6013299fe/ofl/cinzel/Cinzel%5Bwght%5D.ttf",
+      "sourceSHA256": "f4d83d34d1f6c741193e4acf4b3dff9531e5a67b6aa65228d00a7db72a4e0f34",
+      "sourceVersion": "Version 2.000",
+      "licenseFile": "OFL-Cinzel.txt",
+      "licenseSHA256": "f2b3029aba64c378bf0963b62945eee15e564fe4330b934c8f2eb058282b5e83",
+      "characters": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~·—",
+      "copyright": "Copyright 2020 The Cinzel Project Authors (https://github.com/NDISCOVER/Cinzel)"
+    },
+    {
+      "file": "long-cang-400.woff2",
+      "family": "Long Cang",
+      "cssFamily": "Starbook Long Cang",
+      "weight": 400,
+      "bytes": 147332,
+      "sha256": "3688d434f8c78c4896136a15c8a1a65df95f59131c9f96bd34e7d40691aba767",
+      "sourceURL": "https://raw.githubusercontent.com/google/fonts/cc39c4c2c304bc368c9b7c311ea2bcc6013299fe/ofl/longcang/LongCang-Regular.ttf",
+      "sourceSHA256": "e5bf2c3f24ef2327c6f136d8f73e2f9dfdf44896fdbeb35a9515f44777bb91bc",
+      "sourceVersion": "Version 2.001",
+      "licenseFile": "OFL-LongCang.txt",
+      "licenseSHA256": "603546b7219a94bb59bf8294458194a5010119486354092b66a09a3fd61aeacc",
+      "characters": " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~—、。《》「」一上下与业两个中为主么之九也书了云亚些交享什今从以件价任伍住作你使例信做允入全公共关具兼内再冒冲准几出分别到制前副办功加务动势募化匹区协单卖南卡去发变口叨可号各合后启和哪售器国图在地场块备大天失夹套子学守完宏官定实客宫家容导小就屏属工左巧己已市带帮常并幻广序库度开式张当录待律微心志怎性息情惦想成或战户房手打扫找报抽招拼拿挂指按挑换据掉排接提搜搭摊收攻放政数整料新方日时明星晚晶更替最有服未本材条来板查标核格案桌检楼榜次欧正段气水没法注泽活消涨清源演点热然照片版牌物独玩现理用界略登的目盯相看着知石码示礼社私程穹空突窗站端等策筛签算系索紫线终绑给统绩缺网者职能自航色艾芯英萌落行街补装要角解订议记许询该详说谜账购资走赶跌跨跳身轮载边过还这连适选途通逛速道那部都配醒采里量鉴钉钟销错门间阅队阶际陆限险随隐雄集雨零雾需青非面页顺预首魔鱼鸟齐，：；？",
+      "copyright": "Copyright 2018 The LongCang Project Authors (https://github.com/googlefonts/longcang)"
+    }
+  ]
+}

@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>天穹官网首页：星空手账</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600;900&amp;family=Cinzel:wght@600;700&amp;family=Long+Cang&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="container-type: inline-size; background-color: #070A1F; background-image: radial-gradient(#1A2052 1px, transparent 1.5px); background-size: 24px 24px; color: #E9ECFF; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Noto Sans SC', sans-serif; font-size: 16px; line-height: 1.75; -webkit-font-smoothing: antialiased; overflow: hidden">
+
+  <!-- 首屏 -->
+  <section style="position: relative">
+    <div aria-hidden="true" style="position: absolute; inset: 0">
+      <sc-for list="{{sky}}" as="st" hint-placeholder-count="40">
+        <span style="position: absolute; left: {{st.x}}%; top: {{st.y}}%; width: {{st.s}}px; height: {{st.s}}px; border-radius: 50%; background: #E9ECFF; opacity: {{st.o}}"></span>
+      </sc-for>
+    </div>
+
+    <header style="position: relative; max-width: 1240px; margin: 0 auto; padding: 24px clamp(16px, 4cqi, 48px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px">
+      <a href="#s-top" style="display: flex; align-items: center; gap: 12px; color: #E9ECFF; text-decoration: none; min-height: 44px">
+        <img src="/_blob/ea1ba4af1e530cfaa449ab899d4296d0" alt="" style="width: 32px; height: 32px; border-radius: 8px; transform: rotate(-4deg)">
+        <span style="font-family: Cinzel, serif; font-weight: 700; font-size: 18px; letter-spacing: 0.16em">ASTRIA</span>
+        <span style="font-family: 'Noto Serif SC', serif; font-weight: 600; color: #B9C0E6">天穹</span>
+      </a>
+      <nav aria-label="主导航" style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px 24px; font-size: 15px">
+        <a href="#s-todo" style="color: #C3C9EC; text-decoration: none; padding: 10px 0">能做什么</a>
+        <a href="#s-ipad" style="color: #C3C9EC; text-decoration: none; padding: 10px 0">iPad</a>
+        <a href="#s-top" style="color: #C3C9EC; text-decoration: none; padding: 10px 0">使用指南</a>
+        <a href="#s-top" style="color: #C3C9EC; text-decoration: none; padding: 10px 0">更新日志</a>
+        <a href="#s-download" style="display: inline-block; color: #070A1F; background: #E8C77A; text-decoration: none; padding: 10px 18px; border-radius: 10px; font-weight: 600; transform: rotate(-2deg)">下载 App</a>
+      </nav>
+    </header>
+
+    <div id="s-top" style="position: relative; max-width: 1240px; margin: 0 auto; padding: 32px clamp(16px, 4cqi, 48px) 104px; display: flex; flex-wrap: wrap; align-items: center; gap: 48px 40px">
+      <div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 26px">
+        <a href="#s-top" style="align-self: flex-start; font-family: 'Long Cang', cursive; font-size: 22px; line-height: 1.3; color: #E8C77A; text-decoration: none; border: 1.5px solid #E8C77A; border-radius: 999px; padding: 4px 16px; transform: rotate(-2deg)">1.1.0 新到：萌新招待 · 陆行鸟礼物站 · 水晶冲突排行榜 →</a>
+        <h1 style="margin: 0; font-family: 'Noto Serif SC', serif; font-weight: 900; font-size: clamp(46px, 6.4cqi, 92px); line-height: 1.15; letter-spacing: 0.02em">冒险者的<br><span style="background: linear-gradient(transparent 62%, rgba(232, 199, 122, 0.42) 62%, rgba(232, 199, 122, 0.42) 94%, transparent 94%)">随身星图</span></h1>
+        <p style="margin: 0; font-size: 18px; color: #B9C0E6; max-width: 26em">查道具、看行情、守采集点、等天气、找队伍。上线前要准备的、下线后还惦记的，天穹都替你记在这一本里。</p>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px">
+          <a href="#s-download" style="display: inline-block; padding: 12.5px; margin-left: -12.5px"><img src="/_blob/2c70c5259dc0ad94cb0dc5fb747cf10f" alt="在 App Store 下载" style="display: block; height: 50px"></a>
+          <span style="font-family: 'Long Cang', cursive; font-size: 24px; color: #8DA8FF">没有 iPhone？微信搜「FF14检索工具」</span>
+        </div>
+      </div>
+
+      <div style="flex: 1.1 1 440px; min-width: 0; position: relative; aspect-ratio: 560 / 720">
+        <svg aria-hidden="true" viewBox="0 0 100 100" preserveAspectRatio="none" style="position: absolute; inset: 0; width: 100%; height: 100%">
+          <polyline points="23,9 77,1 50,41 23,9" fill="none" stroke="#E8C77A" stroke-opacity="0.55" stroke-width="1" stroke-dasharray="2 6" vector-effect="non-scaling-stroke"></polyline>
+        </svg>
+
+        <figure style="position: absolute; left: 0; top: 10%; width: 46%; margin: 0; background: #F4EFE3; padding: 3% 3% 13%; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45); transform: rotate(-6deg); box-sizing: border-box">
+          <span aria-hidden="true" style="position: absolute; left: 28%; top: -12px; width: 44%; height: 24px; background: rgba(232, 199, 122, 0.82); transform: rotate(3deg)"></span>
+          <img src="/_blob/ee305f484998dab7afe44f23d6800ff4" alt="天穹 App 道具详情：紫水晶的配方与材料" style="display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: top">
+          <figcaption style="position: absolute; left: 0; right: 0; bottom: 3%; text-align: center; font-family: 'Long Cang', cursive; font-size: clamp(16px, 1.6cqi, 24px); color: #1A1430">紫水晶怎么做？</figcaption>
+        </figure>
+
+        <figure style="position: absolute; right: 0; top: 0; width: 46%; margin: 0; background: #F4EFE3; padding: 3% 3% 13%; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45); transform: rotate(4deg); box-sizing: border-box">
+          <span aria-hidden="true" style="position: absolute; left: 26%; top: -12px; width: 44%; height: 24px; background: rgba(141, 168, 255, 0.6); transform: rotate(-4deg)"></span>
+          <img src="/_blob/4ea1cf0dab86e801a2ef6a530c054896" alt="天穹 App 市价查询：热度榜" style="display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: top">
+          <figcaption style="position: absolute; left: 0; right: 0; bottom: 3%; text-align: center; font-family: 'Long Cang', cursive; font-size: clamp(16px, 1.6cqi, 24px); color: #1A1430">今天什么最热门？</figcaption>
+        </figure>
+
+        <figure style="position: absolute; left: 27%; top: 41%; width: 46%; margin: 0; background: #F4EFE3; padding: 3% 3% 13%; box-shadow: 0 20px 44px rgba(0, 0, 0, 0.55); transform: rotate(-1.5deg); box-sizing: border-box">
+          <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" style="position: absolute; left: 50%; top: -17px; transform: translateX(-50%)"><path d="M12 0C13 7 17 11 24 12C17 13 13 17 12 24C11 17 7 13 0 12C7 11 11 7 12 0Z" fill="#E8C77A"></path></svg>
+          <img src="/_blob/99396b602ad3016f16724be00364a9b9" alt="天穹 App 采集时钟：艾欧泽亚时间与正在开放的采集点" style="display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: top">
+          <figcaption style="position: absolute; left: 0; right: 0; bottom: 3%; text-align: center; font-family: 'Long Cang', cursive; font-size: clamp(16px, 1.6cqi, 24px); color: #1A1430">ET 12:00 的采集点</figcaption>
+        </figure>
+
+        <p style="position: absolute; left: 0; bottom: 4%; width: 26%; margin: 0; font-family: 'Long Cang', cursive; font-size: clamp(18px, 1.8cqi, 26px); line-height: 1.25; color: #8DA8FF; transform: rotate(-4deg)">↑ 配方和材料，一页看完</p>
+        <p style="position: absolute; right: 0; top: 64%; width: 25%; margin: 0; font-family: 'Long Cang', cursive; font-size: clamp(18px, 1.8cqi, 26px); line-height: 1.25; color: #E8C77A; transform: rotate(5deg)">↙ 限时采集点，到点就提醒</p>
+        <div aria-hidden="true" style="position: absolute; right: 3%; bottom: 0; width: 92px; height: 92px; border: 2.5px solid #E8C77A; border-radius: 50%; color: #E8C77A; display: flex; flex-direction: column; align-items: center; justify-content: center; transform: rotate(-14deg); line-height: 1.2; opacity: 0.9">
+          <span style="font-family: 'Noto Serif SC', serif; font-weight: 900; font-size: 22px">天穹</span>
+          <span style="font-family: Cinzel, serif; font-size: 10px; letter-spacing: 0.2em">EORZEA</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 今天上线前：待办 + 钉住的照片 -->
+  <section id="s-todo" style="max-width: 1240px; margin: 0 auto; padding: 24px clamp(16px, 4cqi, 48px) 112px; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 48px">
+    <div style="flex: 1.6 1 540px; min-width: 0; position: relative; background-color: #0D1240; background-image: repeating-linear-gradient(transparent 0, transparent 63px, #1F2560 63px, #1F2560 64px); border-radius: 6px; padding: 28px clamp(16px, 3cqi, 40px) 28px clamp(36px, 5cqi, 64px); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45)">
+      <span aria-hidden="true" style="position: absolute; left: clamp(20px, 3cqi, 40px); top: 0; bottom: 0; width: 1.5px; background: rgba(232, 199, 122, 0.5)"></span>
+      <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; margin-bottom: 12px">
+        <h2 style="margin: 0; font-family: 'Noto Serif SC', serif; font-weight: 900; font-size: clamp(30px, 3.4cqi, 46px); line-height: 1.3">今天上线前</h2>
+        <span style="font-family: 'Long Cang', cursive; font-size: 24px; color: #E8C77A">已完成 {{done}} / {{total}}</span>
+      </div>
+      <sc-for list="{{tasks}}" as="t" hint-placeholder-count="8">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 2px 16px; min-height: 64px">
+          <label style="display: flex; align-items: center; gap: 14px; cursor: pointer; min-height: 44px">
+            <input type="checkbox" checked="{{t.checked}}" onChange="{{t.toggle}}" style="width: 22px; height: 22px; accent-color: #E8C77A; margin: 0; flex: none">
+            <span style="font-family: 'Long Cang', cursive; font-size: clamp(22px, 2cqi, 30px); line-height: 1.2; text-decoration: {{t.deco}}; color: {{t.color}}">{{t.text}}</span>
+          </label>
+          <button type="button" onClick="{{t.pick}}" aria-pressed="{{t.pressed}}" style="border: 1.5px solid #E8C77A; background: {{t.tagBg}}; color: {{t.tagFg}}; border-radius: 999px; padding: 6px 14px; font: inherit; font-size: 14px; min-height: 36px; cursor: pointer; white-space: nowrap">→ {{t.tool}}</button>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 28px; padding-top: 24px">
+      <figure style="position: relative; width: min(320px, 100%); margin: 0; background: #F4EFE3; padding: 14px 14px 64px; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5); transform: rotate(2.5deg); box-sizing: border-box">
+        <svg aria-hidden="true" width="34" height="34" viewBox="0 0 24 24" style="position: absolute; left: 50%; top: -17px; transform: translateX(-50%)"><path d="M12 0C13 7 17 11 24 12C17 13 13 17 12 24C11 17 7 13 0 12C7 11 11 7 12 0Z" fill="#E8C77A"></path></svg>
+        <img src="{{pin.src}}" alt="{{pin.alt}}" style="display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: top">
+        <figcaption style="position: absolute; left: 0; right: 0; bottom: 14px; text-align: center; font-family: 'Long Cang', cursive; font-size: 28px; color: #1A1430">{{pin.tool}}</figcaption>
+      </figure>
+      <p style="margin: 0; max-width: 22em; text-align: center; color: #B9C0E6; font-size: 16px">{{pin.body}}</p>
+      <p style="margin: 0; font-family: 'Long Cang', cursive; font-size: 22px; color: #8DA8FF">点左边的标签，换一张钉上来</p>
+    </div>
+  </section>
+
+  <!-- 夹着的几页 -->
+  <section style="max-width: 1240px; margin: 0 auto; padding: 0 clamp(16px, 4cqi, 48px) 112px; display: flex; flex-direction: column; gap: 40px">
+    <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 24px">
+      <h2 style="margin: 0; font-family: 'Noto Serif SC', serif; font-weight: 900; font-size: clamp(30px, 3.4cqi, 46px); line-height: 1.3">本子里还夹着几页</h2>
+      <span style="font-family: 'Long Cang', cursive; font-size: 24px; color: #E8C77A">收集、解谜、看轮换</span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 40px 32px">
+      <sc-for list="{{extras}}" as="e" hint-placeholder-count="3">
+        <figure style="position: relative; flex: 1 1 200px; max-width: 250px; margin: 0; background: #F4EFE3; padding: 12px 12px 56px; box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45); transform: rotate({{e.rot}}deg); box-sizing: border-box">
+          <span aria-hidden="true" style="position: absolute; left: 30%; top: -11px; width: 40%; height: 22px; background: {{e.tape}}"></span>
+          <img src="{{e.src}}" alt="{{e.alt}}" style="display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: cover; object-position: top">
+          <figcaption style="position: absolute; left: 0; right: 0; bottom: 12px; text-align: center; font-family: 'Long Cang', cursive; font-size: 24px; color: #1A1430">{{e.cap}}</figcaption>
+        </figure>
+      </sc-for>
+      <aside style="flex: 1 1 260px; max-width: 320px; background: #E8C77A; color: #1A1430; padding: 26px 24px 30px; transform: rotate(-2deg); box-shadow: 0 14px 30px rgba(0, 0, 0, 0.45)">
+        <p style="margin: 0 0 10px; font-family: 'Long Cang', cursive; font-size: 30px; line-height: 1.25">还有这些：</p>
+        <ul style="margin: 0 0 14px; padding-left: 20px; font-size: 15px; line-height: 1.9">
+          <li>零式英雄榜与角色战绩</li>
+          <li>云雾街玩家社区</li>
+          <li>宏方案库</li>
+        </ul>
+        <p style="margin: 0; font-size: 14px; line-height: 1.7; border-top: 1.5px dashed rgba(26, 20, 48, 0.4); padding-top: 12px">App 里还能连上石之家：幻化、攻略、招募板与官方活动。需要绑定叨鱼账号。</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- iPad -->
+  <section id="s-ipad" style="max-width: 1240px; margin: 0 auto; padding: 0 clamp(16px, 4cqi, 48px) 120px; display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center">
+    <p style="margin: 0; font-family: Cinzel, serif; font-weight: 600; font-size: 13px; letter-spacing: 0.3em; color: #E8C77A">A WIDER SKY</p>
+    <h2 style="margin: 0; font-family: 'Noto Serif SC', serif; font-weight: 900; font-size: clamp(32px, 4cqi, 56px); line-height: 1.25">在大桌面上摊开</h2>
+    <p style="margin: 0; font-family: 'Long Cang', cursive; font-size: 26px; color: #8DA8FF">iPad 上，核心数据、魔晶石和属性面板一页看全 ↓</p>
+    <div style="position: relative; width: 100%; max-width: 1000px; margin-top: 24px; background: #F4EFE3; padding: 14px; box-shadow: 0 22px 48px rgba(0, 0, 0, 0.55); transform: rotate(-1.2deg); box-sizing: border-box">
+      <span aria-hidden="true" style="position: absolute; left: -18px; top: 20px; width: 120px; height: 28px; background: rgba(232, 199, 122, 0.82); transform: rotate(-35deg)"></span>
+      <span aria-hidden="true" style="position: absolute; right: -18px; top: 20px; width: 120px; height: 28px; background: rgba(141, 168, 255, 0.6); transform: rotate(35deg)"></span>
+      <img src="/_blob/9d41340d2bef2892d30d64c2f13cfd0a" alt="天穹 iPad 版配装详情" style="display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top">
+    </div>
+    <p style="margin: 8px 0 0; font-size: 14px; color: #9AA3D6">iPad 版也能在搭载 Apple M1 或更新芯片的 Mac 上使用，以 App Store 兼容说明为准。</p>
+  </section>
+
+  <!-- 下载 -->
+  <section id="s-download" style="max-width: 1240px; margin: 0 auto; padding: 0 clamp(16px, 4cqi, 48px) 48px">
+    <div style="position: relative; border: 2px dashed rgba(232, 199, 122, 0.7); border-radius: 14px; padding: clamp(28px, 4cqi, 56px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 32px 48px; background: rgba(13, 18, 64, 0.85)">
+      <svg aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#E8C77A" stroke-width="1.8" stroke-linecap="round" style="position: absolute; left: 36px; top: -16px; background: #070A1F"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M8.5 7.5L20 18M8.5 16.5L20 6"></path></svg>
+      <div style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+        <p style="margin: 0; font-family: 'Noto Serif SC', serif; font-weight: 900; font-size: clamp(32px, 4cqi, 52px); line-height: 1.2">带上天穹，<br>去冒险。</p>
+        <p style="margin: 0; font-family: 'Long Cang', cursive; font-size: 24px; color: #E8C77A">两个入口，挑顺手的那个</p>
+      </div>
+      <div style="flex: 1 1 460px; min-width: 0; display: flex; flex-wrap: wrap; gap: 20px">
+        <div style="flex: 1 1 200px; border: 1px solid #262C5C; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 10px">
+          <span style="font-size: 13px; color: #9AA3D6">天穹 App</span>
+          <strong style="font-size: 18px">iPhone 与 iPad</strong>
+          <a href="#s-download" style="display: inline-block; padding: 12.5px; margin-left: -12.5px; align-self: flex-start"><img src="/_blob/2c70c5259dc0ad94cb0dc5fb747cf10f" alt="在 App Store 下载" style="display: block; height: 50px"></a>
+        </div>
+        <div style="flex: 1 1 200px; border: 1px solid #262C5C; border-radius: 12px; padding: 20px; display: flex; gap: 16px; align-items: center">
+          <img src="/_blob/6f0f5382627d02bbcda904721e87b0bc" alt="微信小程序「FF14检索工具」小程序码" style="width: 96px; height: 96px; border-radius: 8px; background: #FFFFFF; flex: none">
+          <div style="display: flex; flex-direction: column; gap: 4px">
+            <span style="font-size: 13px; color: #9AA3D6">微信小程序</span>
+            <strong style="font-size: 18px">FF14检索工具</strong>
+            <span style="font-size: 14px; color: #B9C0E6">扫码，或在微信里搜索</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; padding-top: 32px; font-size: 13px; color: #9AA3D6">
+      <span>为《最终幻想14》国服玩家制作的非官方工具</span>
+      <span style="display: flex; flex-wrap: wrap; gap: 18px"><a href="#s-top" style="color: #9AA3D6">隐私政策</a><a href="#s-top" style="color: #9AA3D6">服务协议</a><a href="#s-top" style="color: #9AA3D6">账号注销</a><a href="#s-top" style="color: #9AA3D6">法律与数据来源</a></span>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":4300}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { done: { 0: true }, pin: 0 };
+  }
+  renderVals() {
+    const list = [
+      { text: '查一下这块材料从哪来', tool: '道具资料', src: '/_blob/ee305f484998dab7afe44f23d6800ff4', body: '配方、材料、用途和掉落来源一页看完；相关的任务、副本和 NPC 也能接着点下去。' },
+      { text: '卖之前，看看什么最热门', tool: '市场行情', src: '/_blob/4ea1cf0dab86e801a2ef6a530c054896', body: '热度、成交量和涨跌榜，加上各服挂单、成交与走势；材料清单帮你算一次采购。' },
+      { text: '赶在 ET 12:00 前守采集点', tool: '采集时钟', src: '/_blob/99396b602ad3016f16724be00364a9b9', body: '艾欧泽亚时间和正在开放的限时采集点；关注的采集物，到点前提醒你。' },
+      { text: '等一场小雨再出发', tool: '天气预报', src: '/_blob/14553ca735df33ad56f60eb50ed227db', body: '各地区当前与未来的天气，按目标天气筛出合适的时段。' },
+      { text: '今晚找一队打零式', tool: '跨服招募', src: '/_blob/946bc53902d0988c7f5f6a5875aed29f', body: '按副本与玩法筛选跨服招募，还能看到今天的招募速度。' },
+      { text: '盯一块空地，别错过抽签', tool: '售楼中心', src: '/_blob/76e211add37b35727919b1a84b133b15', body: '空地、抽签阶段与价格一目了然；订阅想要的房区，有变化就知道。' },
+      { text: '给新职业配一套装', tool: 'Asvel 配装器', src: '/_blob/5a730c82218c794563a06d2b809a0644', body: '逛配装广场找现成方案，导入、整理并分享自己的配装。' },
+      { text: '补齐还缺的九宫幻卡', tool: '九宫幻卡', src: '/_blob/0edd3709fb7e8d2a6dd84b156e7dfc0b', body: '卡牌图鉴、收集目标和缺失清单，知道下一张该去哪拿。' }
+    ];
+    const done = this.state.done;
+    const pin = this.state.pin;
+    const tasks = list.map((t, i) => {
+      const on = !!done[i];
+      const sel = i === pin;
+      return {
+        text: t.text, tool: t.tool, checked: on,
+        deco: on ? 'line-through' : 'none',
+        color: on ? '#7C84B8' : '#E9ECFF',
+        pressed: sel ? 'true' : 'false',
+        tagBg: sel ? '#E8C77A' : 'transparent',
+        tagFg: sel ? '#070A1F' : '#E8C77A',
+        toggle: () => { const next = Object.assign({}, this.state.done); next[i] = !on; this.setState({ done: next }); },
+        pick: () => this.setState({ pin: i })
+      };
+    });
+    let seed = 11;
+    const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    const sky = [];
+    for (let i = 0; i < 110; i++) {
+      sky.push({ x: (rnd() * 100).toFixed(2), y: (rnd() * 100).toFixed(2), s: rnd() < 0.85 ? 1 : 2, o: (0.2 + rnd() * 0.6).toFixed(2) });
+    }
+    const p = list[pin];
+    return {
+      sky: sky,
+      tasks: tasks,
+      total: list.length,
+      done: tasks.filter((t) => t.checked).length,
+      pin: { src: p.src, tool: p.tool, body: p.body, alt: '天穹 App ' + p.tool + '页面' },
+      extras: [
+        { src: '/_blob/a49d1a34d5e8b725ca4ccfc1a8786b79', alt: '天穹 App 青魔法书', cap: '青魔法学到哪了', rot: -3, tape: 'rgba(232, 199, 122, 0.82)' },
+        { src: '/_blob/1f55b74257003e9e7ebd9e4ba6ba95ff', alt: '天穹 App 幻巧拼图', cap: '幻巧拼图，帮你算', rot: 2, tape: 'rgba(141, 168, 255, 0.6)' },
+        { src: '/_blob/fcd279161b2b1bbfd9238307c10c48cb', alt: '天穹 App PvP 轮换', cap: '今晚打哪张图', rot: -1, tape: 'rgba(232, 199, 122, 0.82)' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

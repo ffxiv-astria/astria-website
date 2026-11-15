@@ -1,0 +1,61 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+interface Props {
+  image: ImageMetadata;
+  alt: string;
+  caption: string;
+  class?: string;
+  tape?: "gold" | "blue";
+  pin?: boolean;
+  rotation?: number;
+  eager?: boolean;
+  sizes?: string;
+}
+const {
+  image,
+  alt,
+  caption,
+  class: className,
+  tape,
+  pin = false,
+  rotation,
+  eager = false,
+  sizes = "(max-width: 650px) 42vw, (max-width: 980px) 44vw, 23vw",
+} = Astro.props;
+---
+
+<figure
+  class:list={["sb-polaroid", className]}
+  style={rotation !== undefined ? `--photo-rotation:${rotation}deg` : undefined}
+>
+  {tape && (
+    <span class:list={["sb-tape", `sb-tape-${tape}`]} aria-hidden="true"></span>
+  )}
+  {pin && (
+    <svg
+      class="sb-pin"
+      aria-hidden="true"
+      width="34"
+      height="34"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M12 0C13 7 17 11 24 12C17 13 13 17 12 24C11 17 7 13 0 12C7 11 11 7 12 0Z"
+        fill="currentColor"
+      />
+    </svg>
+  )}
+  <Image
+    src={image}
+    alt={alt}
+    width={720}
+    widths={[240, 360, 480, 720, 960]}
+    sizes={sizes}
+    format="webp"
+    loading={eager ? "eager" : "lazy"}
+  />
+  <figcaption>
+    <slot name="caption">{caption}</slot>
+  </figcaption>
+</figure>

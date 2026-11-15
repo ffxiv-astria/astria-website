@@ -2,6 +2,8 @@
 
 ## 页面与数据
 
+Starbook 首页（2026-11-16）使用 `src/data/starbook.ts`、`src/components/starbook/Polaroid.astro` 与 `src/styles/starbook.css`；新导航、页脚、字体及样式仅由首页加载，其余页面继续使用既有共享组件。设计依据与字体说明位于 `docs/redesign/starbook/`，截图来源见 `docs/homepage-assets.md`。
+
 - `src/pages/index.astro`：首页编排与界面展示。保留 `#download`、`#features`，供现有分享承接页面链接。
 - `src/data/site.ts`：品牌入口、功能场景、九篇使用指南和更新记录。文章通过 `src/pages/guides/[slug].astro` 生成。
 - `src/pages/start/index.astro`：系统要求、App Store 下载/二维码、微信小程序入口与 Android 测试状态。
