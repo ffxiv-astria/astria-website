@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import SiteLayout from "../../layouts/SiteLayout.astro";
+import StarbookLayout from "../../layouts/StarbookLayout.astro";
 import { featureGroups } from "../../data/site";
 import { featurePages } from "../../data/feature-pages";
 import workbench from "../../assets/screenshots/apple/iphone-workbench.png";
@@ -36,7 +36,7 @@ const commonFeatures = [
 ];
 ---
 
-<SiteLayout
+<StarbookLayout
   title="FF14 道具、市场、配装与日常工具介绍 — Astria天穹"
   description="了解天穹 App 与微信小程序的 FF14 国服道具查询、Universalis 市场价格、Asvel 配装器、采集时钟、天气预报、房屋与收集功能。"
   active="features"
@@ -348,368 +348,85 @@ const commonFeatures = [
       </a>
     </div>
   </section>
-</SiteLayout>
+</StarbookLayout>
 <style>
-  .topic-card,
-  .tool-card {
-    padding: 27px;
-  }
-  .topic-card h3,
-  .tool-card h3 {
-    font-size: 18px;
-  }
-  .topic-card p,
-  .tool-card p {
-    font-size: 13px;
-    color: var(--muted);
-  }
-  .topic-card .text-link {
-    font-size: 12px;
-  }
-  .extra-tools {
-    padding-top: 35px;
-  }
-  .extra-tools-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 18px;
-  }
-  .tool-card .pills {
-    margin-top: 24px;
-  }
-  @media (max-width: 650px) {
-    .extra-tools-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-  .feature-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 42px;
-  }
-  .feature-nav a {
-    display: inline-flex;
-    gap: 12px;
-    padding: 11px 16px;
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    color: var(--teal);
-    font-size: 10px;
-  }
-  .feature-nav a span {
-    color: var(--soft);
-    font-size: 12px;
-  }
-  .feature-nav a:hover {
-    background: rgba(98, 230, 221, 0.06);
-    border-color: rgba(98, 230, 221, 0.4);
-  }
-  .feature-sections {
-    padding-bottom: 35px;
-  }
+  .feature-nav { display:flex; flex-wrap:wrap; gap:10px; margin-top:34px; }
+  .feature-nav a { display:inline-flex; align-items:center; gap:10px; padding:9px 15px; border:1px solid var(--line-strong); border-radius:3px; font-size:11px; color:var(--teal); background:#e8c77a08; }
+  .feature-nav a span { color:var(--soft); font-size:13px; }
+  .feature-nav a:hover { border-color:var(--teal); background:#e8c77a13; }
+  .topic-card,.tool-card { padding:30px; }
+  .topic-card h3,.tool-card h3 { font-size:20px; }
+  .topic-card p,.tool-card p { font-size:14px; color:var(--muted); }
+  .topic-card .text-link { font-size:13px; }
+  .feature-sections { display:grid; gap:32px; padding-bottom:20px; }
   .feature-detail {
-    display: grid;
-    grid-template-columns: 1.15fr 1fr;
-    gap: 100px;
-    padding-block: 65px;
-    border-top: 1px solid var(--line);
-    scroll-margin-top: 85px;
+    --text:#202b3d; --soft:#354256; --muted:#647083; --teal:#756129;
+    --line:#283a5528; --line-strong:#283a5550;
+    position:relative; display:grid; grid-template-columns:1.05fr 1fr; gap:60px;
+    padding:40px; border:1px solid #ded6c8; border-radius:3px;
+    color:var(--text); background:#f4efe3; box-shadow:5px 6px 0 #02051840;
+    scroll-margin-top:28px;
   }
-  .feature-intro > p:not(.eyebrow):not(.access-note) {
-    max-width: 550px;
-    color: var(--muted);
-    font-size: 15px;
-    margin-bottom: 25px;
+  .feature-detail:before { content:""; position:absolute; top:-10px; right:48px; width:90px; height:20px; background:#d5ba7980; transform:rotate(4deg); }
+  .feature-detail:nth-child(2n) { background:#e4e9f4; }
+  .feature-detail:nth-child(2n):before { background:#a4b2d680; transform:rotate(-4deg); }
+  .feature-intro h2 { font-size:31px; }
+  .feature-intro>p:not(.eyebrow):not(.access-note) { color:var(--muted); font-size:15px; margin-bottom:24px; }
+  .access-note { font-size:12px; color:var(--muted); margin:15px 0 0; }
+  .context-label { font-family:var(--sb-hand); font-size:24px; color:var(--teal); margin-bottom:10px; }
+  .feature-list { margin:0; padding-left:22px; }
+  .feature-list li { font-size:15px; padding:8px 0 9px 3px; border-bottom:1px dotted var(--line); }
+  .feature-list li::marker { color:var(--teal); }
+  .example { border-left:2px solid #b29751; padding-left:16px; margin:25px 0 12px; }
+  .example span { font-size:12px; color:var(--teal); }
+  .example p { font-size:13px; color:var(--muted); margin:6px 0; }
+  .feature-context .text-link { font-size:13px; }
+  .extra-tools { padding-top:50px; }
+  .extra-tools-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:24px; }
+  .tool-card .pills { margin-top:24px; }
+  .platform-showcase { background:#0d124060; }
+  .platform-screens,.example-screens { display:grid; grid-template-columns:1fr 1fr; gap:50px; }
+  .platform-screens figure,.example-screens figure { margin:0; display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:28px; }
+  .platform-device,.example-device { position:relative; height:395px; overflow:hidden; border:10px solid #f4efe3; border-bottom-width:27px; border-radius:2px; box-shadow:var(--shadow); background:#f4efe3; }
+  .platform-device { transform:rotate(-3deg); }
+  .platform-device.android { transform:rotate(3deg); }
+  .platform-device img,.example-device img { display:block; width:100%; height:auto; }
+  .platform-screens figcaption h3,.example-screens h3 { font-size:21px; margin:18px 0 14px; }
+  .platform-screens figcaption p,.example-screens p { font-size:13px; color:var(--muted); }
+  .screenshot-note,.table-note { font-size:12px; color:var(--muted); margin:30px 0 0; }
+  .detail-examples { border-bottom:1px solid var(--line); }
+  .example-device { height:430px; }
+  .comparison-scroll { --text:#202b3d; --soft:#354256; --muted:#647083; --teal:#756129; --line:#283a5528; overflow:auto; border:1px solid #ded6c8; border-radius:3px; background:#f4efe3; box-shadow:4px 6px 0 #02051835; }
+  .comparison { border-collapse:collapse; width:100%; min-width:650px; text-align:left; font-size:14px; }
+  .comparison caption { position:absolute; clip:rect(0,0,0,0); width:1px; height:1px; overflow:hidden; }
+  .comparison th,.comparison td { padding:20px 24px; border-bottom:1px solid var(--line); line-height:1.7; }
+  .comparison thead th { font-weight:600; background:#e7ddc7; color:var(--teal); }
+  .comparison tbody th { font-weight:500; color:var(--soft); }
+  .comparison td { color:var(--muted); }
+  .comparison tr:last-child>* { border-bottom:0; }
+  .table-note { margin-top:18px; }
+  .note { margin-top:28px; }
+  .feature-close { padding-bottom:80px; }
+  @media(max-width:950px) {
+    .feature-detail { gap:30px; padding:32px; }
+    .feature-intro h2 { font-size:28px; }
+    .platform-screens,.example-screens { gap:38px; }
+    .platform-screens figure,.example-screens figure { display:block; }
+    .platform-device,.example-device { max-width:250px; width:80%; height:420px; margin:auto; }
+    .platform-screens figcaption,.example-screens figcaption { margin-top:30px; }
   }
-  .access-note {
-    font-size: 11px;
-    color: var(--muted);
-    margin: 13px 0 0;
-  }
-  .feature-context {
-    padding-top: 4px;
-  }
-  .context-label {
-    font-size: 11px;
-    color: var(--muted);
-    margin-bottom: 15px;
-  }
-  .feature-list {
-    margin: 0 0 20px;
-    display: grid;
-    gap: 0;
-  }
-  .feature-list li {
-    font-size: 16px;
-    padding-block: 10px;
-    border-bottom: 1px solid rgba(184, 203, 223, 0.08);
-  }
-  .example {
-    border-left: 2px solid rgba(98, 230, 221, 0.45);
-    padding-left: 18px;
-    margin: 25px 0 12px;
-  }
-  .example span {
-    font-size: 10px;
-    color: var(--teal);
-  }
-  .example p {
-    font-size: 12px;
-    line-height: 1.9;
-    color: var(--muted);
-    margin: 6px 0;
-  }
-  .feature-context .text-link {
-    font-size: 12px;
-  }
-  .platform-showcase {
-    background: rgba(255, 255, 255, 0.015);
-  }
-  .platform-screens {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 50px;
-  }
-  .platform-screens figure {
-    margin: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    gap: 30px;
-  }
-  .platform-device {
-    height: 395px;
-    overflow: hidden;
-    transform: rotate(-3deg);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    background: #101722;
-  }
-  .platform-device img {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-  .platform-device.android {
-    transform: rotate(3deg);
-  }
-  .platform-screens figcaption h3 {
-    font-size: 22px;
-    margin: 20px 0 14px;
-    line-height: 1.6;
-  }
-  .platform-screens figcaption p {
-    font-size: 12px;
-    color: var(--muted);
-  }
-  .screenshot-note,
-  .table-note {
-    font-size: 11px;
-    color: var(--muted);
-    margin: 35px 0 0;
-  }
-  .comparison-scroll {
-    overflow: auto;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-  }
-  .comparison {
-    border-collapse: collapse;
-    width: 100%;
-    min-width: 650px;
-    text-align: left;
-    font-size: 13px;
-  }
-  .comparison caption {
-    position: absolute;
-    clip: rect(0, 0, 0, 0);
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-  }
-  .comparison th,
-  .comparison td {
-    padding: 20px 25px;
-    border-bottom: 1px solid var(--line);
-    line-height: 1.7;
-  }
-  .comparison thead th {
-    font-size: 12px;
-    font-weight: 500;
-    background: rgba(98, 230, 221, 0.045);
-    color: var(--teal);
-  }
-  .comparison tbody th {
-    font-weight: 500;
-    color: var(--soft);
-  }
-  .comparison td {
-    color: var(--muted);
-  }
-  .comparison tr:last-child > * {
-    border-bottom: 0;
-  }
-  .table-note {
-    margin-top: 18px;
-    line-height: 1.9;
-  }
-  .note {
-    margin-top: 30px;
-  }
-  .note .text-link {
-    font-size: 12px;
-  }
-  .feature-close {
-    padding-bottom: 95px;
-  }
-  .detail-examples {
-    border-bottom: 1px solid var(--line);
-  }
-  .example-screens {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 45px;
-  }
-  .example-screens figure {
-    margin: 0;
-    display: grid;
-    grid-template-columns: 1fr 0.9fr;
-    align-items: center;
-    gap: 25px;
-  }
-  .example-device {
-    height: 430px;
-    overflow: hidden;
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    background: #f5f7fa;
-    box-shadow: var(--shadow);
-  }
-  .example-device img {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-  .example-screens h3 {
-    font-size: 23px;
-    line-height: 1.6;
-    margin-top: 18px;
-  }
-  .example-screens p {
-    font-size: 13px;
-    color: var(--muted);
-  }
-  @media (max-width: 950px) {
-    .example-screens figure {
-      display: block;
-    }
-    .example-device {
-      max-width: 250px;
-      margin: auto;
-    }
-    .example-screens figcaption {
-      margin-top: 30px;
-    }
-    .feature-detail {
-      gap: 45px;
-    }
-    .platform-screens {
-      gap: 35px;
-    }
-    .platform-screens figure {
-      display: block;
-    }
-    .platform-device {
-      width: 65%;
-      height: 420px;
-      margin: auto;
-    }
-    .platform-screens figcaption {
-      margin-top: 35px;
-    }
-    .platform-screens figcaption h3 {
-      font-size: 21px;
-    }
-  }
-  @media (max-width: 650px) {
-    .example-screens {
-      grid-template-columns: 1fr;
-      gap: 40px;
-    }
-    .example-screens figure {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 23px;
-    }
-    .example-screens figcaption {
-      margin: 0;
-    }
-    .example-device {
-      height: 330px;
-      border-radius: 13px;
-    }
-    .example-screens h3 {
-      font-size: 19px;
-    }
-    .example-screens p {
-      font-size: 11px;
-    }
-    .feature-nav {
-      gap: 8px;
-      margin-top: 30px;
-    }
-    .feature-nav a {
-      padding: 9px 12px;
-    }
-    .feature-detail {
-      grid-template-columns: 1fr;
-      gap: 30px;
-      padding-block: 43px;
-      scroll-margin-top: 20px;
-    }
-    .feature-intro h2 {
-      font-size: 30px;
-    }
-    .feature-intro > p:not(.eyebrow):not(.access-note) {
-      font-size: 14px;
-    }
-    .feature-list li {
-      font-size: 14px;
-    }
-    .platform-screens {
-      grid-template-columns: 1fr;
-      gap: 45px;
-    }
-    .platform-screens figure {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 25px;
-    }
-    .platform-device {
-      width: 100%;
-      height: 320px;
-      border-radius: 16px;
-    }
-    .platform-screens figcaption {
-      margin: 0;
-    }
-    .platform-screens figcaption h3 {
-      font-size: 19px;
-    }
-    .platform-screens figcaption p {
-      font-size: 11px;
-    }
-    .comparison th,
-    .comparison td {
-      padding: 16px;
-    }
-    .screenshot-note {
-      font-size: 10px;
-    }
-    .feature-close {
-      padding-bottom: 65px;
-    }
+  @media(max-width:650px) {
+    .feature-nav { gap:8px; }
+    .feature-nav a { padding:7px 10px; }
+    .feature-detail { grid-template-columns:1fr; gap:26px; padding:30px 24px; }
+    .feature-detail:before { right:28px; width:70px; }
+    .topic-card,.tool-card { padding:28px; }
+    .extra-tools-grid { grid-template-columns:1fr; }
+    .platform-screens,.example-screens { grid-template-columns:1fr; gap:38px; }
+    .platform-screens figure,.example-screens figure { display:grid; grid-template-columns:1fr 1fr; gap:22px; }
+    .platform-device,.example-device { width:100%; height:315px; border-width:7px; border-bottom-width:18px; }
+    .platform-screens figcaption,.example-screens figcaption { margin:0; }
+    .platform-screens figcaption h3,.example-screens h3 { font-size:19px; }
+    .comparison th,.comparison td { padding:16px; }
   }
 </style>

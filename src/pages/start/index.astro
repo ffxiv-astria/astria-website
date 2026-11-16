@@ -1,6 +1,6 @@
 ---
 import QRCode from "qrcode";
-import SiteLayout from "../../layouts/SiteLayout.astro";
+import StarbookLayout from "../../layouts/StarbookLayout.astro";
 import { site } from "../../data/site";
 const appStoreQR = await QRCode.toDataURL(site.appStoreURL, {
   width: 220,
@@ -9,12 +9,12 @@ const appStoreQR = await QRCode.toDataURL(site.appStoreURL, {
 });
 ---
 
-<SiteLayout
+<StarbookLayout
   title="天穹 App 下载与微信小程序入口 — FF14 国服工具"
   description="下载天穹 iPhone、iPad App，或在微信搜索 FF14检索工具小程序。了解系统要求、Mac 兼容信息和 Android 测试状态。"
   active="start"
 >
-  <section class="page-hero wrap">
+  <section class="page-hero wrap" id="download">
     <p class="eyebrow">把天穹带在身边</p>
     <h1>
       选一个顺手的入口，
@@ -28,7 +28,7 @@ const appStoreQR = await QRCode.toDataURL(site.appStoreURL, {
     </p>
   </section>
   <section class="wrap start-options" aria-label="使用入口">
-    <article class="platform-card apple-card" id="apple">
+    <article class="platform-card apple-card sc-paper" id="apple">
       <div class="platform-card-heading">
         <img
           src="/brand/astria-app-icon.png"
@@ -55,8 +55,7 @@ const appStoreQR = await QRCode.toDataURL(site.appStoreURL, {
             <img
               src="/brand/download-on-the-app-store-zh-cn.svg"
               alt="在 App Store 下载"
-              width="163"
-              height="60"
+              height="50"
             />
           </a>
           <p class="download-hint">手机直接打开，电脑也可以扫码。</p>
@@ -91,7 +90,7 @@ const appStoreQR = await QRCode.toDataURL(site.appStoreURL, {
         </div>
       </dl>
     </article>
-    <article class="platform-card wechat-card" id="wechat">
+    <article class="platform-card wechat-card sc-paper" id="wechat">
       <div class="platform-card-heading">
         <span class="wechat-mark" aria-hidden="true">
           <svg width="38" height="34" viewBox="0 0 38 34" fill="none">
@@ -232,7 +231,7 @@ const appStoreQR = await QRCode.toDataURL(site.appStoreURL, {
       </a>
     </div>
   </section>
-</SiteLayout>
+</StarbookLayout>
 <script>
   const button = document.querySelector<HTMLButtonElement>("#copy-miniapp");
   const status = document.querySelector<HTMLElement>("#copy-status");
@@ -247,406 +246,90 @@ const appStoreQR = await QRCode.toDataURL(site.appStoreURL, {
   });
 </script>
 <style>
-  .start-options {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
+  .start-options { display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+  .platform-card { padding:36px; position:relative; scroll-margin-top:28px; }
+  .platform-card:before { content:""; position:absolute; width:96px; height:22px; background:#d5ba7980; top:-11px; left:calc(50% - 48px); transform:rotate(-3deg); }
+  .wechat-card { background:#e4e9f4; }
+  .wechat-card:before { background:#a4b2d680; transform:rotate(4deg); }
+  .platform-card-heading { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:30px; }
+  .platform-card-heading>img { border-radius:14px; box-shadow:0 5px 12px #17213c22; }
+  .wechat-mark { height:58px; width:58px; display:grid; place-items:center; border-radius:15px; background:#d4dfdc; color:#57786b; flex:none; }
+  .platform-card h2 { font-size:31px; line-height:1.6; }
+  .platform-card .eyebrow { font-family:var(--sb-latin); font-size:12px; letter-spacing:.12em; }
+  .platform-description { font-size:14px; color:var(--muted); margin-bottom:0; }
+  .apple-download { display:flex; align-items:center; justify-content:space-between; gap:15px; margin:28px 0; padding-block:18px; border-block:1px dashed var(--line); }
+  .app-store-badge { display:inline-flex; padding:12.5px; }
+  .app-store-badge img { height:50px; width:auto; max-width:none; display:block; }
+  .download-hint { font-size:11px; color:var(--muted); margin:3px 0 0; }
+  .download-qr { margin:0; flex-shrink:0; text-align:center; }
+  .download-qr img { display:block; border:5px solid white; border-radius:2px; width:100px; height:100px; }
+  .download-qr figcaption { font-size:10px; color:var(--muted); margin-top:8px; }
+  .requirements { display:grid; gap:15px; margin:0; }
+  .requirements>div { display:grid; grid-template-columns:95px 1fr; gap:12px; font-size:12px; line-height:1.9; }
+  .requirements dt { color:var(--soft); }
+  .requirements dd { margin:0; color:var(--muted); }
+  .requirements dd a { color:var(--teal); margin-left:7px; white-space:nowrap; }
+  .wechat-code-layout { display:grid; grid-template-columns:128px minmax(0,1fr); align-items:center; gap:22px; margin-top:28px; padding:20px 0; border-block:1px dashed var(--line); }
+  .wechat-code { margin:0; text-align:center; }
+  .wechat-code img { display:block; width:128px; height:128px; object-fit:contain; background:white; }
+  .wechat-code figcaption { font-size:10px; color:var(--muted); line-height:1.7; margin-top:8px; }
+  .miniapp-search { min-width:0; }
+  .search-caption { font-size:11px; color:var(--muted); }
+  .miniapp-search>div { margin:10px 0; }
+  .miniapp-search strong { font-size:22px; font-weight:600; display:block; line-height:1.6; user-select:all; }
+  .miniapp-search button { border:1px solid var(--line-strong); border-radius:3px; padding:8px 12px; margin-top:10px; font-size:12px; background:#f4efe3; color:var(--soft); }
+  .miniapp-search button:hover { border-color:var(--teal); color:var(--teal); }
+  #copy-status { display:block; line-height:1.7; font-size:11px; color:var(--muted); }
+  .open-steps { padding:0; margin:25px 0 12px; list-style:none; display:grid; gap:14px; }
+  .open-steps li { display:flex; gap:14px; font-size:13px; color:var(--soft); line-height:1.8; }
+  .open-steps li>span { color:var(--teal); font-family:var(--sb-latin); font-size:12px; padding-top:2px; }
+  .wechat-card>.text-link { font-size:13px; }
+  .android-status { display:flex; align-items:center; justify-content:space-between; gap:35px; border-block:1px dashed var(--line); padding-block:35px; margin-top:40px; }
+  .android-status h2 { font-size:28px; margin:18px 0 14px; }
+  .android-status p { font-size:14px; color:var(--muted); margin-bottom:8px; }
+  .android-actions { display:flex; flex-direction:column; align-items:center; gap:12px; flex-shrink:0; }
+  .start-guides { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:28px; }
+  .start-guides>a { padding-top:22px; border-top:1px dashed var(--line-strong); }
+  .start-guides>a>span:first-child { font-family:var(--sb-hand); font-size:24px; color:var(--teal); }
+  .start-guides h3 { font-size:21px; margin:14px 0; }
+  .start-guides p { font-size:14px; color:var(--muted); }
+  @media(max-width:1050px) {
+    .platform-card { padding:28px; }
+    .apple-download { flex-wrap:wrap; }
+    .download-qr { display:flex; align-items:center; gap:12px; text-align:left; }
+    .download-qr img { width:78px; height:78px; }
+    .download-qr figcaption { max-width:80px; }
+    .requirements>div { grid-template-columns:80px 1fr; }
+    .wechat-code-layout { grid-template-columns:1fr; gap:16px; }
+    .wechat-code { display:flex; align-items:center; gap:18px; text-align:left; }
+    .wechat-code img { flex:none; }
+    .wechat-code figcaption { max-width:110px; }
   }
-  .platform-card {
-    border: 1px solid var(--line);
-    background: rgba(17, 23, 33, 0.7);
-    border-radius: 14px;
-    padding: 36px;
-    scroll-margin-top: 110px;
+  @media(max-width:700px) {
+    .start-options { grid-template-columns:1fr; gap:35px; }
+    .platform-card { padding:30px 26px; }
+    .platform-card h2 { font-size:29px; }
+    .apple-card h2 { font-size:26px; }
+    .page-hero .lede br { display:none; }
+    .platform-card-heading { margin-bottom:25px; }
+    .apple-download { flex-wrap:nowrap; gap:10px; }
+    .download-qr { display:block; text-align:center; }
+    .download-qr figcaption { max-width:none; }
+    .download-hint { max-width:190px; }
+    .wechat-code-layout { grid-template-columns:112px minmax(0,1fr); gap:18px; }
+    .wechat-code { display:block; text-align:center; }
+    .wechat-code img { width:112px; height:112px; }
+    .wechat-code figcaption { max-width:none; }
+    .miniapp-search strong { font-size:20px; }
+    .android-status { display:block; }
+    .android-status h2 { font-size:26px; }
+    .android-actions { align-items:flex-start; margin-top:24px; }
+    .start-guides { grid-template-columns:1fr; gap:25px; }
   }
-  .apple-card {
-    background: linear-gradient(
-      145deg,
-      rgba(98, 230, 221, 0.065),
-      rgba(17, 23, 33, 0.7) 60%
-    );
-  }
-  .platform-card-heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 38px;
-  }
-  .platform-card-heading > img {
-    border-radius: 15px;
-    box-shadow: var(--shadow);
-  }
-  .wechat-mark {
-    height: 58px;
-    width: 58px;
-    display: grid;
-    place-items: center;
-    border-radius: 15px;
-    background: rgba(140, 227, 161, 0.07);
-    border: 1px solid rgba(140, 227, 161, 0.15);
-    color: #8ce3a1;
-  }
-  .platform-card h2 {
-    font-size: 34px;
-    line-height: 1.5;
-  }
-  .platform-card .eyebrow {
-    font-size: 10px;
-  }
-  .wechat-card .eyebrow {
-    color: #8ce3a1;
-  }
-  .platform-description {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.9;
-    margin-bottom: 0;
-  }
-  .apple-download {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 25px;
-    margin: 35px 0 30px;
-    padding-block: 22px;
-    border-block: 1px solid var(--line);
-  }
-  .app-store-badge {
-    display: inline-flex;
-  }
-  .app-store-badge img {
-    max-width: 100%;
-    height: auto;
-  }
-  .download-hint {
-    font-size: 10px;
-    color: var(--muted);
-    margin: 5px 0 0;
-  }
-  .download-qr {
-    margin: 0;
-    flex-shrink: 0;
-    text-align: center;
-  }
-  .download-qr img {
-    display: block;
-    border: 6px solid white;
-    border-radius: 5px;
-  }
-  .download-qr figcaption {
-    font-size: 9px;
-    color: var(--muted);
-    margin-top: 8px;
-  }
-  .requirements {
-    display: grid;
-    gap: 16px;
-    margin: 0;
-  }
-  .requirements > div {
-    display: grid;
-    grid-template-columns: 100px 1fr;
-    gap: 14px;
-    font-size: 11px;
-    line-height: 1.9;
-  }
-  .requirements dt {
-    color: var(--soft);
-  }
-  .requirements dd {
-    margin: 0;
-    color: var(--muted);
-  }
-  .requirements dd a {
-    color: var(--teal);
-    margin-left: 9px;
-    white-space: nowrap;
-  }
-  .miniapp-search {
-    padding: 24px;
-    border: 1px solid rgba(140, 227, 161, 0.18);
-    border-radius: 8px;
-    background: rgba(140, 227, 161, 0.035);
-    margin-top: 36px;
-  }
-  .search-caption {
-    font-size: 10px;
-    color: var(--muted);
-  }
-  .miniapp-search > div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    margin: 12px 0 15px;
-  }
-  .miniapp-search strong {
-    font-size: 24px;
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    user-select: all;
-  }
-  .miniapp-search button {
-    border: 1px solid var(--line-strong);
-    border-radius: 5px;
-    padding: 8px 10px;
-    font-size: 10px;
-    background: rgba(255, 255, 255, 0.03);
-    color: var(--soft);
-    white-space: nowrap;
-  }
-  .miniapp-search button:hover {
-    border-color: var(--teal);
-    color: var(--teal);
-  }
-  #copy-status {
-    font-size: 10px;
-    color: var(--muted);
-  }
-  .open-steps {
-    padding: 0;
-    margin: 27px 0 13px;
-    list-style: none;
-    display: grid;
-    gap: 18px;
-  }
-  .open-steps li {
-    display: flex;
-    gap: 16px;
-    font-size: 12px;
-    color: var(--soft);
-    line-height: 1.8;
-  }
-  .open-steps li > span {
-    font-size: 10px;
-    color: #8ce3a1;
-    letter-spacing: 0.08em;
-  }
-  .wechat-card > .text-link {
-    font-size: 11px;
-    margin-top: 8px;
-  }
-  .android-status {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 40px;
-    border-block: 1px solid var(--line);
-    padding-block: 40px;
-    margin-top: 40px;
-  }
-  .android-status h2 {
-    font-size: 28px;
-    margin: 20px 0 15px;
-  }
-  .android-status p {
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 8px;
-  }
-  .android-actions {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    flex-shrink: 0;
-  }
-  .android-actions .text-link {
-    font-size: 12px;
-  }
-  .start-guides {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 35px;
-  }
-  .start-guides > a {
-    border-top: 1px solid var(--line);
-    padding-top: 25px;
-  }
-  .start-guides > a > span:first-child {
-    font-size: 10px;
-    color: var(--teal);
-  }
-  .start-guides h3 {
-    font-size: 20px;
-    margin: 18px 0 14px;
-  }
-  .start-guides p {
-    font-size: 13px;
-    color: var(--muted);
-  }
-  .start-guides .text-link {
-    font-size: 12px;
-  }
-  .wechat-code-layout {
-    display: grid;
-    grid-template-columns: 128px minmax(0, 1fr);
-    align-items: center;
-    gap: 23px;
-    margin-top: 32px;
-    padding: 22px;
-    border: 1px solid rgba(140, 227, 161, 0.18);
-    border-radius: 8px;
-    background: rgba(140, 227, 161, 0.035);
-  }
-  .wechat-code {
-    margin: 0;
-    text-align: center;
-  }
-  .wechat-code img {
-    display: block;
-    width: 128px;
-    height: 128px;
-    max-width: 100%;
-    object-fit: contain;
-    background: #fff;
-    border-radius: 4px;
-  }
-  .wechat-code figcaption {
-    font-size: 9px;
-    color: var(--muted);
-    line-height: 1.7;
-    margin-top: 8px;
-  }
-  .wechat-code-layout .miniapp-search {
-    padding: 0;
-    margin: 0;
-    border: 0;
-    background: none;
-    min-width: 0;
-  }
-  .wechat-code-layout .miniapp-search > div {
-    display: block;
-    margin-block: 10px;
-  }
-  .wechat-code-layout .miniapp-search strong {
-    font-size: 21px;
-    display: block;
-    line-height: 1.6;
-  }
-  .wechat-code-layout .miniapp-search button {
-    margin-top: 10px;
-  }
-  #copy-status {
-    display: block;
-    line-height: 1.7;
-  }
-  @media (max-width: 950px) {
-    .platform-card {
-      padding: 27px;
-    }
-    .platform-card h2 {
-      font-size: 29px;
-    }
-    .miniapp-search {
-      padding: 18px;
-    }
-    .miniapp-search strong {
-      font-size: 20px;
-    }
-    .apple-download {
-      gap: 10px;
-    }
-    .download-qr img {
-      width: 90px;
-      height: 90px;
-    }
-    .requirements > div {
-      grid-template-columns: 80px 1fr;
-      gap: 10px;
-    }
-  }
-  @media (max-width: 650px) {
-    .wechat-code-layout {
-      grid-template-columns: 112px minmax(0, 1fr);
-      gap: 18px;
-      padding: 17px;
-    }
-    .wechat-code img {
-      width: 112px;
-      height: 112px;
-    }
-    .wechat-code-layout .miniapp-search strong {
-      font-size: 19px;
-    }
-    .search-caption {
-      font-size: 9px;
-    }
-    #copy-status {
-      font-size: 9px;
-    }
-    .start-options {
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
-    .platform-card {
-      padding: 28px;
-      scroll-margin-top: 20px;
-    }
-    .platform-card-heading {
-      margin-bottom: 30px;
-    }
-    .platform-card h2 {
-      font-size: 30px;
-    }
-    .platform-description {
-      font-size: 13px;
-    }
-    .apple-download {
-      margin-block: 28px;
-      gap: 20px;
-    }
-    .download-qr img {
-      width: 95px;
-      height: 95px;
-    }
-    .requirements > div {
-      grid-template-columns: 82px 1fr;
-    }
-    .miniapp-search strong {
-      font-size: 22px;
-    }
-    .miniapp-search {
-      margin-top: 28px;
-    }
-    .android-status {
-      display: block;
-      margin-top: 30px;
-      padding-block: 32px;
-    }
-    .android-status h2 {
-      font-size: 26px;
-    }
-    .android-status p {
-      font-size: 12px;
-    }
-    .android-actions {
-      align-items: flex-start;
-      margin-top: 25px;
-      gap: 10px;
-    }
-    .start-guides {
-      grid-template-columns: 1fr;
-      gap: 25px;
-    }
-    .start-guides h3 {
-      font-size: 19px;
-    }
-    .start-guides p {
-      font-size: 12px;
-    }
-  }
-</style>
-
-<style>
-  @media (max-width: 380px) {
-    .wechat-code-layout {
-      grid-template-columns: 1fr;
-      justify-items: center;
-      text-align: center;
-    }
-    .wechat-code-layout .miniapp-search strong {
-      font-size: 21px;
-    }
+  @media(max-width:380px) {
+    .apple-download { flex-wrap:wrap; gap:16px; }
+    .download-qr { display:flex; text-align:left; }
+    .wechat-code-layout { grid-template-columns:1fr; justify-items:center; text-align:center; }
+    .wechat-code figcaption { max-width:150px; }
   }
 </style>

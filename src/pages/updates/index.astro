@@ -1,5 +1,5 @@
 ---
-import SiteLayout from "../../layouts/SiteLayout.astro";
+import SiteLayout from "../../layouts/StarbookLayout.astro";
 import { updates } from "../../data/site";
 const entries = [...updates].sort((a, b) => b.date.localeCompare(a.date));
 ---
@@ -10,6 +10,11 @@ const entries = [...updates].sort((a, b) => b.date.localeCompare(a.date));
   active="updates"
 >
   <section class="page-hero wrap">
+    <nav class="breadcrumbs" aria-label="面包屑">
+      <a href="/">首页</a>
+      <span aria-hidden="true">/</span>
+      <span>更新日志</span>
+    </nav>
     <p class="eyebrow">每一次更新，都是一点进步</p>
     <h1>
       把变化，
@@ -31,7 +36,10 @@ const entries = [...updates].sort((a, b) => b.date.localeCompare(a.date));
   </section>
   <section class="wrap update-timeline" aria-label="版本更新记录">
     {entries.map((update) => (
-      <article class="update-entry" id={update.id}>
+      <article
+        class:list={["update-entry", update.kind === "Apple App" && "apple-update"]}
+        id={update.id}
+      >
         <div class="update-meta">
           <time datetime={update.date}>{update.date.replaceAll("-", ".")}</time>
           <div class="pills">
@@ -70,50 +78,103 @@ const entries = [...updates].sort((a, b) => b.date.localeCompare(a.date));
   </section>
 </SiteLayout>
 <style>
+  .page-hero .breadcrumbs {
+    margin-bottom: 36px;
+  }
   .update-key {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 10px;
     margin-top: 30px;
   }
   .update-key .text-link {
-    font-size: 11px;
+    font-size: 13px;
     margin-left: 10px;
   }
   .update-timeline {
-    padding-bottom: 30px;
+    padding-bottom: 40px;
   }
   .update-entry {
+    position: relative;
     display: grid;
-    grid-template-columns: 230px minmax(0, 1fr);
-    gap: 65px;
-    border-top: 1px solid var(--line);
-    padding-block: 50px;
-    scroll-margin-top: 100px;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 56px;
+    padding-bottom: 40px;
+    scroll-margin-top: 32px;
+  }
+  .update-entry::before {
+    content: "";
+    position: absolute;
+    top: 24px;
+    left: 226px;
+    bottom: -24px;
+    width: 1px;
+    background: rgba(232, 199, 122, 0.38);
+  }
+  .update-entry::after {
+    content: "";
+    position: absolute;
+    top: 27px;
+    left: 221px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #8da8ff;
+    box-shadow: 0 0 0 6px #070a1f;
+  }
+  .apple-update::after {
+    background: #e8c77a;
+  }
+  .update-entry:last-child::before {
+    bottom: 40px;
+  }
+  .update-meta {
+    padding-top: 23px;
   }
   .update-meta time {
-    font-size: 15px;
+    font-family: "Starbook Cinzel", serif;
+    font-weight: 600;
+    font-size: 22px;
     letter-spacing: 0.04em;
     color: var(--soft);
     display: block;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
   }
   .version-label {
     align-self: center;
-    font-size: 11px;
+    font-size: 13px;
     color: var(--muted);
   }
   .update-content {
-    max-width: 770px;
+    --text: #202b3d;
+    --muted: #657083;
+    --teal: #756129;
+    --line: rgba(31, 43, 60, 0.16);
+    min-width: 0;
+    color: var(--text);
+    background: #f4efe3;
+    border-top: 4px solid #8da8ff;
+    border-radius: 4px;
+    padding: 34px 40px 32px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
+  }
+  .apple-update .update-content {
+    border-top-color: #e8c77a;
   }
   .update-content h2 {
-    font-size: 29px;
-    margin-bottom: 15px;
+    font-family: "Starbook Noto Serif SC", serif;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+    margin: 0 0 16px;
   }
   .update-content > p {
-    font-size: 14px;
+    font-size: 16px;
+    line-height: 1.9;
     color: var(--muted);
-    margin-bottom: 25px;
+    margin: 0 0 24px;
   }
   .update-content ul {
     list-style: none;
@@ -122,64 +183,107 @@ const entries = [...updates].sort((a, b) => b.date.localeCompare(a.date));
   }
   .update-content li {
     position: relative;
-    padding-left: 19px;
-    font-size: 13px;
+    padding-left: 20px;
+    font-size: 15px;
     line-height: 1.95;
-    color: var(--soft);
-    margin-block: 10px;
+    color: var(--text);
+    margin-block: 12px;
   }
   .update-content li:before {
     content: "";
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: var(--teal);
+    width: 6px;
+    height: 6px;
+    background: #a28645;
     position: absolute;
     left: 0;
-    top: 11px;
+    top: 12px;
+    transform: rotate(45deg);
   }
   .update-content .text-link {
-    font-size: 12px;
-    margin-top: 15px;
+    font-size: 14px;
+    margin-top: 18px;
+    color: #65501f;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+  }
+  .update-content a:focus-visible {
+    outline-color: #65501f;
   }
   .update-note {
-    padding-bottom: 95px;
+    padding-bottom: 104px;
+  }
+  .update-note .note {
+    padding: 28px 32px;
+    background: #0d1240;
+    border: 1px dashed rgba(232, 199, 122, 0.5);
+    border-radius: 5px;
+  }
+  .update-note p {
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--muted);
+    margin: 0 0 18px;
   }
   .update-note .text-link {
-    font-size: 12px;
+    font-size: 14px;
   }
-  @media (max-width: 650px) {
+  @media (max-width: 800px) {
     .update-entry {
       grid-template-columns: 1fr;
-      gap: 26px;
-      padding-block: 35px;
-      scroll-margin-top: 20px;
+      gap: 20px;
+      padding: 0 0 36px 24px;
+      scroll-margin-top: 24px;
+    }
+    .update-entry::before {
+      top: 15px;
+      left: 0;
+      bottom: -15px;
+    }
+    .update-entry::after {
+      left: -5px;
+      top: 10px;
+    }
+    .update-entry:last-child::before {
+      bottom: 36px;
     }
     .update-meta {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
       gap: 15px;
+      padding-top: 0;
     }
     .update-meta time {
       margin: 0;
-      font-size: 12px;
+      font-size: 17px;
+    }
+  }
+  @media (max-width: 650px) {
+    .page-hero .breadcrumbs {
+      margin-bottom: 28px;
+    }
+    .update-content {
+      padding: 26px 24px;
     }
     .update-content h2 {
-      font-size: 26px;
+      font-size: 24px;
     }
     .update-content > p {
-      font-size: 13px;
+      font-size: 15px;
     }
     .update-content li {
-      font-size: 12px;
+      font-size: 14px;
     }
     .update-note {
-      padding-bottom: 65px;
+      padding-bottom: 64px;
+    }
+    .update-note .note {
+      padding: 24px;
     }
     .update-key .text-link {
       margin-left: 0;
-      font-size: 10px;
+      font-size: 13px;
     }
   }
 </style>

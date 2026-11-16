@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import SiteLayout from "../../layouts/SiteLayout.astro";
+import StarbookLayout from "../../layouts/StarbookLayout.astro";
 import { featurePages } from "../../data/feature-pages";
 import { guides } from "../../data/site";
 import gameData from "../../assets/home/game-data.png";
@@ -29,7 +29,7 @@ const relatedFeatures = featurePages.filter((item) =>
 );
 ---
 
-<SiteLayout
+<StarbookLayout
   title={`${feature.title} — Astria天穹`}
   description={feature.description}
   active="features"
@@ -50,7 +50,7 @@ const relatedFeatures = featurePages.filter((item) =>
       </div>
     </section>
     <div class="feature-page-layout">
-      <article class="feature-page-body">
+      <article class="feature-page-body sc-paper">
         <section>
           <p class="eyebrow">从一个具体问题开始</p>
           <h2>{feature.scenario}</h2>
@@ -90,35 +90,38 @@ const relatedFeatures = featurePages.filter((item) =>
       <a class="button primary" href="/start/">开始使用天穹<span aria-hidden="true">↗</span></a>
     </section>
   </div>
-</SiteLayout>
+</StarbookLayout>
 
 <style>
-  .feature-page-hero { max-width: 960px; }
-  .feature-page-hero h1 { font-size: clamp(33px, 4.2vw, 53px); line-height: 1.4; max-width: 900px; }
-  .feature-page-hero .breadcrumbs { margin-bottom: 32px; }
-  .feature-page-layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, .8fr); gap: 64px; align-items: start; }
-  .feature-page-body { min-width: 0; }
-  .feature-page-body section { margin-bottom: 40px; }
-  .feature-page-body h2 { font-size: 24px; line-height: 1.55; margin: 0 0 16px; }
-  .feature-page-body p, .feature-steps { color: var(--soft); line-height: 1.95; font-size: 15px; }
-  .feature-steps { padding-left: 24px; }
-  .feature-steps li { padding-left: 5px; margin-bottom: 16px; }
-  .feature-steps li::marker { color: var(--teal); font-weight: 700; }
-  .feature-page-image figure { margin: 0; }
-  .feature-page-image img { display: block; width: 100%; height: auto; border-radius: 18px; border: 1px solid var(--line); }
-  .feature-page-image figcaption { color: var(--muted); font-size: 12px; line-height: 1.8; margin-top: 16px; }
-  .feature-reading .text-link { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid var(--line); line-height: 1.7; }
-  .feature-page-start { border-top: 1px solid var(--line); margin-top: 40px; }
-  .feature-page-start h2 { font-size: clamp(27px, 3vw, 39px); margin: 0 0 16px; }
-  .feature-page-start p { color: var(--muted); line-height: 1.9; margin-bottom: 26px; }
-  @media (max-width: 900px) {
-    .feature-page-layout { grid-template-columns: minmax(0, 1.3fr) minmax(0, .8fr); gap: 32px; }
+  .feature-page-hero { max-width:960px; }
+  .feature-page-hero h1 { font-size:clamp(32px,4vw,52px); }
+  .feature-page-layout { display:grid; grid-template-columns:minmax(0,1.6fr) minmax(0,.8fr); gap:45px; align-items:start; }
+  .feature-page-body { min-width:0; padding:42px; position:relative; }
+  .feature-page-body:before { content:""; position:absolute; top:-10px; left:35px; width:88px; height:20px; background:#d5ba7980; transform:rotate(-4deg); }
+  .feature-page-body section { margin-bottom:36px; }
+  .feature-page-body section:last-child { margin-bottom:0; }
+  .feature-page-body h2 { font-size:24px; line-height:1.6; margin-bottom:16px; }
+  .feature-page-body p,.feature-steps { color:var(--soft); line-height:2; font-size:15px; }
+  .feature-steps { padding-left:24px; }
+  .feature-steps li { padding-left:5px; margin-bottom:16px; }
+  .feature-steps li::marker { color:var(--teal); font-weight:700; }
+  .feature-page-body .note { background:#ded9ea65; border-left-color:#9994b3; padding:23px; }
+  .feature-page-image { position:sticky; top:32px; }
+  .feature-page-image figure { margin:0; padding:12px 12px 18px; border-radius:2px; background:#f4efe3; box-shadow:var(--shadow); }
+  .feature-page-image img { display:block; width:100%; height:auto; border-radius:0; }
+  .feature-page-image figcaption { color:#6b6576; font-size:12px; line-height:1.8; margin-top:16px; }
+  .feature-reading .text-link { display:flex; justify-content:space-between; padding:14px 0; border-bottom:1px dotted var(--line); line-height:1.7; }
+  .feature-page-start { border-top:1px dashed var(--line); margin-top:55px; }
+  .feature-page-start p { color:var(--muted); margin-bottom:25px; }
+  @media(max-width:950px) {
+    .feature-page-layout { grid-template-columns:minmax(0,1.4fr) minmax(0,.8fr); gap:28px; }
+    .feature-page-body { padding:32px; }
   }
-  @media (max-width: 650px) {
-    .feature-page-layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
-    .feature-page-image { max-width: 320px; justify-self: center; }
-    .feature-page-image.wide { max-width: none; }
-    .feature-page-body h2 { font-size: 22px; }
-    .feature-page-body section { margin-bottom: 32px; }
+  @media(max-width:650px) {
+    .feature-page-layout { grid-template-columns:1fr; gap:35px; }
+    .feature-page-body { padding:30px 24px; }
+    .feature-page-body h2 { font-size:22px; }
+    .feature-page-image { position:static; width:min(100%,320px); justify-self:center; }
+    .feature-page-image.wide { width:100%; }
   }
 </style>

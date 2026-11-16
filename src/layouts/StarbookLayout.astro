@@ -1,0 +1,46 @@
+---
+import Layout from "./Layout.astro";
+import StarbookHeader from "../components/starbook/StarbookHeader.astro";
+import StarbookFooter from "../components/starbook/StarbookFooter.astro";
+import { pageStructuredData, socialImage } from "../lib/seo";
+import "../styles/starbook-content.css";
+interface Props {
+  title: string;
+  description: string;
+  active?: string;
+  noindex?: boolean;
+}
+const { title, description, active = "features", noindex = false } = Astro.props;
+const links = [
+  { id: "features", href: "/features/", label: "功能介绍" },
+  { id: "start", href: "/start/", label: "开始使用" },
+  { id: "guides", href: "/guides/", label: "使用指南" },
+  { id: "updates", href: "/updates/", label: "更新日志" },
+];
+---
+
+<Layout
+  title={title}
+  description={description}
+  noindex={noindex}
+  canonicalPath={Astro.url.pathname}
+  ogImage={socialImage}
+  ogImageWidth={1200}
+  ogImageHeight={630}
+  ogType={Astro.url.pathname.startsWith("/guides/") && Astro.url.pathname !== "/guides/" ? "article" : "website"}
+  structuredData={pageStructuredData(Astro.url.pathname, title, description)}
+>
+  <div class="sb-content-shell" data-starbook-content>
+    <a class="sc-skip" href="#main-content">跳到主要内容</a>
+    <div class="sc-masthead">
+      <StarbookHeader active={active} />
+      <nav class="sc-page-tabs wrap" aria-label="页面导航">
+        {links.map((link) => (
+          <a href={link.href} aria-current={active === link.id ? "page" : undefined}>{link.label}</a>
+        ))}
+      </nav>
+    </div>
+    <main id="main-content" tabindex="-1"><slot /></main>
+    <div class="wrap sc-footer-wrap"><StarbookFooter /></div>
+  </div>
+</Layout>
